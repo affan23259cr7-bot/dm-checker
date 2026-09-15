@@ -3,114 +3,329 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<meta name="theme-color" content="#0f172a">
-<title>DM Checker — BHS</title>
+<meta name="theme-color" content="#020617">
+<title>MT3 — DM Checker</title>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <style>
+:root{--gold:#d4af37;--gold2:#f2d574;--navy:#020617;--card:rgba(30,41,59,.72)}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{font-family:"Segoe UI",Tahoma,sans-serif;background:#0f172a;color:#e2e8f0;margin:0;padding:16px;max-width:960px;margin:0 auto}
-h1{font-size:19px;margin:0 0 3px}.sub{color:#94a3b8;font-size:12px;margin-bottom:16px}
-.card{background:#1e293b;border:1px solid #334155;border-radius:10px;padding:14px;margin-bottom:14px}
-.ct{font-size:14px;font-weight:600;margin-bottom:9px}
-.bar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-button{background:#2563eb;color:#fff;border:0;padding:10px 16px;border-radius:7px;cursor:pointer;font-size:14px;font-family:inherit}
-button:active{opacity:.7}button.gray{background:#475569}button:disabled{opacity:.4}
-textarea{width:100%;height:80px;background:#0f172a;color:#e2e8f0;border:1px solid #334155;border-radius:7px;padding:10px;font-family:Consolas,monospace;font-size:13px}
-.status{font-size:12px;padding:8px 11px;border-radius:6px;margin-top:9px}
-.ok{background:#064e3b;color:#6ee7b7}.warn{background:#78350f;color:#fcd34d}.err{background:#7f1d1d;color:#fca5a5}
+body{font-family:"Segoe UI",Tahoma,sans-serif;color:#e7edf5;margin:0;padding:18px 14px 40px;
+background:radial-gradient(1200px 600px at 50% -10%,#1b2a4a 0%,#0b1426 45%,#020617 100%);min-height:100vh}
+.wrapmain{max-width:960px;margin:0 auto}
+.hd{display:flex;align-items:center;gap:14px;justify-content:center;margin-bottom:6px}
+.hd svg{width:62px;height:62px;filter:drop-shadow(0 4px 10px rgba(0,0,0,.6))}
+h1{font-size:21px;margin:0;letter-spacing:.5px}
+h1 span{background:linear-gradient(135deg,var(--gold2),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:#8fa3bf;font-size:12px;text-align:center;margin:0 0 18px}
+.card{background:var(--card);backdrop-filter:blur(10px);border:1px solid rgba(212,175,55,.22);
+border-radius:14px;padding:15px;margin-bottom:14px;box-shadow:0 8px 24px -12px #000}
+.ct{font-size:12.5px;font-weight:700;color:var(--gold);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:11px}
+.bar{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
+button{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#1a1405;border:0;padding:11px 18px;
+border-radius:9px;cursor:pointer;font-size:14px;font-weight:700;font-family:inherit}
+button:active{transform:scale(.97)}button.gray{background:#334155;color:#cbd5e1;font-weight:600}
+textarea{width:100%;height:78px;background:#0a1120;color:#e7edf5;border:1px solid #2b3c57;border-radius:9px;padding:10px;font-family:Consolas,monospace;font-size:13px}
+.status{font-size:12px;padding:8px 12px;border-radius:7px;margin-top:9px}
+.ok{background:rgba(6,78,59,.65);color:#6ee7b7}.warn{background:rgba(120,53,15,.65);color:#fcd34d}.err{background:rgba(127,29,29,.65);color:#fca5a5}
 table{width:100%;border-collapse:collapse;font-size:12.5px}
-th{background:#334155;padding:8px;text-align:left;position:sticky;top:0;z-index:1;white-space:nowrap}
-td{padding:8px;border-bottom:1px solid #334155;vertical-align:top}
-.b{display:inline-block;padding:3px 9px;border-radius:20px;font-size:11.5px;font-weight:600;white-space:nowrap}
+th{background:rgba(212,175,55,.16);color:var(--gold);padding:9px;text-align:left;position:sticky;top:0;white-space:nowrap}
+td{padding:9px;border-bottom:1px solid #22304a;vertical-align:top}
+.b{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11.5px;font-weight:700;white-space:nowrap}
 .red{background:#7f1d1d;color:#fca5a5}.org{background:#7c2d12;color:#fdba74}.grn{background:#064e3b;color:#6ee7b7}
-.wrap{max-height:58vh;overflow:auto;border-radius:7px}.mono{font-family:Consolas,monospace}
-.stat{display:flex;gap:16px;flex-wrap:wrap;margin-top:10px}
-.stat div{font-size:12px;color:#94a3b8}.stat b{display:block;font-size:20px;color:#e2e8f0}
-.hint{color:#64748b;font-size:11.5px;margin-top:6px;line-height:1.5}
+.tw{max-height:58vh;overflow:auto;border-radius:9px}.mono{font-family:Consolas,monospace}
+.stat{display:flex;gap:18px;flex-wrap:wrap;margin-top:11px}
+.stat div{font-size:11.5px;color:#8fa3bf}.stat b{display:block;font-size:20px;color:var(--gold2)}
+.hint{color:#64748b;font-size:11.5px;margin-top:7px;line-height:1.55}
 a{color:#93c5fd}
 </style>
 </head>
 <body>
-<h1>🔧 DM Checker — ตรวจ DM ค้างจาก CMMS</h1>
-<div class="sub">Import ไฟล์ Equipment History → ค้นด้วยการพิมพ์ / ถ่ายรูปป้าย / สแกนสด</div>
+<div class="wrapmain">
+
+<div class="hd">
+<svg viewBox="0 0 100 120"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0" stop-color="#f2d574"/><stop offset="1" stop-color="#b8860b"/></linearGradient></defs>
+<path d="M50 3 6 18v46c0 30 22 46 44 53 22-7 44-23 44-53V18z" fill="#12306b" stroke="url(#g)" stroke-width="5"/>
+<path d="M50 12 14 24v40c0 25 18 39 36 45 18-6 36-20 36-45V24z" fill="none" stroke="#fff" stroke-width="1.6" opacity=".55"/>
+<text x="50" y="58" font-size="30" font-weight="700" text-anchor="middle" fill="url(#g)" font-family="Segoe UI,sans-serif">MT3</text>
+<path d="M22 74h56M30 86l8-8 8 8" stroke="url(#g)" stroke-width="4" fill="none" stroke-linecap="round"/>
+<circle cx="62" cy="82" r="8" fill="none" stroke="url(#g)" stroke-width="4"/></svg>
+<div><h1><span>MT3</span> DM CHECKER</h1>
+<div style="font-size:11px;color:#8fa3bf;letter-spacing:2px">MAINTENANCE TEAM</div></div>
+</div>
+<p class="sub">ตรวจ DM ค้างจาก CMMS • ข้อมูลกลางอัปเดตอัตโนมัติ</p>
 
 <div class="card">
-  <div class="ct">1) ฐานข้อมูล CMMS</div>
+  <div class="ct">① ฐานข้อมูลกลาง</div>
   <div class="bar">
+    <button onclick="loadCentralDB()">🔄 รีเฟรชข้อมูล</button>
     <input type="file" id="f" accept=".xlsx,.xls,.csv" hidden>
-    <button onclick="f.click()">📥 Import ไฟล์ CMMS</button>
-    <button class="gray" onclick="clearDB()">🗑 ล้าง</button>
+    <button class="gray" onclick="f.click()">📥 Import เอง (สำรอง)</button>
   </div>
-  <div id="dbinfo" class="hint"></div>
   <div id="freshness"></div>
   <div class="stat" id="stats"></div>
+  <div id="dbinfo" class="hint"></div>
 </div>
 
 <div class="card">
-  <div class="ct">2) 🎥 สแกนสด (จ่อป้าย อ่านอัตโนมัติ)</div>
+  <div class="ct">② สแกนสด</div>
   <div class="bar">
     <button id="btnScan" onclick="toggleScan()">▶️ เริ่มสแกน</button>
     <button class="gray" id="btnTorch" onclick="torch()" style="display:none">🔦 ไฟฉาย</button>
   </div>
   <div id="scanst" class="hint"></div>
-  <div id="camwrap" style="display:none;position:relative;max-width:500px;margin-top:10px">
-    <video id="cam" playsinline muted autoplay style="width:100%;border-radius:8px;background:#000;display:block"></video>
-    <div style="position:absolute;left:8%;top:38%;width:84%;height:24%;border:2px solid #38bdf8;border-radius:6px;box-shadow:0 0 0 999px rgba(0,0,0,.45);pointer-events:none"></div>
-    <div id="live" style="position:absolute;left:0;right:0;bottom:5px;text-align:center;font-family:Consolas,monospace;font-size:14px;color:#7dd3fc;text-shadow:0 1px 3px #000"></div>
+  <div id="camwrap" style="display:none;position:relative;max-width:500px;margin-top:11px">
+    <video id="cam" playsinline muted autoplay style="width:100%;border-radius:10px;background:#000;display:block"></video>
+    <div style="position:absolute;left:8%;top:38%;width:84%;height:24%;border:2px solid var(--gold);border-radius:6px;box-shadow:0 0 0 999px rgba(0,0,0,.5);pointer-events:none"></div>
+    <div id="live" style="position:absolute;left:0;right:0;bottom:6px;text-align:center;font-family:Consolas,monospace;font-size:14px;color:var(--gold2);text-shadow:0 1px 3px #000"></div>
   </div>
-  <div id="scanlist" style="margin-top:10px"></div>
+  <div id="scanlist" style="margin-top:11px"></div>
 </div>
 
 <div class="card">
-  <div class="ct">3) 📷 ค้นหาด้วยรูปป้าย</div>
+  <div class="ct">③ ค้นหาด้วยรูปป้าย</div>
   <div class="bar">
     <input type="file" id="img" accept="image/*" capture="environment" multiple hidden>
     <button onclick="img.click()">📸 ถ่ายรูป / เลือกรูป</button>
   </div>
   <div id="ocrst" class="hint"></div>
-  <div id="ocrout" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px"></div>
+  <div id="ocrout" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:11px"></div>
 </div>
 
 <div class="card">
-  <div class="ct">4) ⌨️ พิมพ์ค้นหา</div>
+  <div class="ct">④ พิมพ์ค้นหา</div>
   <textarea id="q" placeholder="LP252.BHT57_HM013&#10;LP252-BHT57-HS041"></textarea>
-  <div class="bar" style="margin-top:8px">
+  <div class="bar" style="margin-top:9px">
     <button onclick="check()">ตรวจสอบ</button>
     <button class="gray" onclick="exportResult()">⬇ Export Excel</button>
   </div>
   <div class="hint">พิมพ์ได้ทั้ง <b>.</b> <b>_</b> <b>-</b> หรือเว้นวรรค ระบบแปลงให้เอง</div>
 </div>
 
-<div class="card"><div class="wrap"><table id="out"></table></div></div>
+<div class="card"><div class="tw"><table id="out"></table></div></div>
+</div>
 
 <script>
+/* ============ ตั้งค่าฐานข้อมูลกลาง ============ */
+const SHEET_ID='1X3yGiY54Agb3rywBF803bYhFgZEgLKUciy6ObwdbSlg';
+const CSV_URL='https://docs.google.com/spreadsheets/d/'+SHEET_ID+'/gviz/tq?tqx=out:csv';
+
 const KEY='cmms_dm_db';let DB=null,RESULT=[];
 const norm=s=>String(s??'').toUpperCase().replace(/[\s\-_./]/g,'');
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const H={pos:'ตำแหน่ง',sym:'สาเหตุ/อาการ',dt:'วันที่เสีย',lvl:'ระดับความเสียหาย',plan:'แผนการแก้ไข',doc:'Doc DM',wp:'WORK PERMIT',done:'วันแล้วเสร็จ',mc:'Machine type',cause:'สาเหตุการชำรุด',part:'อะไหล่'};
 
-/* ---------- ดึงข้อมูลจาก Server กลาง (Google Sheets) อัตโนมัติ ---------- */
-async function loadCentralDB() {
-  const CSV_URL = 'https://docs.google.com/spreadsheets/d/1X3yGiY54Agb3rywBF803bYhFgZEgLKUciy6ObwdbSlg/edit?usp=sharing'; // <-- ลิงก์ที่ได้จากการ Publish to web
-  scanst.textContent = '⏳ กำลังอัปเดตฐานข้อมูลจาก Server กลาง...';
-  
-  try {
-    const res = await fetch(CSV_URL);
-    const data = await res.text();
-    const rows = XLSX.utils.sheet_to_json(XLSX.read(data, {type:'string'}).Sheets.Sheet1);
-    
-    // กรองข้อมูล: ปิดแล้วไม่เอา
-    const recs = rows.filter(r => !r['วันแล้วเสร็จ'] && r['ระดับความเสียหาย'] !== 'ปิด DM')
-                     .map(r => ({ ...r, _n: norm(r['ตำแหน่ง']), pos: r['ตำแหน่ง'] }));
-    
-    DB = { at: Date.now(), recs };
+/* ---------- แปลง workbook -> records ---------- */
+function parseWB(wb){
+  const rows=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1,defval:''});
+  let hi=rows.findIndex(r=>r.some(c=>String(c).trim()==='ตำแหน่ง'));
+  if(hi<0)throw new Error('ไม่พบคอลัมน์ "ตำแหน่ง"');
+  const hd=rows[hi].map(c=>String(c).trim()),ix={};
+  for(const k in H)ix[k]=hd.indexOf(H[k]);
+  const recs=[];
+  for(let i=hi+1;i<rows.length;i++){
+    const row=rows[i];if(!row)continue;
+    const pos=String(row[ix.pos]??'').trim();if(!pos)continue;
+    const done=ix.done>=0?String(row[ix.done]??'').trim():'';
+    const lvl=ix.lvl>=0?String(row[ix.lvl]??'').trim():'';
+    if(done||lvl==='ปิด DM')continue;
+    const o={};for(const k in H)o[k]=ix[k]>=0?String(row[ix[k]]??'').trim():'';
+    o.pos=pos;o._n=norm(pos);recs.push(o);
+  }
+  return recs;
+}
+
+/* ---------- โหลดจาก Google Sheets ---------- */
+async function loadCentralDB(){
+  freshness.className='status warn';freshness.textContent='⏳ กำลังดึงข้อมูลจากฐานข้อมูลกลาง...';
+  try{
+    const res=await fetch(CSV_URL+'&t='+Date.now(),{cache:'no-store'});
+    if(!res.ok)throw new Error('HTTP '+res.status);
+    const txt=await res.text();
+    if(txt.trim().startsWith('<'))throw new Error('ชีตยังไม่เปิดสิทธิ์ Anyone with the link');
+    const recs=parseWB(XLSX.read(txt,{type:'string',raw:true}));
+    if(!recs.length)throw new Error('ไม่พบ DM ที่ยังไม่ปิด');
+    DB={at:Date.now(),recs,src:'ฐานข้อมูลกลาง'};
+    try{localStorage.setItem(KEY,JSON.stringify(DB))}catch(e){}
     render();
-    scanst.textContent = '✅ ข้อมูลเป็นปัจจุบัน (จาก Server กลาง)';
-  } catch(e) { 
-    scanst.textContent = '❌ ดึงข้อมูลพลาด กรุณาตรวจสอบลิงก์ CSV';
-    console.error(e);
+  }catch(e){
+    freshness.className='status err';
+    freshness.innerHTML='❌ ดึงข้อมูลกลางไม่ได้: '+esc(e.message)+(DB?'<br>กำลังใช้ข้อมูลที่บันทึกไว้ครั้งก่อน':'');
+    if(DB)renderStats();
   }
 }
 
-// เปลี่ยนจากการกดปุ่ม ให้รันฟังก์ชันนี้ทันทีที่เปิดหน้าเว็บ
-window.addEventListener('load', loadCentralDB);
+/* ---------- Import สำรอง ---------- */
+f.onchange=e=>{const file=e.target.files[0];if(!file)return;
+const r=new FileReader();r.onload=ev=>{try{
+  const recs=parseWB(XLSX.read(ev.target.result,{type:'array'}));
+  DB={at:Date.now(),recs,src:'ไฟล์ในเครื่อง'};
+  try{localStorage.setItem(KEY,JSON.stringify(DB))}catch(err){}
+  render();alert('✅ นำเข้าสำเร็จ '+recs.length.toLocaleString()+' รายการ');
+}catch(err){alert('❌ '+err.message)}};r.readAsArrayBuffer(file);f.value='';};
+
+function render(){
+  if(!DB){freshness.className='status warn';freshness.textContent='⚠️ ยังไม่มีข้อมูล';return;}
+  const hrs=(Date.now()-DB.at)/36e5;
+  freshness.className='status '+(hrs>24?'warn':'ok');
+  freshness.textContent=(hrs>24?'⚠️ ข้อมูลเก่ากว่า '+Math.floor(hrs/24)+' วัน':'✅ ข้อมูลเป็นปัจจุบัน')+' — จาก'+DB.src;
+  renderStats();
+}
+function renderStats(){
+  dbinfo.textContent='อัปเดต '+new Date(DB.at).toLocaleString('th-TH')+' • '+DB.recs.length.toLocaleString()+' รายการ';
+  const c={},ps=new Set();DB.recs.forEach(r=>{c[r.lvl||'-']=(c[r.lvl||'-']||0)+1;ps.add(r._n)});
+  stats.innerHTML='<div><b>'+DB.recs.length.toLocaleString()+'</b>DM ค้าง</div><div><b>'+ps.size.toLocaleString()+'</b>ตำแหน่ง</div>'
+    +Object.entries(c).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([k,v])=>'<div><b>'+v.toLocaleString()+'</b>'+esc(k)+'</div>').join('');
+}
+
+/* ---------- ตรวจสอบ ---------- */
+function check(){
+  if(!DB){alert('ยังไม่มีข้อมูล กด "รีเฟรชข้อมูล" ก่อน');return;}
+  const codes=q.value.split(/[\n,;]+/).map(s=>s.trim()).filter(Boolean);
+  if(!codes.length){alert('กรุณาใส่รหัสตำแหน่ง');return;}
+  RESULT=codes.map(code=>({code,hits:DB.recs.filter(r=>r._n===norm(code))}));
+  let h='<tr><th>ตำแหน่ง</th><th>สถานะ</th><th>Doc DM</th><th>วันที่เสีย</th><th>ค้าง</th><th>อาการ</th><th>แผน</th><th>อะไหล่</th></tr>';
+  RESULT.forEach(({code,hits})=>{
+    if(!hits.length){const n=nearest(code);
+      h+='<tr><td class="mono">'+esc(code)+'</td><td><span class="b grn">🟢 ไม่พบ DM ค้าง</span></td><td colspan="6" style="color:#64748b">ยังไม่เคยเปิด DM หรือปิดแล้ว'+(n?' • ใกล้เคียง: <span class="mono" style="color:#fdba74">'+esc(n)+'</span>':'')+'</td></tr>';return;}
+    const bd=hits.length>1?'<span class="b org">🟠 ค้าง '+hits.length+' ใบ</span>':'<span class="b red">🔴 มี DM ค้าง</span>';
+    hits.forEach((r,i)=>{h+='<tr><td class="mono">'+(i?'':esc(code))+'</td><td>'+(i?'':bd)+'</td><td class="mono">'+esc(r.doc)+'</td><td>'+esc(r.dt)+'</td><td>'+age(r.dt)+'</td><td>'+esc(r.sym)+'</td><td>'+esc(r.plan)+'</td><td>'+esc(r.part)+'</td></tr>';});
+  });
+  out.innerHTML=h;
+}
+function age(s){const m=String(s).match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);if(!m)return'-';
+  let y=+m[3];if(y>2400)y-=543;
+  const d=Math.floor((Date.now()-new Date(y,+m[2]-1,+m[1]))/864e5);
+  if(d<0||d>9000)return'-';
+  return d>365?'<span style="color:#fca5a5">'+d+' วัน</span>':d+' วัน';}
+function exportResult(){
+  if(!RESULT.length){alert('ยังไม่มีผลลัพธ์');return;}
+  const rows=[['ตำแหน่ง','สถานะ','Doc DM','วันที่เสีย','ค้าง(วัน)','ระดับ','อาการ','แผน','อะไหล่']];
+  RESULT.forEach(({code,hits})=>hits.length
+    ?hits.forEach(r=>rows.push([code,'มี DM ค้าง',r.doc,r.dt,age(r.dt).replace(/<[^>]+>/g,'').replace(' วัน',''),r.lvl,r.sym,r.plan,r.part]))
+    :rows.push([code,'ไม่พบ DM ค้าง','','','','','','','']));
+  const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(rows),'DM Check');
+  XLSX.writeFile(wb,'dm_check_'+new Date().toISOString().slice(0,10)+'.xlsx');
+}
+
+/* ---------- OCR core ---------- */
+const RX=/L\s*[P9]\s*([0-9OQDILZSBGTA]{3})\s*[.\-_· ]?\s*([A-Z0-9]{3})\s*([0-9OQDILZSBGTA]{2})\s*[.\-_· ]?\s*([A-Z0-9]{2})\s*([0-9OQDILZSBGTA]{3})/gi;
+const D={O:'0',Q:'0',D:'0',I:'1',L:'1','|':'1',Z:'2',S:'5',B:'8',G:'6',T:'7',A:'4'};
+const L2={'0':'O','1':'I','5':'S','8':'B','2':'Z','6':'G','4':'A'};
+const toD=s=>[...s.toUpperCase()].map(c=>D[c]??c).join('');
+const toL=s=>[...s.toUpperCase()].map(c=>L2[c]??c).join('');
+function grab(t){let m;RX.lastIndex=0;while((m=RX.exec(t)))return 'LP'+toD(m[1])+'-'+toL(m[2])+toD(m[3])+'-'+toL(m[4])+toD(m[5]);return null;}
+function enhance(ctx,w,h,k){const d=ctx.getImageData(0,0,w,h),p=d.data;let s=0;
+  for(let i=0;i<p.length;i+=4){const g=.299*p[i]+.587*p[i+1]+.114*p[i+2];p[i]=p[i+1]=p[i+2]=g;s+=g;}
+  const a=s/(p.length/4);
+  for(let i=0;i<p.length;i+=4){const v=Math.max(0,Math.min(255,(p[i]-a)*k+a));p[i]=p[i+1]=p[i+2]=v;}
+  ctx.putImageData(d,0,0);}
+function nearest(code){if(!DB)return null;const t=norm(code);let best=null,bd=3;
+  DB.recs.forEach(r=>{if(Math.abs(r._n.length-t.length)>2)return;const d=lev(r._n,t);if(d<bd){bd=d;best=r.pos;}});return best;}
+function lev(a,b){const m=[];for(let i=0;i<=b.length;i++)m[i]=[i];for(let j=0;j<=a.length;j++)m[0][j]=j;
+  for(let i=1;i<=b.length;i++)for(let j=1;j<=a.length;j++)
+    m[i][j]=b[i-1]===a[j-1]?m[i-1][j-1]:Math.min(m[i-1][j-1],m[i][j-1],m[i-1][j])+1;return m[b.length][a.length];}
+
+/* ---------- OCR จากรูป ---------- */
+function prep(file){return new Promise(res=>{const r=new FileReader();r.onload=e=>{const im=new Image();
+  im.onload=()=>{const sc=Math.min(2400/im.width,3),w=im.width*sc|0,h=im.height*sc|0;
+    const c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d');
+    x.drawImage(im,0,0,w,h);enhance(x,w,h,2.2);
+    res({url:c.toDataURL('image/jpeg',.92),thumb:e.target.result});};im.src=e.target.result;};
+  r.readAsDataURL(file);});}
+img.onchange=async e=>{
+  const files=[...e.target.files];if(!files.length)return;
+  if(!DB){alert('ยังไม่มีข้อมูล');img.value='';return;}
+  ocrout.innerHTML='';ocrst.textContent='⏳ โหลดโมดูล OCR...';
+  const w=await Tesseract.createWorker('eng');
+  await w.setParameters({tessedit_char_whitelist:'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-_ ',tessedit_pageseg_mode:'6'});
+  for(let i=0;i<files.length;i++){
+    ocrst.textContent='⏳ ประมวลผล '+(i+1)+'/'+files.length;
+    const {url,thumb}=await prep(files[i]);
+    const {data}=await w.recognize(url);
+    const code=grab(data.text.replace(/\n/g,' '));
+    const hits=code?DB.recs.filter(r=>r._n===norm(code)):[];
+    const near=code&&!hits.length?nearest(code):null;
+    ocrout.insertAdjacentHTML('beforeend',
+      '<div style="width:215px;background:#0a1120;border:1px solid #2b3c57;border-radius:9px;padding:8px">'
+      +'<img src="'+thumb+'" style="width:100%;height:110px;object-fit:cover;border-radius:6px">'
+      +'<input class="mono" id="oc'+i+'" value="'+(code||'')+'" placeholder="อ่านไม่ออก — พิมพ์เอง" style="width:100%;margin-top:7px;background:#16213a;color:#e7edf5;border:1px solid #2b3c57;border-radius:6px;padding:6px;font-size:12.5px">'
+      +'<div style="margin-top:6px">'+(!code?'<span class="b org">⚠️ อ่านไม่ออก</span>'
+        :hits.length?'<span class="b red">🔴 DM ค้าง '+hits.length+' ใบ</span>':'<span class="b grn">🟢 ไม่พบ</span>')
+      +(near?'<div style="color:#fdba74;font-size:11px;margin-top:5px">ใกล้เคียง: <a href="#" onclick="document.getElementById(\'oc'+i+'\').value=\''+near+'\';return false">'+near+'</a></div>':'')
+      +'</div></div>');
+  }
+  await w.terminate();
+  ocrst.textContent='✅ เสร็จแล้ว — ตรวจรหัสให้ถูก แล้วกดปุ่มด้านล่าง';
+  ocrout.insertAdjacentHTML('beforeend','<div style="width:100%"><button onclick="pushOCR('+files.length+')">➡️ ส่งไปตรวจสอบทั้งหมด</button></div>');
+  img.value='';
+};
+function pushOCR(n){const a=[];for(let i=0;i<n;i++){const el=document.getElementById('oc'+i);if(el&&el.value.trim())a.push(el.value.trim());}
+  if(!a.length){alert('ไม่มีรหัส');return;}q.value=a.join('\n');check();out.scrollIntoView({behavior:'smooth'});}
+
+/* ---------- สแกนสด ---------- */
+let SC={on:0,w:null,st:null,busy:0,seen:new Map(),track:null,torchOn:0,tid:null};
+async function toggleScan(){
+  if(SC.on)return stopScan();
+  if(!DB){alert('ยังไม่มีข้อมูล');return;}
+  if(!navigator.mediaDevices?.getUserMedia){scanst.innerHTML='<span class="status err">❌ ต้องเปิดผ่าน HTTPS</span>';return;}
+  scanst.textContent='⏳ เปิดกล้อง...';
+  try{SC.st=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1920},height:{ideal:1080}}});}
+  catch(e){scanst.innerHTML='<span class="status err">❌ เปิดกล้องไม่ได้: '+esc(e.message)+'</span>';return;}
+  cam.srcObject=SC.st;await cam.play();
+  SC.track=SC.st.getVideoTracks()[0];
+  if(SC.track.getCapabilities?.().torch)btnTorch.style.display='';
+  camwrap.style.display='';btnScan.textContent='⏹ หยุด';SC.on=1;
+  scanst.textContent='⏳ โหลดโมดูลอ่านตัวอักษร...';
+  SC.w=await Tesseract.createWorker('eng');
+  await SC.w.setParameters({tessedit_char_whitelist:'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-_ ',tessedit_pageseg_mode:'7'});
+  scanst.textContent='🔍 จ่อให้ป้ายอยู่ในกรอบทอง';
+  SC.tid=setInterval(tick,900);
+}
+function stopScan(){SC.on=0;clearInterval(SC.tid);SC.st?.getTracks().forEach(t=>t.stop());
+  SC.w?.terminate();SC.w=null;SC.track=null;SC.torchOn=0;SC.seen.clear();
+  camwrap.style.display='none';btnTorch.style.display='none';btnScan.textContent='▶️ เริ่มสแกน';scanst.textContent='หยุดแล้ว';live.textContent='';}
+async function torch(){if(!SC.track)return;SC.torchOn=!SC.torchOn;
+  try{await SC.track.applyConstraints({advanced:[{torch:!!SC.torchOn}]})}catch(e){}}
+async function tick(){
+  if(!SC.on||SC.busy||!SC.w||cam.readyState<2)return;SC.busy=1;
+  try{
+    const vw=cam.videoWidth,vh=cam.videoHeight;
+    const sx=vw*.08,sy=vh*.38,sw=vw*.84,sh=vh*.24;
+    const sc=Math.min(1600/sw,3),w=sw*sc|0,h=sh*sc|0;
+    const c=document.createElement('canvas');c.width=w;c.height=h;
+    const x=c.getContext('2d');x.drawImage(cam,sx,sy,sw,sh,0,0,w,h);enhance(x,w,h,2.4);
+    const {data}=await SC.w.recognize(c);
+    const txt=data.text.replace(/\n/g,' ').trim(),code=grab(txt);
+    live.textContent=code?'▸ '+code:(txt?'…'+txt.slice(-24):'');
+    if(!code)return;
+    const n=(SC.seen.get(code)||0)+1;SC.seen.set(code,n);
+    if(n===2)confirmHit(code);
+  }catch(e){}finally{SC.busy=0;}
+}
+function beep(hz,ms){try{const a=new(window.AudioContext||window.webkitAudioContext)(),o=a.createOscillator(),g=a.createGain();
+  o.frequency.value=hz;o.connect(g);g.connect(a.destination);g.gain.value=.12;o.start();
+  setTimeout(()=>{o.stop();a.close()},ms);}catch(e){}}
+function confirmHit(code){
+  const hits=DB.recs.filter(r=>r._n===norm(code));
+  if(hits.length){beep(880,90);setTimeout(()=>beep(660,140),120);navigator.vibrate?.([90,60,90]);}
+  else{beep(520,140);navigator.vibrate?.(70);}
+  const near=hits.length?null:nearest(code);
+  const badge=hits.length>1?'<span class="b org">🟠 ค้าง '+hits.length+' ใบ</span>'
+    :hits.length?'<span class="b red">🔴 มี DM ค้าง</span>':'<span class="b grn">🟢 ไม่พบ DM ค้าง</span>';
+  const detail=hits.map(r=>'<div style="color:#cbd5e1;font-size:12px;margin-top:4px">• <span class="mono">'+esc(r.doc)+'</span> '+esc(r.sym)+' <span style="color:#8fa3bf">('+esc(r.lvl)+', ค้าง '+age(r.dt).replace(/<[^>]+>/g,'')+')</span></div>').join('');
+  scanlist.insertAdjacentHTML('afterbegin',
+    '<div style="background:#0a1120;border:1px solid #2b3c57;border-left:4px solid '+(hits.length?'#ef4444':'#10b981')+';border-radius:9px;padding:10px;margin-bottom:8px">'
+    +'<div class="bar"><span class="mono" style="font-size:14px">'+esc(code)+'</span>'+badge
+    +'<span style="color:#64748b;font-size:11px;margin-left:auto">'+new Date().toLocaleTimeString('th-TH')+'</span></div>'
+    +detail+(near?'<div style="color:#fdba74;font-size:11px;margin-top:5px">ไม่พบใน CMMS — ใกล้เคียง: '+esc(near)+'</div>':'')
+    +'</div>');
+  setTimeout(()=>SC.seen.delete(code),8000);
+}
+window.addEventListener('beforeunload',()=>{if(SC.on)stopScan()});
+try{DB=JSON.parse(localStorage.getItem(KEY))}catch(e){DB=null}
+if(DB)render();
+loadCentralDB();
+</script>
+</body></html>
