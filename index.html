@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <meta name="theme-color" content="#020617">
-<title>MT3 — BHS Autonomous Intelligence Hub v5.1</title>
+<title>MT3 — BHS Autonomous Intelligence Hub v5.2</title>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <style>
@@ -58,17 +58,18 @@ details{margin-top:6px}summary{cursor:pointer;font-size:11px;color:#64748b}
 
 <div class="hd">
 <img id="logo" alt="MT3 Logo" crossorigin="anonymous">
-<div><h1><span>MT3</span> BHS INTELLIGENCE HUB<span class="ver">v5.1 Locked</span></h1>
+<div><h1><span>MT3</span> BHS INTELLIGENCE HUB<span class="ver">v5.2 Pro</span></h1>
 <div style="font-size:11px;color:#8fa3bf;letter-spacing:1px">BAGGAGE HANDLING SYSTEM • AUTONOMOUS MAINTENANCE</div></div>
 </div>
 <p class="sub">ระบบวิเคราะห์และบริหารงานซ่อมบำรุงสายพานกระเป๋าอัจฉริยะ • Predictive Diagnostics & BHS Expert System</p>
 
-<!-- เมนูแท็บ -->
+<!-- เมนูแท็บ 5 ช่อง -->
 <div class="tabs">
   <button class="tab-btn active" onclick="switchTab('t1',this)">🔍 1. ตรวจสอบ & ค้นหา DM</button>
   <button class="tab-btn" onclick="switchTab('t2',this)">🧠 2. BHS AI Diagnostics & Prediction</button>
   <button class="tab-btn" onclick="switchTab('t3',this)">📊 3. Reliability & MTBF / MTTR</button>
   <button class="tab-btn" onclick="switchTab('t4',this)">🛠️ 4. Work Order & BHS Downtime</button>
+  <button class="tab-btn" onclick="switchTab('t5',this)">⚙️ 5. ฐานข้อมูลกลาง</button>
 </div>
 
 <!-- แท็บ 1: ตรวจสอบ DM -->
@@ -80,7 +81,7 @@ details{margin-top:6px}summary{cursor:pointer;font-size:11px;color:#64748b}
       <button onclick="camInput.click()">📸 ถ่ายรูปป้ายอุปกรณ์</button>
       <input type="file" id="galInput" accept="image/*" multiple hidden>
       <button class="gray" onclick="galInput.click()">📁 เลือกรูปจากคลัง</button>
-      <button class="gray" onclick="loadCentralDB()" style="margin-left:auto">🔄 ซิงค์ข้อมูลกลาง</button>
+      <button class="gray" onclick="loadCentralDB()" style="margin-left:auto">🔄 รีเฟรชข้อมูล</button>
     </div>
     <div id="quickOcrSt" class="hint" style="margin-bottom:8px">สถานะฐานข้อมูล: กำลังเชื่อมต่ออัตโนมัติ...</div>
     <textarea id="q" placeholder="LP258-BHT57-HS395&#10;LP258-BHT57-HS397"></textarea>
@@ -165,18 +166,32 @@ details{margin-top:6px}summary{cursor:pointer;font-size:11px;color:#64748b}
   </div>
 </div>
 
+<!-- แท็บ 5: ฐานข้อมูลกลาง -->
+<div id="t5" class="panel">
+  <div class="card">
+    <div class="ct">⚙️ จัดการฐานข้อมูลกลาง (Google Sheets Sync)</div>
+    <div class="bar">
+      <button onclick="loadCentralDB()">🔄 รีเฟรชข้อมูลทันที</button>
+      <input type="file" id="f" accept=".xlsx,.xls,.csv" hidden>
+      <button class="gray" onclick="f.click()">📥 Import ไฟล์สำรองเอง</button>
+    </div>
+    <div id="freshness" style="margin-top:10px"></div>
+    <div class="stat" id="stats"></div>
+    <div id="dbinfo" class="hint" style="margin-top:8px"></div>
+  </div>
+</div>
+
 </div>
 
 <script>
 /* ================== ล็อกโลโก้กลางอย่างถาวร ================== */
-const LOCKED_LOGO_URL = 'https://i.ibb.co/6c2r9L5/mt3-emblem.jpg'; // โลโก้ทางการที่อัปโหลด
+const LOCKED_LOGO_URL = 'https://i.ibb.co/6c2r9L5/mt3-emblem.jpg';
 const FALLBACK_LOGO = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTIwIj48cGF0aCBkPSJNNTAgNUw5NSAyMHY1MGMwIDI1LTIwIDQwLTQ1IDQ1QzI1IDExMCA1IDk1IDUgNzBWMjB6IiBmaWxsPSIjMTQzNTZkIiBzdHJva2U9IiNkNGFmMzciIHN0cm9rZS13aWR0aD0iNSIvPjx0ZXh0IHg9IjUwIiB5PSI1MiIgZm9udC1zaXplPSIzMiIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiNkNGFmMzciIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCI+TVQzPC90ZXh0Pjwvc3ZnPg==';
 
 (function(){
   const logoEl = document.getElementById('logo');
   logoEl.onerror = () => { logoEl.onerror = null; logoEl.src = FALLBACK_LOGO; };
   logoEl.src = LOCKED_LOGO_URL;
-  // ลบแคชโลโก้เก่าทิ้งทันทีเพื่อบังคับใช้โลโก้กลางนี้
   localStorage.removeItem('mt3_logo');
 })();
 
@@ -187,10 +202,10 @@ function switchTab(id,el){
   el.classList.add('active');
 }
 
-/* ============ ฐานข้อมูลกลาง (ซิงค์เบื้องหลังอัตโนมัติ) ============ */
+/* ============ ฐานข้อมูลกลาง (ซิงค์และแสดงผลในแท็บ 5) ============ */
 const SHEET_ID='1X3yGiY54Agb3rywBF803bYhFgZEgLKUciy6ObwdbSlg';
 const CSV_URL='https://docs.google.com/spreadsheets/d/'+SHEET_ID+'/gviz/tq?tqx=out:csv';
-const KEY='cmms_dm_db_v5.1';let DB=null,RESULT=[],KEYS=[];
+const KEY='cmms_dm_db_v5.2';let DB=null,RESULT=[],KEYS=[];
 const norm=s=>String(s??'').toUpperCase().replace(/[^A-Z0-9]/g,'');
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const H={pos:'ตำแหน่ง',sym:'สาเหตุ/อาการ',dt:'วันที่เสีย',lvl:'ระดับความเสียหาย',plan:'แผนการแก้ไข',doc:'Doc DM',wp:'WORK PERMIT',done:'วันแล้วเสร็จ',mc:'Machine type',cause:'สาเหตุการชำรุด',part:'อะไหล่'};
@@ -223,7 +238,11 @@ function parseWB(wb){
 function buildIndex(){KEYS=[...new Set(DB.recs.map(r=>r._n))];}
 
 async function loadCentralDB(){
-  quickOcrSt.innerHTML='<span style="color:#fcd34d">⏳ กำลังซิงค์ข้อมูลจากฐานข้อมูลกลาง...</span>';
+  if(document.getElementById('freshness')) {
+    freshness.className='status warn';
+    freshness.textContent='⏳ กำลังดึงข้อมูลจากฐานข้อมูลกลาง...';
+  }
+  quickOcrSt.innerHTML='<span style="color:#fcd34d">⏳ กำลังซิงค์ข้อมูล...</span>';
   try{
     const res=await fetch(CSV_URL+'&t='+Date.now(),{cache:'no-store'});
     if(!res.ok)throw new Error('HTTP '+res.status);
@@ -234,11 +253,40 @@ async function loadCentralDB(){
     DB={at:Date.now(),recs,src:'ฐานข้อมูลกลาง'};
     try{localStorage.setItem(KEY,JSON.stringify(DB))}catch(e){}
     buildIndex();
-    quickOcrSt.innerHTML='<span style="color:#6ee7b7">✅ ฐานข้อมูลพร้อมใช้งาน — ทั้งหมด '+recs.length.toLocaleString()+' รายการ (ค้าง '+recs.filter(r=>r.open).length.toLocaleString()+')</span>';
+    render();
+    quickOcrSt.innerHTML='<span style="color:#6ee7b7">✅ ฐานข้อมูลพร้อมใช้งาน — ทั้งหมด '+recs.length.toLocaleString()+' รายการ</span>';
   }catch(e){
-    quickOcrSt.innerHTML='<span style="color:#fca5a5">❌ ซิงค์ข้อมูลไม่ได้: '+esc(e.message)+(DB?' (ใช้ข้อมูลสำรองในเครื่อง)':'')+'</span>';
-    if(DB){buildIndex();}
+    if(document.getElementById('freshness')){
+      freshness.className='status err';
+      freshness.textContent='❌ ดึงข้อมูลไม่ได้: '+e.message;
+    }
+    quickOcrSt.innerHTML='<span style="color:#fca5a5">❌ ซิงค์ไม่สำเร็จ (ใช้ข้อมูลสำรอง)</span>';
+    if(DB){buildIndex();render();}
   }
+}
+
+f.onchange=e=>{const file=e.target.files[0];if(!file)return;
+const r=new FileReader();r.onload=ev=>{try{
+  const recs=parseWB(XLSX.read(ev.target.result,{type:'array'}));
+  DB={at:Date.now(),recs,src:'ไฟล์ในเครื่อง'};
+  try{localStorage.setItem(KEY,JSON.stringify(DB))}catch(err){}
+  buildIndex();render();alert('✅ นำเข้าสำเร็จ '+recs.length.toLocaleString()+' รายการ');
+}catch(err){alert('❌ '+err.message)}};r.readAsArrayBuffer(file);f.value='';};
+
+function render(){
+  if(!DB)return;
+  const hrs=(Date.now()-DB.at)/36e5;
+  freshness.className='status '+(hrs>24?'warn':'ok');
+  freshness.textContent=(hrs>24?'⚠️ ข้อมูลเก่ากว่า '+Math.floor(hrs/24)+' วัน':'✅ ข้อมูลเป็นปัจจุบัน')+' — จาก'+DB.src;
+  renderStats();
+}
+function renderStats(){
+  const op=DB.recs.filter(r=>r.open);
+  dbinfo.textContent='อัปเดต '+new Date(DB.at).toLocaleString('th-TH')+' • ทั้งหมด '+DB.recs.length.toLocaleString()+' รายการ (ค้าง '+op.length.toLocaleString()+')';
+  const c={},ps=new Set(),mc=new Set();
+  op.forEach(r=>{c[r.lvl||'-']=(c[r.lvl||'-']||0)+1;ps.add(r._n);if(r.mc)mc.add(r.mc)});
+  stats.innerHTML='<div><b>'+op.length.toLocaleString()+'</b>DM ค้าง</div><div><b>'+ps.size.toLocaleString()+'</b>ตำแหน่ง</div><div><b>'+mc.size+'</b>Machine type</div>'
+    +Object.entries(c).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([k,v])=>'<div><b>'+v.toLocaleString()+'</b>'+esc(k)+'</div>').join('');
 }
 
 /* ---------- ตรวจสอบ DM ---------- */
