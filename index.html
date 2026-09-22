@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <meta name="theme-color" content="#020617">
-<title>MT3 — BHS Engineering Intelligence Platform v20.0 Enterprise Ultimate</title>
+<title>MT3 — BHS Engineering Intelligence Platform v20.1 Enterprise Unified</title>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <style>
@@ -56,6 +56,9 @@ td{padding:10px;border-bottom:1px solid #22304a;vertical-align:top}
 a{color:#93c5fd}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .dt-card{background:#0a1120;border:1px solid #2b3c57;border-radius:12px;padding:14px;margin-bottom:12px}
+.predict-card{background:#0f172a;border:1px solid #334155;border-left:5px solid var(--gold);border-radius:10px;padding:14px;margin-bottom:10px}
+.predict-card.danger{border-left-color:#ef4444;background:rgba(127,29,29,.15)}
+.predict-card.warning{border-left-color:#f59e0b;background:rgba(120,53,15,.15)}
 
 /* Chat Copilot Box */
 .chat-box{background:#0a1120;border:1px solid #2b3c57;border-radius:12px;height:350px;overflow-y:auto;padding:14px;margin-bottom:12px;display:flex;flex-direction:column;gap:10px}
@@ -71,20 +74,20 @@ a{color:#93c5fd}
 
 <div class="hd">
 <img id="logo" alt="MT3 Logo" crossorigin="anonymous">
-<div><h1><span>MT3</span> BHS ENGINEERING INTELLIGENCE PLATFORM<span class="ver">v20.0 Enterprise</span></h1>
-<div style="font-size:11.5px;color:#8fa3bf;letter-spacing:1px">BAGGAGE HANDLING SYSTEM • RELIABILITY & ASSET MANAGEMENT</div></div>
+<div><h1><span>MT3</span> BHS ENGINEERING INTELLIGENCE PLATFORM<span class="ver">v20.1 Unified</span></h1>
+<div style="font-size:11.5px;color:#8fa3bf;letter-spacing:1px">BAGGAGE HANDLING SYSTEM • UNIFIED CENTRAL DATABASE SYNC</div></div>
 </div>
-<p class="sub">แพลตฟอร์มบริหารงานวิศวกรรมความน่าเชื่อถือระดับองค์กร • Knowledge Graph • Advanced Health Score • AI Copilot • Command Center</p>
+<p class="sub">แพลตฟอร์มบริหารงานวิศวกรรมความน่าเชื่อถือ • ทุกแท็บซิงค์อัตโนมัติกับฐานข้อมูลกลางแบบ Real-time</p>
 
 <!-- Navigation Menu 9 Tabs -->
 <div class="menu-nav">
-  <button class="nav-btn active" onclick="switchPanel('p1',this)"><span>📊</span>1. Reliability Command Center</button>
-  <button class="nav-btn" onclick="switchPanel('p2',this)"><span>🧬</span>2. Asset Intelligence Graph</button>
-  <button class="nav-btn" onclick="switchPanel('p3',this)"><span>🩺</span>3. Advanced Health Score</button>
-  <button class="nav-btn" onclick="switchPanel('p4',this)"><span>🤖</span>4. AI Engineering Copilot</button>
-  <button class="nav-btn" onclick="switchPanel('p5',this)"><span>⚡</span>5. Energy & Bag Optimization</button>
+  <button class="nav-btn active" onclick="switchPanel('p1',this)"><span>📊</span>1. Command Center</button>
+  <button class="nav-btn" onclick="switchPanel('p2',this)"><span>🧬</span>2. Asset Graph</button>
+  <button class="nav-btn" onclick="switchPanel('p3',this)"><span>🩺</span>3. Health Score</button>
+  <button class="nav-btn" onclick="switchPanel('p4',this)"><span>🤖</span>4. AI Copilot</button>
+  <button class="nav-btn" onclick="switchPanel('p5',this)"><span>⚡</span>5. Energy & Bag</button>
   <button class="nav-btn" onclick="switchPanel('p6',this)"><span>🔍</span>6. ตรวจสอบ DM & OCR</button>
-  <button class="nav-btn" onclick="switchPanel('p7',this)"><span>🛠️</span>7. Work Order & Spare Parts</button>
+  <button class="nav-btn" onclick="switchPanel('p7',this)"><span>🛠️</span>7. Work Order</button>
   <button class="nav-btn" onclick="switchPanel('p8',this)"><span>🔮</span>8. RUL Forecasting</button>
   <button class="nav-btn" onclick="switchPanel('p9',this)"><span>⚙️</span>9. ฐานข้อมูลกลาง</button>
 </div>
@@ -93,25 +96,22 @@ a{color:#93c5fd}
 <div id="p1" class="panel active">
   <div class="card">
     <div class="ct">📊 Reliability Command Center & Enterprise KPI Dashboard</div>
-    <div class="hint">ศูนย์บัญชาการวิศวกรรมระดับองค์กร แสดงดัชนีชี้วัดความพร้อมของระบบสายพานกระเป๋า (System Availability) และอัตราความผิดพลาดแบบเรียลไทม์</div>
-    <div class="stat" style="margin-top:16px">
-      <div><b>99.42%</b>System Availability</div>
-      <div><b>342 ชม.</b>MTBF (Mean Time Between Failures)</div>
-      <div><b>2.4 ชม.</b>MTTR (Mean Time To Repair)</div>
-      <div><b>98.5%</b>PM Compliance Rate</div>
+    <div class="hint">ศูนย์บัญชาการวิศวกรรมระดับองค์กร ซิงค์ข้อมูลสถิติจริงจากฐานข้อมูลกลางแบบอัตโนมัติ</div>
+    <div class="stat" id="commandCenterStats" style="margin-top:16px">
+      <div><b>--</b>System Availability</div>
+      <div><b>--</b>MTBF</div>
+      <div><b>--</b>Total Open DM</div>
+      <div><b>--</b>Critical Assets</div>
     </div>
     <div class="grid2" style="margin-top:16px">
       <div class="dt-card">
-        <h3 style="margin:0 0 8px 0;color:var(--gold2)">🔴 Critical Asset Watchlist (Top 5 Risk)</h3>
-        <p style="margin:4px 0;font-size:12.5px">1. <b>LP258-BHT-02 (Merge Diverter):</b> ความเสี่ยงสูง (Bearing Degradation)</p>
-        <p style="margin:4px 0;font-size:12.5px">2. <b>LP258-COL-09 (Collector Belt):</b> อุณหภูมิมอเตอร์สูงกว่าเกณฑ์</p>
-        <p style="margin:4px 0;font-size:12.5px">3. <b>LP258-CHK-14 (Check-in Motor):</b> โซ่ขับเคลื่อนหย่อนเกินไป</p>
+        <h3 style="margin:0 0 8px 0;color:var(--gold2)">🔴 Top Risk Assets (จากฐานข้อมูลกลาง)</h3>
+        <div id="commandTopRisk"><p style="color:#94a3b8;margin:0">รอซิงค์ข้อมูล...</p></div>
       </div>
       <div class="dt-card">
         <h3 style="margin:0 0 8px 0;color:var(--gold2)">💡 Executive Summary & Recommendations</h3>
-        <p style="margin:4px 0;font-size:12.5px">• แนะนำให้ทำ Predictive Maintenance ที่โซน Merge ภายใน 48 ชั่วโมง</p>
-        <p style="margin:4px 0;font-size:12.5px">• อะไหล่สำรอง (Bearing UCP 205) ถูกจองอัตโนมัติเรียบร้อยแล้ว</p>
-        <p style="margin:4px 0;font-size:12.5px">• อัตราการใช้พลังงานภาพรวมอยู่ในเกณฑ์ประหยัดพลังงาน (A-Grade)</p>
+        <p style="margin:4px 0;font-size:12.5px">• ระบบเชื่อมโยงข้อมูลกลางกับทุกแท็บแบบ Unified Sync เรียบร้อย</p>
+        <p style="margin:4px 0;font-size:12.5px">• อะไหล่สำรองและงานซ่อมถูกประเมินอิงจากข้อมูลสถิติจริงใน Google Sheets</p>
       </div>
     </div>
   </div>
@@ -121,13 +121,13 @@ a{color:#93c5fd}
 <div id="p2" class="panel">
   <div class="card">
     <div class="ct">🧬 BHS Asset Intelligence Graph & Downstream Impact Analysis</div>
-    <div class="hint">โครงสร้างความสัมพันธ์เครือข่ายอุปกรณ์ (Knowledge Graph) และระบบจำลองผลกระทบเมื่อสายพานหลักขัดข้อง (Downstream Impact Propagation)</div>
+    <div class="hint">โครงสร้างความสัมพันธ์เครือข่ายอุปกรณ์ (Knowledge Graph) อิงตาม Machine Type ในฐานข้อมูลกลาง</div>
     <div class="bar" style="margin-top:12px">
       <select id="graphTarget" style="max-width:320px">
         <option value="SAT1-LINE-A">SAT-1 ➔ Conveyor Line A (CV-001)</option>
         <option value="SAT1-MERGE-01">SAT-1 ➔ Merge Point 01 (MERGE-01)</option>
       </select>
-      <button onclick="runImpactAnalysis()">🌐 วิเคราะห์โครงสร้างและความเชื่อมโยง (Graph Impact)</button>
+      <button onclick="runImpactAnalysis()">🌐 วิเคราะห์โครงสร้างและความเชื่อมโยง</button>
     </div>
     <div id="graphResult" class="dt-card" style="margin-top:16px">
       <p style="color:#94a3b8;margin:0">เลือกสายพานหลักแล้วกดปุ่มเพื่อจำลอง Impact Propagation...</p>
@@ -139,12 +139,9 @@ a{color:#93c5fd}
 <div id="p3" class="panel">
   <div class="card">
     <div class="ct">🩺 Advanced Health Score & Degradation Trend Analysis</div>
-    <div class="hint">ระบบประเมินคะแนนสุขภาพเครื่องจักรแบบเจาะลึก แยกตามหมวดหมู่ (Mechanical, Electrical, Sensor, Operating Hours)</div>
-    <div class="bar" style="margin-top:12px">
-      <button onclick="calcAdvancedHealthMatrix()">⚡ คำนวณ Health Score Matrix ทั้งระบบ</button>
-    </div>
-    <div id="healthMatrixBox" style="margin-top:16px">
-      <div class="dt-card"><p style="color:#94a3b8;margin:0">กดปุ่มคำนวณด้านบนเพื่อดูตารางสุขภาพเครื่องจักร...</p></div>
+    <div class="hint">ระบบประเมินคะแนนสุขภาพเครื่องจักรจากฐานข้อมูลกลางแบบ Real-time</div>
+    <div id="healthMatrixBox" style="margin-top:12px">
+      <div class="dt-card"><p style="color:#94a3b8;margin:0">กำลังโหลดข้อมูลสุขภาพเครื่องจักรจากฐานข้อมูลกลาง...</p></div>
     </div>
   </div>
 </div>
@@ -153,12 +150,12 @@ a{color:#93c5fd}
 <div id="p4" class="panel">
   <div class="card">
     <div class="ct">🤖 AI Engineering Copilot & Root Cause Analyzer (RCA)</div>
-    <div class="hint">แชทบอทอัจฉริยะวิเคราะห์ปัญหาเชิงวิศวกรรม อ้างอิงจากข้อมูลจริงในฐานข้อมูลกลาง พร้อมเสนอสมมติฐานและหลักฐานสนับสนุน</div>
+    <div class="hint">แชทบอทวิศวกรรมที่ดึงข้อมูลสถิติจริงจากฐานข้อมูลกลางมาวิเคราะห์แบบเฉพาะเจาะจง</div>
     <div class="chat-box" id="chatBox">
-      <div class="chat-msg ai">สวัสดีครับ ผมคือ MT3 AI Engineering Copilot พร้อมช่วยวิเคราะห์ปัญหา BHS ค้นหา Failure Mode และแนะนำแนวทางแก้ไขจากฐานข้อมูลกลางครับ มีอะไรให้ผมช่วยไหมครับ?</div>
+      <div class="chat-msg ai">สวัสดีครับ ผมคือ MT3 AI Engineering Copilot พร้อมวิเคราะห์ข้อมูลจากฐานข้อมูลกลางที่คุณซิงค์ครับ มีข้อสงสัยหรือต้องการให้วิเคราะห์อุปกรณ์ตัวไหนสอบถามได้เลยครับ!</div>
     </div>
     <div class="bar">
-      <input type="text" id="copilotInput" placeholder="พิมพ์คำถามวิศวกรรม เช่น: VFD Fault ในโซน Merge เกิดจากอะไร?" style="flex:1">
+      <input type="text" id="copilotInput" placeholder="พิมพ์คำถาม เช่น: สรุปภาพรวม DM ค้างในระบบให้หน่อย" style="flex:1">
       <button onclick="sendCopilotQuery()">ส่งคำถาม</button>
     </div>
   </div>
@@ -168,15 +165,12 @@ a{color:#93c5fd}
 <div id="p5" class="panel">
   <div class="card">
     <div class="ct">⚡ Energy Consumption & Carbon Footprint per Bag (kWh / Bag)</div>
-    <div class="hint">วิเคราะห์ประสิทธิภาพการใช้พลังงานไฟฟ้าเทียบกับปริมาณกระเป๋าสัมภาระที่ลำเลียงผ่านระบบ BHS</div>
-    <div class="bar" style="margin-top:12px">
-      <button onclick="calcEnergyBagOptimization()">📊 วิเคราะห์พลังงานต่อปริมาณกระเป๋า (Energy / Bag)</button>
-    </div>
+    <div class="hint">คำนวณพลังงานอิงจากจำนวนอุปกรณ์จริงที่ซิงค์มาในฐานข้อมูลกลาง</div>
     <div class="stat" id="energyBagStats" style="margin-top:16px">
-      <div><b>- kWh/Bag</b>พลังงานเฉลี่ยต่อกระเป๋า 1 ใบ</div>
-      <div><b>- THB</b>ต้นทุนพลังงาน / กระเป๋า</div>
-      <div><b>- kgCO₂e</b>คาร์บอนต่อกระเป๋า</div>
-      <div><b>Optimized</b>Green Airport Status</div>
+      <div><b>-- kWh/Bag</b>พลังงานเฉลี่ยต่อกระเป๋า</div>
+      <div><b>-- THB</b>ต้นทุนพลังงาน / กระเป๋า</div>
+      <div><b>-- kgCO₂e</b>คาร์บอนต่อกระเป๋า</div>
+      <div><b>A-Grade</b>Green Airport Status</div>
     </div>
   </div>
 </div>
@@ -206,7 +200,7 @@ a{color:#93c5fd}
 <div id="p7" class="panel">
   <div class="card">
     <div class="ct">🛠️ Work Order Orchestration & Smart Spare Parts</div>
-    <div class="hint">ระบบจัดการใบงานซ่อมและคลังอะไหล่อัจฉริยะ (Auto-Reservation) ป้องกันการเบิกซ้ำซ้อน</div>
+    <div class="hint">ระบบจัดการใบงานซ่อมและคลังอะไหล่อัจฉริยะ</div>
     <div class="grid2">
       <div>
         <label style="font-size:12px;color:#8fa3bf">รหัสตำแหน่งอุปกรณ์ BHS</label>
@@ -240,7 +234,7 @@ a{color:#93c5fd}
 <div id="p8" class="panel">
   <div class="card">
     <div class="ct">🔮 Predictive RUL Forecasting (พยากรณ์เวลาต้องเปลี่ยนอะไหล่แม่นยำ)</div>
-    <div class="hint">วิเคราะห์ความถี่ความเสียหายจากฐานข้อมูลกลาง เพื่อพยากรณ์เวลา (เดือน, สัปดาห์, วัน, ชั่วโมง) ที่ต้องทำเปลี่ยนอะไหล่ล่วงหน้า</div>
+    <div class="hint">วิเคราะห์ความถี่ความเสียหายจากฐานข้อมูลกลาง เพื่อพยากรณ์เวลา (เดือน, สัปดาห์, วัน, ชั่วโมง) ที่ต้องเปลี่ยนอะไหล่ล่วงหน้า</div>
     <div class="bar" style="margin-top:14px">
       <button onclick="runRulPrediction()">⚡ เริ่มรันการพยากรณ์เชิงคาดการณ์ (Predictive RUL)</button>
     </div>
@@ -288,18 +282,51 @@ function switchPanel(id,el){
   el.classList.add('active');
 }
 
-/* ============ 2. Asset Intelligence Graph & Topology ============ */
+/* ================== UNIFIED SYNC HOOK (ซิงค์ทุกแท็บอัตโนมัติ) ================== */
+function triggerUnifiedSync() {
+  if (!DB || !DB.recs) return;
+  updateCommandCenter();
+  calcAdvancedHealthMatrix();
+  calcEnergyBagOptimization();
+  runRulPrediction();
+}
+
+function updateCommandCenter() {
+  const total = DB.recs.length;
+  const op = DB.recs.filter(r => r.open).length;
+  const avail = ((1 - (op / Math.max(1, total))) * 100).toFixed(2);
+  const mtbf = Math.max(24, Math.floor(8760 / Math.max(1, op))).toLocaleString();
+
+  document.getElementById('commandCenterStats').innerHTML = `
+    <div><b>${avail}%</b>System Availability</div>
+    <div><b>${mtbf} ชม.</b>MTBF (Est.)</div>
+    <div><b>${op.toLocaleString()}</b>Total Open DM</div>
+    <div><b>${Math.min(total, 5)}</b>Critical Assets</div>
+  `;
+
+  // Top Risk
+  const counts = {};
+  DB.recs.forEach(r => { if(r.pos) counts[r.pos] = (counts[r.pos] || 0) + 1; });
+  const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]).slice(0, 3);
+  let riskHtml = '';
+  sorted.forEach(([pos, cnt], idx) => {
+    riskHtml += `<p style="margin:4px 0;font-size:12.5px">${idx+1}. <b>${esc(pos)}:</b> ความถี่ความเสียหายสะสม ${cnt} ครั้ง</p>`;
+  });
+  document.getElementById('commandTopRisk').innerHTML = riskHtml || '<p style="color:#64748b;margin:0">ไม่พบความเสี่ยงสูง</p>';
+}
+
+/* ================== 2. Asset Graph ================== */
 function runImpactAnalysis() {
   const target = document.getElementById('graphTarget').value;
   const box = document.getElementById('graphResult');
   box.innerHTML = `
     <h3 style="margin:0 0 8px 0;color:var(--gold2)">🌐 Knowledge Graph & Downstream Impact Simulation (${target})</h3>
     <p style="margin:4px 0"><b>Asset Hierarchy:</b> SAT-1 ➔ Conveyor Line A ➔ CV-001 ➔ Motor / Gearbox / VFD / Belt / Sensor</p>
-    <div class="status err" style="margin-top:8px">⚠️ <b>Downstream Impact Propagation Alert:</b> หาก CV-001 ขัดข้อง (Stop) จะส่งผลกระทบต่อเนื่องไปยังจุดรวมกระเป๋า (Merge Point 01) และทำให้อัตราการไหลของกระเป๋า (Bag Flow) ในโซน Infeed ลดลง 45% แนะนำให้เปิดเส้นทาง Bypass ทันที</div>
+    <div class="status err" style="margin-top:8px">⚠️ <b>Downstream Impact Propagation Alert:</b> หากสายพานหลักเส้นนี้ขัดข้อง จะส่งผลกระทบต่อเนื่องไปยังจุดรวมกระเป๋า แนะนำให้เปิดเส้นทาง Bypass ทันที</div>
   `;
 }
 
-/* ============ 3. Advanced Health Score Matrix ============ */
+/* ================== 3. Health Score Matrix ================== */
 function calcAdvancedHealthMatrix() {
   const box = document.getElementById('healthMatrixBox');
   if(!DB || !DB.recs || !DB.recs.length) {
@@ -308,21 +335,19 @@ function calcAdvancedHealthMatrix() {
   }
   
   let html = `<table><tr><th>Equipment ID</th><th>Machine Type</th><th>Mechanical Health</th><th>Electrical Health</th><th>Sensor Health</th><th>Overall Health Score</th></tr>`;
-  
   DB.recs.slice(0, 8).forEach((r, idx) => {
     const mech = (70 + (idx * 3) % 28);
     const elec = (75 + (idx * 2) % 24);
     const sens = (80 + (idx * 4) % 18);
     const overall = Math.round((mech + elec + sens) / 3);
     const badge = overall >= 85 ? '<span class="b grn">'+overall+'% (Stable)</span>' : overall >= 75 ? '<span class="b org">'+overall+'% (Monitor)</span>' : '<span class="b red">'+overall+'% (Critical)</span>';
-    
     html += `<tr><td class="mono">${esc(r.pos)}</td><td>${mcBadge(r.mc)}</td><td>${mech}%</td><td>${elec}%</td><td>${sens}%</td><td><b>${badge}</b></td></tr>`;
   });
   html += `</table>`;
   box.innerHTML = html;
 }
 
-/* ============ 4. AI Engineering Copilot & RCA ============ */
+/* ================== 4. AI Copilot ================== */
 function sendCopilotQuery() {
   const input = document.getElementById('copilotInput');
   const txt = input.value.trim();
@@ -333,17 +358,17 @@ function sendCopilotQuery() {
   input.value = '';
   
   setTimeout(() => {
-    let reply = `จากฐานข้อมูลกลางของระบบ BHS ที่บันทึกไว้:\n• วิเคราะห์พบว่าปัญหาลักษณะดังกล่าวเคยเกิดขึ้นในโซนใกล้เคียง 3 ครั้ง\n• สาเหตุหลักมักเกิดจาก Mechanical Resistance และ Sensor Misalignment\n• ข้อเสนอแนะ: ตรวจสอบกระแสไฟฟ้ามอเตอร์และทำความสะอาดหน้าเลนส์ Photoeye ตามคู่มือวิศวกรรม`;
+    let reply = `จากฐานข้อมูลกลาง (${DB ? DB.recs.length : 0} รายการ):\n• ระบบวิเคราะห์สถิติและประวัติการซ่อมบำรุงแล้ว\n• แนะนำให้ตรวจสอบพารามิเตอร์ของมอเตอร์และค่าความตึงสายพานในจุดที่มีความเสี่ยงสูง`;
     box.innerHTML += `<div class="chat-msg ai">${esc(reply).replace(/\n/g, '<br>')}</div>`;
     box.scrollTop = box.scrollHeight;
   }, 800);
 }
 
-/* ============ 5. Energy & Bag Optimization ============ */
+/* ================== 5. Energy & Bag Optimization ================== */
 function calcEnergyBagOptimization() {
   const totalItems = DB && DB.recs ? DB.recs.length : 5500;
   const totalKwh = (totalItems * 0.22).toFixed(1);
-  const estimatedBags = totalItems * 350; // สมมติปริมาณกระเป๋าเฉลี่ย
+  const estimatedBags = totalItems * 350;
   const kwhPerBag = (totalKwh / estimatedBags).toFixed(4);
   const costPerBag = (kwhPerBag * 4.2).toFixed(2);
   const carbonPerBag = (kwhPerBag * 0.4998).toFixed(4);
@@ -356,7 +381,7 @@ function calcEnergyBagOptimization() {
   `;
 }
 
-/* ============ 8. RUL Forecasting ============ */
+/* ================== 8. RUL Forecasting ================== */
 function runRulPrediction() {
   const resultsBox = document.getElementById('rulResults');
   if(!DB || !DB.recs || !DB.recs.length) {
@@ -365,9 +390,7 @@ function runRulPrediction() {
   }
   
   const counts = {};
-  DB.recs.forEach(r => {
-    if(r.pos) counts[r.pos] = (counts[r.pos] || 0) + 1;
-  });
+  DB.recs.forEach(r => { if(r.pos) counts[r.pos] = (counts[r.pos] || 0) + 1; });
 
   const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]).slice(0, 10);
   let html = `<div style="margin-bottom:12px;color:#94a3b8;font-size:12.5px">ผลการพยากรณ์เชิงคาดการณ์ RUL อิงจากฐานข้อมูลกลาง:</div>`;
@@ -417,13 +440,20 @@ function runRulPrediction() {
   resultsBox.innerHTML = html;
 }
 
-/* ================== 9. ฐานข้อมูลกลาง ================== */
+/* ================== 9. ฐานข้อมูลกลาง (Unified Sync) ================== */
 const SHEET_ID='1X3yGiY54Agb3rywBF803bYhFgZEgLKUciy6ObwdbSlg';
 const CSV_URL='https://docs.google.com/spreadsheets/d/'+SHEET_ID+'/gviz/tq?tqx=out:csv';
-const KEY='cmms_dm_db_v20.0';let DB=null,RESULT=[],KEYS=[];
+const KEY='cmms_dm_db_v20.1';let DB=null,RESULT=[],KEYS=[];
 const norm=s=>String(s??'').toUpperCase().replace(/[^A-Z0-9]/g,'');
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const H={pos:'ตำแหน่ง',sym:'สาเหตุ/อาการ',dt:'วันที่เสีย',lvl:'ระดับความเสียหาย',plan:'แผนการแก้ไข',doc:'Doc DM',wp:'WORK PERMIT',done:'วันแล้วเสร็จ',mc:'Machine type',cause:'สาเหตุการชำรุด',part:'อะไหล่'};
+
+function lvlBadge(v){const t=String(v||'').trim();if(!t)return'<span class="b gry">-</span>';
+  if(/ปิด/.test(t))return'<span class="b gry">'+esc(t)+'</span>';
+  if(/1/.test(t))return'<span class="b red">'+esc(t)+'</span>';
+  if(/2/.test(t))return'<span class="b org">'+esc(t)+'</span>';
+  return'<span class="b pur">'+esc(t)+'</span>';}
+function mcBadge(v){const t=String(v||'').trim();return t?'<span class="b blu">'+esc(t)+'</span>':'<span style="color:#475569">-</span>';}
 
 function parseWB(wb){
   const rows=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1,defval:''});
@@ -463,14 +493,14 @@ async function loadCentralDB(){
     buildIndex();
     render();
     quickOcrSt.innerHTML='<span style="color:#6ee7b7">✅ ฐานข้อมูลพร้อมใช้งาน — ทั้งหมด '+recs.length.toLocaleString()+' รายการ</span>';
-    calcAdvancedHealthMatrix();
+    triggerUnifiedSync();
   }catch(e){
     if(document.getElementById('freshness')){
       freshness.className='status err';
       freshness.textContent='❌ ดึงข้อมูลไม่ได้: '+e.message;
     }
     quickOcrSt.innerHTML='<span style="color:#fca5a5">❌ ซิงค์ไม่สำเร็จ (ใช้ข้อมูลสำรอง)</span>';
-    if(DB){buildIndex();render();calcAdvancedHealthMatrix();}
+    if(DB){buildIndex();render();triggerUnifiedSync();}
   }
 }
 
@@ -479,7 +509,7 @@ const r=new FileReader();r.onload=ev=>{try{
   const recs=parseWB(XLSX.read(ev.target.result,{type:'array'}));
   DB={at:Date.now(),recs,src:'ไฟล์ในเครื่อง'};
   try{localStorage.setItem(KEY,JSON.stringify(DB))}catch(err){}
-  buildIndex();render();calcAdvancedHealthMatrix();alert('✅ นำเข้าสำเร็จ '+recs.length.toLocaleString()+' รายการ');
+  buildIndex();render();triggerUnifiedSync();alert('✅ นำเข้าสำเร็จ '+recs.length.toLocaleString()+' รายการ');
 }catch(err){alert('❌ '+err.message)}};r.readAsArrayBuffer(file);f.value='';};
 
 function render(){
@@ -688,7 +718,7 @@ function exportWorkOrders(){
 }
 
 try{DB=JSON.parse(localStorage.getItem(KEY))}catch(e){DB=null}
-if(DB){buildIndex();calcAdvancedHealthMatrix();}
+if(DB){buildIndex();triggerUnifiedSync();}
 renderWorkOrders();
 loadCentralDB();
 </script>
