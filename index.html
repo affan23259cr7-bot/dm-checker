@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <meta name="theme-color" content="#020617">
-<title>MT3 — BHS Engineering Intelligence Platform v20.3 Enterprise</title>
+<title>MT3 — BHS Engineering Intelligence Platform v20.4 Enterprise</title>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <style>
@@ -74,10 +74,10 @@ a{color:#93c5fd}
 
 <div class="hd">
 <img id="logo" alt="MT3 Logo" crossorigin="anonymous">
-<div><h1><span>MT3</span> BHS ENGINEERING INTELLIGENCE PLATFORM<span class="ver">v20.3 Enterprise</span></h1>
-<div style="font-size:11.5px;color:#8fa3bf;letter-spacing:1px">BAGGAGE HANDLING SYSTEM • GITHUB RAW LOGO INTEGRATION</div></div>
+<div><h1><span>MT3</span> BHS ENGINEERING INTELLIGENCE PLATFORM<span class="ver">v20.4 Enterprise</span></h1>
+<div style="font-size:11.5px;color:#8fa3bf;letter-spacing:1px">BAGGAGE HANDLING SYSTEM • GITHUB REPOSITORY LOGO INTEGRATION</div></div>
 </div>
-<p class="sub">แพลตฟอร์มบริหารงานวิศวกรรมความน่าเชื่อถือ • รองรับลิงก์ภาพจาก GitHub Raw • ทำงานได้จริง 100% ทุกแท็บ</p>
+<p class="sub">แพลตฟอร์มบริหารงานวิศวกรรมความน่าเชื่อถือ • โลโก้โหลดตรงจาก GitHub Repository • ซิงค์อัตโนมัติ 100%</p>
 
 <!-- Navigation Menu 9 Tabs -->
 <div class="menu-nav">
@@ -264,15 +264,14 @@ a{color:#93c5fd}
 </div>
 
 <script>
-/* ================== ตั้งค่าลิงก์โลโก้ GitHub Raw ================== */
-// แทนที่ลิงก์ด้านล่างนี้ด้วย URL แบบ Raw จาก GitHub ของคุณ (เช่น https://raw.githubusercontent.com/username/repo/main/logo.jpg)
-const GITHUB_LOGO_URL = 'https://raw.githubusercontent.com/YOUR_GITHUB_USERNAME/YOUR_REPO_NAME/main/logo.jpg';
-const FALLBACK_LOGO = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTIwIj48cGF0aCBkPSJNNTAgNUw5NSAyMHY1MGMwIDI1LTIwIDQwLTQ1IDQ1QzI1IDExMCA1IDk1IDUgNzBWMjB6IiBmaWxsPSIjMTQzNTZkIiBzdHJva2U9IiNkNGFmMzciIHN0cm9rZS13aWR0aD0iNSIvPjx0ZXh0IHg9IjUwIiB5PSI1MiIgZm9udC1zaXplPSIzMiIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiNkNGFmMzciIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCI+TVQzPC90ZXh0PC9zdmc+';
+/* ================== โหลดโลโก้จาก GitHub Repository โดยตรง ================== */
+const LOCAL_LOGO = './logo.png'; // โหลดไฟล์ logo.png ที่อยู่ใน GitHub 📂 เดียวกันกับ index.html
+const FALLBACK_LOGO = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTIwIj48cGF0aCBkPSJNNTAgNUw5NSAyMHY1MGMwIDI1LTIwIDQwLTQ1IDQ1QzI1IDExMCA1IDk1IDUgNzBWMjB6IiBmaWxsPSIjMTQzNTZkIiBzdHJva2U9IiNkNGFmMzciIHN0cm9rZS13aWR0aD0iNSIvPjx0ZXh0IHg9IjUwIiB5PSI1MiIgZm9udC1zaXplPSIzMiIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiNkNGFmMzciIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCI+TVQzPC90ZXh0Pjwvc3ZnPg==';
 
 (function(){
   const logoEl = document.getElementById('logo');
   logoEl.onerror = () => { logoEl.onerror = null; logoEl.src = FALLBACK_LOGO; };
-  logoEl.src = GITHUB_LOGO_URL;
+  logoEl.src = LOCAL_LOGO;
 })();
 
 function switchPanel(id,el){
@@ -443,7 +442,7 @@ function runRulPrediction() {
 /* ================== 9. ฐานข้อมูลกลาง (Unified Sync) ================== */
 const SHEET_ID='1X3yGiY54Agb3rywBF803bYhFgZEgLKUciy6ObwdbSlg';
 const CSV_URL='https://docs.google.com/spreadsheets/d/'+SHEET_ID+'/gviz/tq?tqx=out:csv';
-const KEY='cmms_dm_db_v20.3';let DB=null,RESULT=[],KEYS=[];
+const KEY='cmms_dm_db_v20.4';let DB=null,RESULT=[],KEYS=[];
 const norm=s=>String(s??'').toUpperCase().replace(/[^A-Z0-9]/g,'');
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const H={pos:'ตำแหน่ง',sym:'สาเหตุ/อาการ',dt:'วันที่เสีย',lvl:'ระดับความเสียหาย',plan:'แผนการแก้ไข',doc:'Doc DM',wp:'WORK PERMIT',done:'วันแล้วเสร็จ',mc:'Machine type',cause:'สาเหตุการชำรุด',part:'อะไหล่'};
