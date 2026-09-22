@@ -130,11 +130,11 @@ body.isAdmin .lockmsg{display:none}
 <!-- ========== แท็บ 1 : ส่งรายงาน ========== -->
 <div id="tab-report" class="tab-content container active">
   <label>📍 พื้นที่ปฏิบัติงาน</label>
-  <select id="area"><option>MTB-West</option><option>MTB-East</option><option>SAT-East</option>
+  <select id="area" onchange="updateCycleHint()"><option>MTB-West</option><option>MTB-East</option><option>SAT-East</option>
   <option>SAT-West</option><option>Tunnel-West</option><option>Tunnel-East</option></select>
 
   <label>⏰ รอบตรวจเช็ค</label>
-  <select id="shift"><option>รับกะ</option><option>ส่งคืน</option></select>
+  <select id="shift" onchange="updateCycleHint()"><option>รับกะ</option><option>ส่งคืน</option></select>
 
   <div class="cyclebox newc" id="cycleHint">⏳ กำลังตรวจสอบเลขที่เอกสาร...</div>
 
@@ -300,7 +300,7 @@ const getPin=()=>localStorage.getItem('mt3_pin')||DEFAULT_PIN;
 
 /* ================== [LOCKED] โลโก้กลาง ================== */
 const LOGO_URL='https://affan23259cr7-bot.github.io/tool-check/logo.png';
-const LOGO_FALLBACK='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTIwIj48cGF0aCBkPSJNNTAgNUw5NSAyMHY1MGMwIDI1LTIwIDQwLTQ1IDQ1QzI1IDExMCA1IDk1IDUgNzBWMjB6IiBmaWxsPSIjMTQzNTZkIiBzdHJva2U9IiNkNGFmMzciIHN0cm9rZS13aWR0aD0iNSIvPjx0ZXh0IHg9IjUwIiB5PSI1MiIgZm9udC1zaXplPSIzMiIgZm9udC13ZWlnaHQ9ImJvbGQiIGJpbGw9IiNkNGFmMzciIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCI+TVQzPC90ZXh0PjxjaXJjbGUgY3g9IjM4IiBjeT0iNzUiIHI9IjkiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2Q0YWYzNyIgc3Ryb2tlLXdpZHRoPSI0Ii8+PHBhdGggZD0iTTU1IDgzbDE1LTE1TTYyIDY2aDEwdjEwIiBzdHJva2U9IiNkNGFmMzciIHN0cm9rZS13aWR0aD0iNCIgZmlsbD0ibm9uZSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PC9zdmc+';
+const LOGO_FALLBACK='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTIwIj48cGF0aCBkPSJNNTAgNUw5NSAyMHY1MGMwIDI1LTIwIDQwLTQ1IDQ1QzI1IDExMCA1IDk1IDUgNzBWMjB6IiBmaWxsPSIjMTQzNTZkIiBzdHJva2U9IiNkNGFmMzciIHN0cm9rZS13aWR0aD0iNSIvPjx0ZXh0IHg9IjUwIiB5PSI1MiIgZm9udC1zaXplPSIzMiIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiNkNGFmMzciIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCI+TVQzPC90ZXh0PjxjaXJjbGUgY3g9IjM4IiBjeT0iNzUiIHI9IjkiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2Q0YWYzNyIgc3Ryb2tlLXdpZHRoPSI0Ii8+PHBhdGggZD0iTTU1IDgzbDE1LTE1TTYyIDY2aDEwdjEwIiBzdHJva2U9IiNkNGFmMzciIHN0cm9rZS13aWR0aD0iNCIgZmlsbD0ibm9uZSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PC9zdmc+';
 let LOGO_SRC=LOGO_URL;
 (function(){
   const el=$('logo');
@@ -569,48 +569,94 @@ function showImg(i){$('modalImg').src=photos[i].b64;$('modal').classList.add('sh
 function showHistImg(i){$('modalImg').src=cache[i].img;$('modal').classList.add('show');}
 function showLogImg(i){const t=logCache[i].thumb;if(t){$('modalImg').src=t;$('modal').classList.add('show');}}
 
-/* ================== เลขที่เอกสารอิงตามวันที่ (ทุกพื้นที่ในวันเดียวกันใช้เลขเดียวกัน) ================== */
+/* ================== เลขที่เอกสารแบบ 1 รอบ = 6 พื้นที่ × (รับกะ+ส่งคืน) = 12 รายการ ================== */
 const DOC_PREFIX='MT';
+const AREAS=['MTB-West','MTB-East','SAT-East','SAT-West','Tunnel-West','Tunnel-East'];
+const SHIFTS=['รับกะ','ส่งคืน'];
+const CYCLE_SIZE=AREAS.length*SHIFTS.length; // 12
 const pad=(n,l)=>String(n).padStart(l,'0');
 function beYY(d){return pad((d.getFullYear()+543)%100,2);}
 function todayKey(){return new Date().toISOString().slice(0,10);}
 function _seq(){try{return JSON.parse(localStorage.getItem('mt3_docseq')||'{}');}catch(e){return{};}}
 function _saveSeq(o){localStorage.setItem('mt3_docseq',JSON.stringify(o));}
 
-function getDocNoForDate(dateKey){
-  const d=dateKey?new Date(dateKey):new Date();
-  const yy=beYY(d);
-  const dk=dateKey||todayKey();
-  
-  // เช็คจาก cloudRecs หากวันนี้มีเลขเอกสารออกไปแล้ว ให้ใช้เลขเดิม
-  const existing=cloudRecs.find(r=>r.dateKey===dk&&r.docNo&&r.docNo.indexOf(DOC_PREFIX+yy+'/')===0);
-  if(existing&&existing.docNo)return existing.docNo;
-  
-  let n=0;
+/* รวมรายการในระบบตามเลขที่เอกสาร -> เก็บชุดคีย์ พื้นที่|รอบ */
+function cycleMap(){
+  const yy=beYY(new Date()),m={};
   cloudRecs.forEach(r=>{
-    if(r.docNo&&r.docNo.indexOf(DOC_PREFIX+yy+'/')===0){
+    if(!r.docNo||r.docNo.indexOf(DOC_PREFIX+yy+'/')!==0)return;
+    if(!m[r.docNo])m[r.docNo]=new Set();
+    m[r.docNo].add(r.area+'|'+r.shift);
+  });
+  return m;
+}
+
+/* หาเลขล่าสุดในปีนี้ */
+function maxDocNum(){
+  const yy=beYY(new Date());
+  let maxN=0;
+  cloudRecs.forEach(r=>{
+    if(r.docNo&&typeof r.docNo==='string'&&r.docNo.indexOf(DOC_PREFIX+yy+'/')===0){
       const v=parseInt(r.docNo.split('/')[1],10);
-      if(!isNaN(v)&&v>n)n=v;
+      if(!isNaN(v)&&v>maxN)maxN=v;
     }
   });
   const s=_seq(); s.last=s.last||{};
-  if((s.last[yy]||0)>n)n=s.last[yy];
-  n=n+1; s.last[yy]=n; _saveSeq(s);
+  if((s.last[yy]||0)>maxN)maxN=s.last[yy];
+  return maxN;
+}
+
+function newDocNo(){
+  const yy=beYY(new Date());
+  const n=maxDocNum()+1;
+  const s=_seq(); s.last=s.last||{}; s.last[yy]=n; _saveSeq(s);
   return DOC_PREFIX+yy+'/'+pad(n,4);
 }
 
-function docNo(rec){
-  if(rec&&rec.docNo)return rec.docNo;
-  const dk=(rec&&rec.dateKey)?rec.dateKey:todayKey();
-  return getDocNoForDate(dk);
+/* คืนเลขที่เอกสารของรอบที่ยังเปิดอยู่ (ยังไม่ครบ 12 และยังไม่มี พื้นที่+รอบ นี้) */
+function openCycleDocNo(area,shift){
+  const yy=beYY(new Date());
+  const m=cycleMap();
+  const keys=Object.keys(m).sort((a,b)=>
+    parseInt(b.split('/')[1],10)-parseInt(a.split('/')[1],10));
+  for(const dno of keys){
+    const set=m[dno];
+    if(set.size>=CYCLE_SIZE)continue;              // รอบนี้ครบแล้ว -> ปิด
+    if(set.has(area+'|'+shift))continue;           // พื้นที่+รอบนี้ส่งไปแล้ว -> ต้องขึ้นรอบใหม่
+    return dno;                                    // ยังว่าง -> ใช้เลขเดิม
+  }
+  return null;
+}
+
+function resolveDocNo(area,shift){
+  const open=openCycleDocNo(area,shift);
+  return open?open:newDocNo();
+}
+
+function docNo(rec){ return (rec&&rec.docNo)?rec.docNo:'-'; }
+
+function docRangeLabel(list){
+  const dnos=[...new Set(list.map(r=>r.docNo).filter(Boolean))].sort();
+  if(!dnos.length)return '-';
+  return dnos.length===1?dnos[0]:dnos[0]+' – '+dnos[dnos.length-1];
 }
 
 function updateCycleHint(){
   const el=$('cycleHint'); if(!el)return;
-  const dk=todayKey();
-  const currentDno=getDocNoForDate(dk);
-  el.className='cyclebox newc';
-  el.innerHTML='📅 เลขที่เอกสารประจำวันนี้: <b>'+currentDno+'</b><br><span style="opacity:.8">ทุกพื้นที่และทุกรอบการตรวจในวันนี้จะใช้หมายเลขเดียวกันนี้</span>';
+  if(!cloudReady){ el.className='cyclebox'; el.innerHTML='⏳ กำลังเชื่อมต่อฐานข้อมูล...'; return; }
+  const a=$('area').value,s=$('shift').value;
+  const open=openCycleDocNo(a,s);
+  if(open){
+    const done=cycleMap()[open].size;
+    el.className='cyclebox';
+    el.innerHTML='📄 รอบนี้จะใช้เลขที่เอกสาร <b>'+open+'</b><br>'+
+      '<span style="opacity:.85">ส่งแล้ว '+done+'/'+CYCLE_SIZE+' รายการ (6 พื้นที่ × รับกะ+ส่งคืน) — ครบเมื่อไหร่ระบบจะขึ้นเลขใหม่อัตโนมัติ</span>';
+  }else{
+    const yy=beYY(new Date());
+    el.className='cyclebox newc';
+    el.innerHTML='🆕 รอบก่อนหน้าครบแล้ว — รายการนี้จะ <b>เปิดเลขที่เอกสารใหม่</b> '+
+      '<b>'+DOC_PREFIX+yy+'/'+pad(maxDocNum()+1,4)+'</b>';
+  }
 }
 
 /* ================== บันทึกรายงาน ================== */
@@ -661,7 +707,7 @@ async function submitReport(){
     const batch='B'+now.getTime();
     showStatus('status','⏳ กำลังบันทึกและส่งขึ้นฐานข้อมูลกลาง...','info');
 
-    const dno=getDocNoForDate(dateKey);
+    const dno=resolveDocNo(area,shift);
     const cnt=photos.length,hasDup=photos.some(p=>p.isDup);
     let upFail=0;
 
@@ -688,7 +734,7 @@ async function submitReport(){
     showStatus('status','❌ เกิดข้อผิดพลาด: '+err.message,'err');
   }finally{
     submitting=false; btn.disabled=false; btn.textContent='✅ บันทึกรายงาน';
-    setTimeout(updateCycleHint,800);
+    setTimeout(updateCycleHint,900);
   }
 }
 function showStatus(id,msg,type){const e=$(id);if(!e)return;e.className='status show '+type;e.innerText=msg;
@@ -793,6 +839,8 @@ async function printSingle(id){
   const grp=rec.batch?all.filter(r=>r.batch===rec.batch):[rec];
   const c=docCfg(),logo=LOGO_SRC;
   const dno=docNo(rec);
+  const cyc=all.filter(r=>r.docNo===dno);
+  const doneKeys=new Set(cyc.map(r=>r.area+'|'+r.shift));
   const items=(rec.note||'').split('\n').map(s=>s.trim()).filter(Boolean);
   const normal=items.length===0;
   let rows='';
@@ -814,6 +862,8 @@ async function printSingle(id){
     <div class="fl"><div class="lb">ผู้ตรวจเช็ค</div><div class="vl">${esc(rec.inspector)}</div>
       <div class="lb" style="width:26mm;text-align:right;padding-right:5px">วันเวลาที่ตรวจ</div>
       <div class="vl" style="max-width:40mm">${esc(rec.timestamp)}</div></div>
+    <div class="fl"><div class="lb">สถานะรอบเอกสาร</div><div class="vl">
+      ส่งครบแล้ว ${doneKeys.size}/${CYCLE_SIZE} รายการ ${doneKeys.size>=CYCLE_SIZE?'(ปิดรอบแล้ว ✓)':'(อยู่ระหว่างรอบ)'}</div></div>
     <div style="margin-top:12px;font-weight:700">รายการเครื่องมือที่ตรวจพบความผิดปกติ</div>
     <table><tr><th>ลำดับ</th><th>รายการ / อาการที่พบ</th><th>สถานะ</th><th>หมายเหตุ</th></tr>${rows}</table>
     <div class="chk">
@@ -1052,26 +1102,29 @@ function exportSummaryExcel(){
   const docs=[...new Set(cache.map(r=>r.docNo).filter(Boolean))];
   const rows3=docs.map(dn=>{
     const g=grouped.filter(r=>r.docNo===dn);
+    const keys=new Set(g.map(r=>r.area+'|'+r.shift));
     return {
       'เลขที่เอกสาร':dn,
-      'พื้นที่ทั้งหมด':g.map(r=>r.area).join(', '),
-      'จำนวนรายการย่อย':g.length,
+      'พื้นที่ในรอบนี้':[...new Set(g.map(r=>r.area))].join(', '),
+      'ความคืบหน้า':keys.size+'/'+CYCLE_SIZE,
+      'สถานะรอบ':keys.size>=CYCLE_SIZE?'ปิดรอบแล้ว':'อยู่ระหว่างรอบ ⚠',
       'รายการที่พบ':g.map(r=>(r.note||'').replace(/\n/g,' / ')).filter(Boolean).join(' | ')||'-'
     };
   });
   const ws3=XLSX.utils.json_to_sheet(rows3);
-  ws3['!cols']=[{wch:16},{wch:25},{wch:15},{wch:50}];
+  ws3['!cols']=[{wch:16},{wch:30},{wch:13},{wch:16},{wch:50}];
   XLSX.utils.book_append_sheet(wb,ws3,'สรุปตามเลขที่เอกสาร');
 
   const areaList=[...new Set(cache.map(r=>r.area))];
   const rows4=areaList.map(a=>{
     const g=grouped.filter(r=>r.area===a);
     return {'พื้นที่':a,'จำนวนรายงาน(ชุด)':g.length,'จำนวนภาพ':cache.filter(r=>r.area===a).length,
+      'จำนวนเอกสาร':[...new Set(g.map(r=>r.docNo))].length,
       'พบภาพซ้ำ(ชุด)':g.filter(r=>r.isDup).length,
       'รายการที่พบ':g.map(r=>(r.note||'').replace(/\n/g,' / ')).filter(Boolean).join(' | ')||'-'};
   });
   const ws4=XLSX.utils.json_to_sheet(rows4);
-  ws4['!cols']=[{wch:15},{wch:18},{wch:12},{wch:15},{wch:55}];
+  ws4['!cols']=[{wch:15},{wch:18},{wch:12},{wch:13},{wch:15},{wch:55}];
   XLSX.utils.book_append_sheet(wb,ws4,'สรุปตามพื้นที่');
 
   XLSX.writeFile(wb,'รายงานสรุปตรวจเช็คเครื่องมือ_Team3_'+stamp()+'.xlsx');
@@ -1160,7 +1213,6 @@ async function loadLog(){
   $('lgToday').innerText=logs.filter(l=>l.delDateKey===today).length;
   logCache=logs;
   $('logList').innerHTML=logs.length?logs.map((l,i)=>{
-    const areas=[...new Set((l.detail||[]).map(x=>x.area))].join(', ');
     return `<div class="logcard">${l.thumb?`<img src="${l.thumb}" onclick="showLogImg(${i})">`:''}
       <div class="li"><b>ลบ ${l.count} รายการ</b><br>👤 ผู้ลบ: <b>${l.admin}</b><br>🕐 ${l.delAt}<br>💬 ${l.reason}</div></div>`;
   }).join(''):'<div class="empty">ยังไม่มีประวัติการลบข้อมูล</div>';}
