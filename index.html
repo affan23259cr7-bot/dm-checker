@@ -613,52 +613,32 @@ function newDocNo(){
   return DOC_PREFIX+yy+'/'+pad(n,4);
 }
 
-/* คืนเลขที่เอกสารของรอบที่ยังเปิดอยู่ (ยังไม่ครบ 12 และยังไม่มี พื้นที่+รอบ นี้) */
+/* คืนเลขที่เอกสารของรอบที่ยังเปิดอยู่ (อิงตามวันที่ 22/09/2569 ให้ใช้ MT69/0004 ยาวไปจนครบ 12 รายการ) */
 function openCycleDocNo(area,shift){
   const yy=beYY(new Date());
   const m=cycleMap();
+  
+  // บังคับให้วันที่ 22/09/2569 ใช้เลข MT69/0004 เป็นหลักร่วมกัน
+  const targetDate='2026-09-22';
+  const hasTargetDateData = cloudRecs.some(r => r.dateKey === targetDate);
+  if(hasTargetDateData) {
+    const forcedDno = DOC_PREFIX + yy + '/0004';
+    const set = m[forcedDno] || new Set();
+    if(set.size < CYCLE_SIZE && !set.has(area+'|'+shift)) {
+      return forcedDno;
+    }
+  }
+
   const keys=Object.keys(m).sort((a,b)=>
     parseInt(b.split('/')[1],10)-parseInt(a.split('/')[1],10));
   for(const dno of keys){
     const set=m[dno];
-    if(set.size>=CYCLE_SIZE)continue;              // รอบนี้ครบแล้ว -> ปิด
-    if(set.has(area+'|'+shift))continue;           // พื้นที่+รอบนี้ส่งไปแล้ว -> ต้องขึ้นรอบใหม่
-    return dno;                                    // ยังว่าง -> ใช้เลขเดิม
+    if(set.size>=CYCLE_SIZE)continue;
+    if(set.has(area+'|'+shift))continue;
+    return dno;
   }
   return null;
 }
-
-function resolveDocNo(area,shift){
-  const open=openCycleDocNo(area,shift);
-  return open?open:newDocNo();
-}
-
-function docNo(rec){ return (rec&&rec.docNo)?rec.docNo:'-'; }
-
-function docRangeLabel(list){
-  const dnos=[...new Set(list.map(r=>r.docNo).filter(Boolean))].sort();
-  if(!dnos.length)return '-';
-  return dnos.length===1?dnos[0]:dnos[0]+' – '+dnos[dnos.length-1];
-}
-
-function updateCycleHint(){
-  const el=$('cycleHint'); if(!el)return;
-  if(!cloudReady){ el.className='cyclebox'; el.innerHTML='⏳ กำลังเชื่อมต่อฐานข้อมูล...'; return; }
-  const a=$('area').value,s=$('shift').value;
-  const open=openCycleDocNo(a,s);
-  if(open){
-    const done=cycleMap()[open].size;
-    el.className='cyclebox';
-    el.innerHTML='📄 รอบนี้จะใช้เลขที่เอกสาร <b>'+open+'</b><br>'+
-      '<span style="opacity:.85">ส่งแล้ว '+done+'/'+CYCLE_SIZE+' รายการ (6 พื้นที่ × รับกะ+ส่งคืน) — ครบเมื่อไหร่ระบบจะขึ้นเลขใหม่อัตโนมัติ</span>';
-  }else{
-    const yy=beYY(new Date());
-    el.className='cyclebox newc';
-    el.innerHTML='🆕 รอบก่อนหน้าครบแล้ว — รายการนี้จะ <b>เปิดเลขที่เอกสารใหม่</b> '+
-      '<b>'+DOC_PREFIX+yy+'/'+pad(maxDocNum()+1,4)+'</b>';
-  }
-}
-
 /* ================== บันทึกรายงาน ================== */
 let saveClipText='';
 function thTime(d){return pad(d.getHours(),2)+':'+pad(d.getMinutes(),2);}
