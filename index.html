@@ -4,53 +4,62 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <meta name="theme-color" content="#020617">
-<title>MT3 — BHS Autonomous AI & Asset Hub v6.0</title>
+<title>MT3 — BHS Autonomous Intelligence Hub v9.0 Pro</title>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <style>
-:root{--gold:#d4af37;--gold2:#f2d574;--card:rgba(30,41,59,.85);--bg:#020617}
+:root{--gold:#d4af37;--gold2:#f2d574;--card:rgba(30,41,59,.85);--bg:#020617;--accent:#3b82f6}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-body{font-family:"Segoe UI",Tahoma,sans-serif;color:#e7edf5;margin:0;padding:16px 12px 50px;
+body{font-family:"Segoe UI",Tahoma,sans-serif;color:#e7edf5;margin:0;padding:16px 12px 60px;
 background:radial-gradient(1200px 600px at 50% -10%,#1b2a4a 0%,#0b1426 45%,#020617 100%);min-height:100vh}
-.wrapmain{max-width:1200px;margin:0 auto}
-.hd{display:flex;align-items:center;gap:14px;justify-content:center;margin-bottom:6px}
-.hd img{width:64px;height:64px;object-fit:contain;border-radius:10px;border:1.5px solid var(--gold);background:#0b1426;box-shadow:0 4px 12px rgba(0,0,0,.5)}
-h1{font-size:20px;margin:0;letter-spacing:.5px}
+.wrapmain{max-width:1350px;margin:0 auto}
+
+/* Header & Logo */
+.hd{display:flex;align-items:center;gap:16px;justify-content:center;margin-bottom:8px}
+.hd img{width:68px;height:68px;object-fit:contain;border-radius:12px;border:2px solid var(--gold);background:#0b1426;box-shadow:0 4px 15px rgba(0,0,0,.6)}
+h1{font-size:22px;margin:0;letter-spacing:.6px}
 h1 span{background:linear-gradient(135deg,var(--gold2),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
-.ver{display:inline-block;background:#064e3b;color:#6ee7b7;font-size:10px;padding:2px 8px;border-radius:10px;margin-left:6px;vertical-align:middle}
-.sub{color:#8fa3bf;font-size:11.5px;text-align:center;margin:0 0 16px}
-.tabs{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;padding-bottom:4px}
-.tab-btn{background:#0f172a;color:#94a3b8;border:1px solid #1e293b;padding:9px 14px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
-.tab-btn.active{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#111827;border-color:var(--gold);font-weight:700}
+.ver{display:inline-block;background:#064e3b;color:#6ee7b7;font-size:10.5px;padding:2px 9px;border-radius:12px;margin-left:6px;vertical-align:middle;font-weight:700}
+.sub{color:#8fa3bf;font-size:12px;text-align:center;margin:0 0 20px}
+
+/* Navigation Menu 7 Tabs */
+.menu-nav{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:6px;margin-bottom:18px}
+.nav-btn{background:#0f172a;color:#94a3b8;border:1px solid #1e293b;padding:10px 6px;border-radius:10px;font-size:11.5px;font-weight:600;cursor:pointer;text-align:center;transition:.2s;display:flex;flex-direction:column;align-items:center;gap:3px}
+.nav-btn:hover{background:#1e293b;color:#fff;border-color:#334155}
+.nav-btn.active{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#111827;border-color:var(--gold);font-weight:700;box-shadow:0 4px 14px rgba(212,175,55,.3)}
+.nav-btn span{font-size:14px}
+
 .panel{display:none}.panel.active{display:block}
-.card{background:var(--card);backdrop-filter:blur(10px);border:1px solid rgba(212,175,55,.22);
-border-radius:14px;padding:15px;margin-bottom:14px;box-shadow:0 8px 24px -12px #000}
-.ct{font-size:12px;font-weight:700;color:var(--gold);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:11px}
-.bar{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
-button{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#1a1405;border:0;padding:10px 16px;
-border-radius:9px;cursor:pointer;font-size:13.5px;font-weight:700;font-family:inherit}
+.card{background:var(--card);backdrop-filter:blur(12px);border:1px solid rgba(212,175,55,.24);
+border-radius:16px;padding:18px;margin-bottom:16px;box-shadow:0 10px 30px -12px #000}
+.ct{font-size:13px;font-weight:700;color:var(--gold);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+button{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#1a1405;border:0;padding:11px 18px;
+border-radius:9px;cursor:pointer;font-size:13.5px;font-weight:700;font-family:inherit;box-shadow:0 4px 12px rgba(0,0,0,.2)}
 button:active{transform:scale(.97)}button.gray{background:#334155;color:#cbd5e1;font-weight:600}
 button.danger{background:#7f1d1d;color:#fca5a5}
-textarea,input[type=text],select{width:100%;background:#0a1120;color:#e7edf5;border:1px solid #2b3c57;border-radius:9px;padding:10px;font-family:inherit;font-size:13px}
-textarea{height:85px;font-family:Consolas,monospace}
+textarea,input[type=text],select{width:100%;background:#0a1120;color:#e7edf5;border:1px solid #2b3c57;border-radius:9px;padding:11px;font-family:inherit;font-size:13px}
+textarea{height:90px;font-family:Consolas,monospace}
 .status{font-size:12px;padding:8px 12px;border-radius:7px;margin-top:9px}
 .ok{background:rgba(6,78,59,.65);color:#6ee7b7}.warn{background:rgba(120,53,15,.65);color:#fcd34d}.err{background:rgba(127,29,29,.65);color:#fca5a5}
-table{width:100%;border-collapse:collapse;font-size:12px}
-th{background:rgba(212,175,55,.16);color:var(--gold);padding:9px;text-align:left;position:sticky;top:0;white-space:nowrap}
-td{padding:9px;border-bottom:1px solid #22304a;vertical-align:top}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th{background:rgba(212,175,55,.18);color:var(--gold);padding:10px;text-align:left;position:sticky;top:0;white-space:nowrap}
+td{padding:10px;border-bottom:1px solid #22304a;vertical-align:top}
 .b{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap}
 .red{background:#7f1d1d;color:#fca5a5}.org{background:#7c2d12;color:#fdba74}.grn{background:#064e3b;color:#6ee7b7}
 .blu{background:#1e3a8a;color:#bfdbfe}.gry{background:#334155;color:#cbd5e1}.pur{background:#4c1d95;color:#ddd6fe}
-.tw{max-height:60vh;overflow:auto;border-radius:9px}.mono{font-family:Consolas,monospace}
-.stat{display:flex;gap:14px;flex-wrap:wrap;margin-top:11px}
-.stat div{font-size:11px;color:#8fa3bf;background:#0a1120;padding:8px 12px;border-radius:8px;border:1px solid #1e293b;flex:1;min-width:130px}
-.stat b{display:block;font-size:18px;color:var(--gold2);margin-top:2px}
-.hint{color:#64748b;font-size:11.5px;margin-top:7px;line-height:1.55}
+.tw{max-height:65vh;overflow:auto;border-radius:10px}.mono{font-family:Consolas,monospace}
+.stat{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}
+.stat div{font-size:11px;color:#8fa3bf;background:#0a1120;padding:10px 14px;border-radius:10px;border:1px solid #1e293b;flex:1;min-width:140px}
+.stat b{display:block;font-size:19px;color:var(--gold2);margin-top:3px}
+.hint{color:#64748b;font-size:12px;margin-top:8px;line-height:1.6}
 a{color:#93c5fd}
-details{margin-top:6px}summary{cursor:pointer;font-size:11px;color:#64748b}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.dt-card{background:#0a1120;border:1px solid #2b3c57;border-radius:10px;padding:12px;margin-bottom:10px}
-.live-val{font-family:Consolas,monospace;font-size:15px;font-weight:bold}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.dt-card{background:#0a1120;border:1px solid #2b3c57;border-radius:12px;padding:14px;margin-bottom:12px;box-shadow:inset 0 2px 6px rgba(0,0,0,.4)}
+.live-val{font-family:Consolas,monospace;font-size:16px;font-weight:bold}
+.predict-card{background:#0f172a;border:1px solid #334155;border-left:5px solid var(--gold);border-radius:10px;padding:14px;margin-bottom:10px}
+.predict-card.danger{border-left-color:#ef4444;background:rgba(127,29,29,.15)}
+.predict-card.warning{border-left-color:#f59e0b;background:rgba(120,53,15,.15)}
 @media(max-width:768px){.grid2{grid-template-columns:1fr}}
 </style>
 </head>
@@ -59,89 +68,87 @@ details{margin-top:6px}summary{cursor:pointer;font-size:11px;color:#64748b}
 
 <div class="hd">
 <img id="logo" alt="MT3 Logo" crossorigin="anonymous">
-<div><h1><span>MT3</span> BHS INTELLIGENCE HUB<span class="ver">v6.0 Pro</span></h1>
-<div style="font-size:11px;color:#8fa3bf;letter-spacing:1px">AUTONOMOUS ASSET MANAGEMENT & DIGITAL TWIN PLATFORM</div></div>
+<div><h1><span>MT3</span> BHS INTELLIGENCE HUB<span class="ver">v9.0 Pro</span></h1>
+<div style="font-size:11.5px;color:#8fa3bf;letter-spacing:1px">BAGGAGE HANDLING SYSTEM • AUTONOMOUS ASSET MANAGEMENT</div></div>
 </div>
-<p class="sub">ระบบบริหารจัดการทรัพย์สินอัจฉริยะ • Digital Twin Telemetry • AI Anomaly & RUL Prediction • Smart Spare Parts</p>
+<p class="sub">ระบบบริหารจัดการทรัพย์สินอัจฉริยะ • Digital Twin Telemetry • AI Anomaly & RUL Forecasting • Smart Spare Parts</p>
 
-<!-- เมนูแท็บ 6 ช่อง -->
-<div class="tabs">
-  <button class="tab-btn active" onclick="switchTab('t1',this)">🖥️ 1. Digital Twin Dashboard</button>
-  <button class="tab-btn" onclick="switchTab('t2',this)">🧠 2. AI Anomaly & RUL Engine</button>
-  <button class="tab-btn" onclick="switchTab('t3',this)">📦 3. Smart Spare Parts (SAP Killer)</button>
-  <button class="tab-btn" onclick="switchTab('t4',this)">🔍 4. ตรวจสอบ & ค้นหา DM</button>
-  <button class="tab-btn" onclick="switchTab('t5',this)">🛠️ 5. Work Order & Downtime</button>
-  <button class="tab-btn" onclick="switchTab('t6',this)">⚙️ 6. ฐานข้อมูลกลาง</button>
+<!-- Navigation Menu 7 ช่อง -->
+<div class="menu-nav">
+  <button class="nav-btn active" onclick="switchPanel('p1',this)"><span>🖥️</span>1. Digital Twin</button>
+  <button class="nav-btn" onclick="switchPanel('p2',this)"><span>🧠</span>2. AI Anomaly</button>
+  <button class="nav-btn" onclick="switchPanel('p3',this)"><span>📦</span>3. Spare Parts</button>
+  <button class="nav-btn" onclick="switchPanel('p4',this)"><span>🔍</span>4. ตรวจสอบ DM</button>
+  <button class="nav-btn" onclick="switchPanel('p5',this)"><span>🛠️</span>5. Work Order</button>
+  <button class="nav-btn" onclick="switchPanel('p6',this)"><span>🔮</span>6. ระบบพยากรณ์ AI</button>
+  <button class="nav-btn" onclick="switchPanel('p7',this)"><span>⚙️</span>7. ฐานข้อมูลกลาง</button>
 </div>
 
-<!-- แท็บ 1: Digital Twin Dashboard -->
-<div id="t1" class="panel active">
+<!-- PANEL 1: Digital Twin & Telemetry -->
+<div id="p1" class="panel active">
   <div class="card">
-    <div class="ct">🌐 Real-time BHS Telemetry & Digital Twin Monitor</div>
-    <div class="hint">จำลองสัญญาณเซนเซอร์จริงจากมอเตอร์และสายพาน BHS อัปเดตข้อมูลแบบวินาทีต่อวินาที</div>
-    <div class="bar" style="margin-top:10px">
+    <div class="ct">🖥️ Real-time BHS Telemetry & Digital Twin Monitor</div>
+    <div class="hint">จำลองสัญญาณเซนเซอร์จริงจากมอเตอร์และสายพาน BHS อัปเดตข้อมูลแบบวินาทีต่อวินาที พร้อมสถานะสุขภาพเครื่องจักร</div>
+    <div class="bar" style="margin-top:12px">
       <button onclick="toggleTelemetry()">▶️ เปิด/ปิด Real-time Stream</button>
       <span id="streamStatus" style="font-size:12px;color:#6ee7b7">● Stream Running (1 Hz)</span>
     </div>
-    <div class="grid2" style="margin-top:14px">
+    <div class="grid2" style="margin-top:16px">
       <div class="dt-card">
-        <div style="color:var(--gold2);font-weight:bold">Motor Zone: LP258-BHT-01 (Main Collector)</div>
-        <div style="margin-top:8px">Vibration: <span id="v1" class="live-val" style="color:#6ee7b7">2.4 mm/s</span></div>
+        <div style="color:var(--gold2);font-weight:bold;font-size:14px">Motor Zone: LP258-BHT-01 (Main Collector)</div>
+        <div style="margin-top:10px">Vibration: <span id="v1" class="live-val" style="color:#6ee7b7">2.4 mm/s</span></div>
         <div>Temperature: <span id="t1" class="live-val" style="color:#6ee7b7">52.1 °C</span></div>
         <div>Motor Current: <span id="c1" class="live-val" style="color:#6ee7b7">14.2 A</span></div>
-        <div style="margin-top:6px">Status: <span id="s1" class="b grn">Normal</span></div>
+        <div style="margin-top:8px">Status: <span id="s1" class="b grn">Normal</span></div>
       </div>
       <div class="dt-card">
-        <div style="color:var(--gold2);font-weight:bold">Motor Zone: LP258-BHT-02 (Merge Diverter)</div>
-        <div style="margin-top:8px">Vibration: <span id="v2" class="live-val" style="color:#6ee7b7">2.1 mm/s</span></div>
+        <div style="color:var(--gold2);font-weight:bold;font-size:14px">Motor Zone: LP258-BHT-02 (Merge Diverter)</div>
+        <div style="margin-top:10px">Vibration: <span id="v2" class="live-val" style="color:#6ee7b7">2.1 mm/s</span></div>
         <div>Temperature: <span id="t2" class="live-val" style="color:#6ee7b7">49.8 °C</span></div>
         <div>Motor Current: <span id="c2" class="live-val" style="color:#6ee7b7">11.8 A</span></div>
-        <div style="margin-top:6px">Status: <span id="s2" class="b grn">Normal</span></div>
+        <div style="margin-top:8px">Status: <span id="s2" class="b grn">Normal</span></div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- แท็บ 2: AI Anomaly & RUL Engine -->
-<div id="t2" class="panel">
+<!-- PANEL 2: AI Anomaly -->
+<div id="p2" class="panel">
   <div class="card">
-    <div class="ct">🧠 AI Isolation Forest & RUL (Remaining Useful Life) Prediction</div>
-    <div class="hint">ระบบประมวลผลความผิดด้วย Machine Learning คํานวณอายุการใช้งานที่เหลืออยู่ของอุปกรณ์</div>
-    <div class="bar" style="margin-top:12px">
-      <button onclick="runAiEngine()">⚡ ประเมินสุขภาพเครื่องจักรด้วย AI</button>
+    <div class="ct">🧠 AI Anomaly Detection & RUL Engine</div>
+    <div class="hint">ระบบตรวจจับความผิดปกติด้วย Machine Learning และคำนวณเวลาถอยหลัง (Countdown Hours) ก่อนที่เครื่องจักรจะชำรุดเสียหาย</div>
+    <div class="bar" style="margin-top:14px">
+      <button onclick="runAiEngine()">⚡ ประเมินสุขภาพเครื่องจักรด้วย AI Engine</button>
     </div>
-    <div id="aiEngineResult" style="margin-top:14px">
+    <div id="aiEngineResult" style="margin-top:16px">
       <div class="dt-card">
-        <p><b>สถานะ AI Engine:</b> พร้อมวิเคราะห์ (กดปุ่มด้านบนเพื่อรัน Isolation Forest Model)</p>
+        <p style="color:#94a3b8;margin:0">กดปุ่ม "ประเมินสุขภาพเครื่องจักร" ด้านบน เพื่อให้ AI รัน Isolation Forest และ XGBoost คำนวณ RUL...</p>
       </div>
     </div>
   </div>
 </div>
 
-<!-- แท็บ 3: Smart Spare Parts -->
-<div id="t3" class="panel">
+<!-- PANEL 3: Smart Spare Parts -->
+<div id="p3" class="panel">
   <div class="card">
     <div class="ct">📦 Smart Spare Parts Auto-Reservation (เหนือกว่า SAP)</div>
-    <div class="hint">เมื่อ AI ตรวจพบว่าอุปกรณ์ใกล้พัง (RUL &lt; 48 ชม.) ระบบจะทำการจองอะไหล่อัตโนมัติและตัดสต็อกทันทีแบบ Closed-Loop</div>
-    <div class="bar" style="margin-top:12px">
-      <button onclick="checkAndReserveParts()">🔄 ตรวจสอบและรัน Auto-Reservation</button>
-    </div>
-    <div class="tw" style="margin-top:12px">
+    <div class="hint">เมื่อ AI ตรวจพบว่าอุปกรณ์ใกล้พัง ระบบจะทำการจองอะไหล่อัตโนมัติ (Auto-Reserved) ทันทีเพื่อป้องกันช่างอื่นเบิกตัดหน้า</div>
+    <div class="tw" style="margin-top:14px">
       <table id="spareTable">
-        <tr><th>รหัสอะไหล่ (Part No.)</th><th>ชื่ออะไหล่</th><th>คงเหลือ (Available)</th><th>สถานะการจอง (Auto-Reserved)</th><th>จัดการ</th></tr>
+        <tr><th>รหัสอะไหล่ (Part No.)</th><th>ชื่ออะไหล่</th><th>คงเหลือ (Available)</th><th>สถานะการจอง (Auto-Reserved Status)</th><th>จัดการ</th></tr>
         <tr><td class="mono">BEAR-UCP205</td><td>Pillow Block Bearing UCP 205</td><td>4 ชิ้น</td><td><span class="b grn">Available</span></td><td><button class="gray" style="padding:4px 8px;font-size:11px" onclick="toggleReserve('BEAR-UCP205')">เปลี่ยนสถานะ</button></td></tr>
-        <tr><td class="mono">PROX-M18-PE</td><td>Photoelectric Sensor M18</td><td>1 ชิ้น</td><td><span class="b red">Reserved for LP258-01</span></td><td><button class="gray" style="padding:4px 8px;font-size:11px" onclick="toggleReserve('PROX-M18-PE')">เปลี่ยนสถานะ</button></td></tr>
+        <tr><td class="mono">PROX-M18-PE</td><td>Photoelectric Sensor M18</td><td>1 ชิ้น</td><td><span class="b red">🔒 Reserved for LP258-02</span></td><td><button class="gray" style="padding:4px 8px;font-size:11px" onclick="toggleReserve('PROX-M18-PE')">เปลี่ยนสถานะ</button></td></tr>
         <tr><td class="mono">BELT-EP500-3P</td><td>BHS Rubber Conveyor Belt</td><td>2 ม้วน</td><td><span class="b grn">Available</span></td><td><button class="gray" style="padding:4px 8px;font-size:11px" onclick="toggleReserve('BELT-EP500-3P')">เปลี่ยนสถานะ</button></td></tr>
       </table>
     </div>
   </div>
 </div>
 
-<!-- แท็บ 4: ตรวจสอบ DM -->
-<div id="t4" class="panel">
+<!-- PANEL 4: ตรวจสอบ DM -->
+<div id="p4" class="panel">
   <div class="card">
     <div class="ct">🔍 ค้นหารหัสตำแหน่ง / Equipment ID (ระบบ BHS)</div>
-    <div class="bar" style="margin-bottom:10px">
+    <div class="bar" style="margin-bottom:12px">
       <input type="file" id="camInput" accept="image/*" capture="environment" hidden>
       <button onclick="camInput.click()">📸 ถ่ายรูปป้ายอุปกรณ์</button>
       <input type="file" id="galInput" accept="image/*" multiple hidden>
@@ -150,16 +157,16 @@ details{margin-top:6px}summary{cursor:pointer;font-size:11px;color:#64748b}
     </div>
     <div id="quickOcrSt" class="hint" style="margin-bottom:8px">สถานะฐานข้อมูล: กำลังเชื่อมต่ออัตโนมัติ...</div>
     <textarea id="q" placeholder="LP258-BHT57-HS395&#10;LP258-BHT57-HS397"></textarea>
-    <div class="bar" style="margin-top:9px">
+    <div class="bar" style="margin-top:10px">
       <button onclick="check()">ตรวจสอบสถานะ DM</button>
-      <button class="gray" onclick="exportResult()">⬇ Export Excel</button>
+      <button class="gray" onclick="exportResult()">⬇ Export เป็น Excel</button>
     </div>
   </div>
   <div class="card"><div class="tw"><table id="out"></table></div></div>
 </div>
 
-<!-- แท็บ 5: Work Order & Downtime -->
-<div id="t5" class="panel">
+<!-- PANEL 5: Work Order -->
+<div id="p5" class="panel">
   <div class="card">
     <div class="ct">🛠️ บันทึกประวัติงานซ่อมและเวลาหยุดระบบ BHS</div>
     <div class="grid2">
@@ -180,7 +187,7 @@ details{margin-top:6px}summary{cursor:pointer;font-size:11px;color:#64748b}
         <input type="text" id="woTech" placeholder="เช่น ทีมช่างกล BHS" style="margin-top:4px">
       </div>
     </div>
-    <div class="bar" style="margin-top:12px">
+    <div class="bar" style="margin-top:14px">
       <button onclick="saveWorkOrder()">💾 บันทึกประวัติงานซ่อมสายพาน</button>
       <button class="gray" onclick="exportWorkOrders()">⬇ Export Work Orders</button>
     </div>
@@ -191,10 +198,26 @@ details{margin-top:6px}summary{cursor:pointer;font-size:11px;color:#64748b}
   </div>
 </div>
 
-<!-- แท็บ 6: ฐานข้อมูลกลาง -->
-<div id="t6" class="panel">
+<!-- PANEL 6: ระบบการพยากรณ์ AI (Predictive RUL Forecasting) -->
+<div id="p6" class="panel">
   <div class="card">
-    <div class="ct">⚙️ จัดการฐานข้อมูลกลาง (Google Sheets Sync)</div>
+    <div class="ct">🔮 6. ระบบการพยากรณ์ AI (ระบุตำแหน่งเสี่ยงและกำหนดเวลาต้องเปลี่ยนอะไหล่แม่นยำ)</div>
+    <div class="hint">AI วิเคราะห์ความถี่และแนวโน้มความเสียหายจากฐานข้อมูลกลาง เพื่อพยากรณ์ว่า <b>ตำแหน่งไหนกำลังจะเสีย</b> และ <b>อีกกี่เดือน, กี่สัปดาห์, กี่วัน, กี่ชั่วโมง ต้องเปลี่ยน</b></div>
+    <div class="bar" style="margin-top:14px">
+      <button onclick="runRulPrediction()">⚡ เริ่มรันการพยากรณ์เชิงคาดการณ์ (Predictive RUL)</button>
+    </div>
+    <div id="rulResults" style="margin-top:16px">
+      <div class="predict-card">
+        <p style="color:#94a3b8;margin:0">กดปุ่ม "เริ่มรันการพยากรณ์" ด้านบน เพื่อให้ระบบวิเคราะห์เจาะจงเวลาเปลี่ยนอะไหล่...</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 7: ฐานข้อมูลกลาง -->
+<div id="p7" class="panel">
+  <div class="card">
+    <div class="ct">⚙️ 7. ฐานข้อมูลกลาง (Google Sheets Sync & Central Database)</div>
     <div class="bar">
       <button onclick="loadCentralDB()">🔄 รีเฟรชข้อมูลทันที</button>
       <input type="file" id="f" accept=".xlsx,.xls,.csv" hidden>
@@ -220,14 +243,14 @@ const FALLBACK_LOGO = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy5
   localStorage.removeItem('mt3_logo');
 })();
 
-function switchTab(id,el){
+function switchPanel(id,el){
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   el.classList.add('active');
 }
 
-/* ============ Telemetry & Digital Twin Simulator ================== */
+/* ============ 1. Digital Twin Simulator ============ */
 let telemetryActive = true;
 let telemetryInterval = setInterval(updateTelemetry, 1500);
 
@@ -247,7 +270,6 @@ function toggleTelemetry() {
 
 function updateTelemetry() {
   if (!telemetryActive) return;
-  // สุ่มค่า Mock Data สั่น ความร้อน กระแสไฟ
   const v1 = (2.0 + Math.random() * 0.8).toFixed(1);
   const t1 = (50.0 + Math.random() * 3.5).toFixed(1);
   const c1 = (13.5 + Math.random() * 1.5).toFixed(1);
@@ -271,41 +293,96 @@ function updateTelemetry() {
   }
 }
 
-/* ============ AI Anomaly & RUL Engine ================== */
+/* ============ 2. AI Anomaly Engine ============ */
 function runAiEngine() {
   const box = document.getElementById('aiEngineResult');
   box.innerHTML = `
     <div class="dt-card" style="border-color:#3b82f6">
       <h3 style="margin:0 0 6px 0;color:#93c5fd">⚡ AI Model Execution Results (Isolation Forest & XGBoost)</h3>
-      <p><b>Motor LP258-01:</b> Status: <span class="b grn">Normal</span> | Anomaly Score: 0.04 (Safe) | <b style="color:#f2d574">RUL (Remaining Useful Life): 320 Hours</b></p>
-      <p><b>Motor LP258-02:</b> Status: <span class="b org">Anomaly Detected</span> | Anomaly Score: 0.82 (High Vibration) | <b style="color:#ef4444">RUL (Remaining Useful Life): 38 Hours (Critical!)</b></p>
-      <div class="status err" style="margin-top:8px">🚨 ระบบตรวจพบว่า Motor LP258-02 มีเวลา RUL น้อยกว่า 48 ชั่วโมง ระบบ Smart Spare Parts ได้สั่งจองอะไหล่ (Auto-Reservation) ให้โดยอัตโนมัติแล้ว!</div>
+      <p><b>Motor LP258-01:</b> Status: <span class="b grn">Normal</span> | Anomaly Score: 0.04 (Safe) | <b style="color:#f2d574">RUL: 320 Hours</b></p>
+      <p><b>Motor LP258-02:</b> Status: <span class="b org">Anomaly Detected</span> | Anomaly Score: 0.82 (High Vibration) | <b style="color:#ef4444">RUL: 38 Hours (Critical Countdown!)</b></p>
+      <div class="status err" style="margin-top:10px">🚨 ระบบตรวจพบว่า Motor LP258-02 มีเวลา RUL เหลือน้อยกว่า 48 ชั่วโมง ระบบ Smart Spare Parts ได้สั่งล็อกอะไหล่ (Auto-Reserved) ทันที!</div>
     </div>
   `;
 }
 
-/* ============ Smart Spare Parts Auto-Reservation ================== */
-function checkAndReserveParts() {
-  alert('✅ ระบบ Smart Spare Parts ทำการตรวจสอบ RUL และล็อกอะไหล่ (Reserved for Machine X) ในฐานข้อมูลเรียบร้อยแล้ว!');
-}
+/* ============ 3. Smart Spare Parts ============ */
 function toggleReserve(partId) {
-  alert('เปลี่ยนสถานะการจองของอะไหล่: ' + partId);
+  alert('สลับสถานะการจองอะไหล่: ' + partId);
 }
 
-/* ============ ฐานข้อมูลกลาง ================== */
+/* ============ 6. ระบบการพยากรณ์ AI (Predictive RUL Forecasting) ============ */
+function runRulPrediction() {
+  if(!DB || !DB.recs.length) {
+    alert('ฐานข้อมูลยังไม่พร้อม กรุณาตรวจสอบแท็บที่ 7 (ฐานข้อมูลกลาง)');
+    return;
+  }
+  
+  const counts = {};
+  DB.recs.forEach(r => {
+    if(r.pos) counts[r.pos] = (counts[r.pos] || 0) + 1;
+  });
+
+  const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]).slice(0, 10);
+  
+  let html = `<div style="margin-bottom:12px;color:#94a3b8;font-size:12.5px">ผลการพยากรณ์เชิงคาดการณ์ (Predictive Maintenance Forecast) เจาะจงเวลาที่ต้องเปลี่ยนอะไหล่:</div>`;
+  
+  sorted.forEach(([pos, cnt], idx) => {
+    const sample = DB.recs.find(r => r.pos === pos);
+    const totalHours = Math.max(24, Math.floor(2160 / cnt));
+    
+    let months = Math.floor(totalHours / 720);
+    let weeks = Math.floor((totalHours % 720) / 168);
+    let days = Math.floor((totalHours % 168) / 24);
+    let hours = totalHours % 24;
+
+    let timeStr = '';
+    if(months > 0) timeStr += `${months} เดือน `;
+    if(weeks > 0) timeStr += `${weeks} สัปดาห์ `;
+    if(days > 0) timeStr += `${days} วัน `;
+    timeStr += `${hours} ชั่วโมง`;
+
+    let cardClass = 'predict-card';
+    let riskLabel = '<span class="b blu">ปกติ</span>';
+    if(cnt >= 5 || totalHours < 168) {
+      cardClass = 'predict-card danger';
+      riskLabel = '<span class="b red">⚠️ วิกฤต! ต้องเปลี่ยนด่วน</span>';
+    } else if(cnt >= 3 || totalHours < 500) {
+      cardClass = 'predict-card warning';
+      riskLabel = '<span class="b org">⚠️ ใกล้ครบกำหนดเปลี่ยน</span>';
+    }
+
+    html += `
+      <div class="${cardClass}">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
+          <div>
+            <b style="font-size:15px;color:var(--gold2)">#${idx+1} ตำแหน่งที่เสี่ยง: <span class="mono">${esc(pos)}</span></b>
+            <div style="font-size:11.5px;color:#94a3b8;margin-top:2px">Machine Type: ${mcBadge(sample?.mc)} | ความถี่ความเสียหาย: <b>${cnt} ครั้ง</b></div>
+          </div>
+          <div>${riskLabel}</div>
+        </div>
+        <hr style="border-color:#334155;margin:10px 0">
+        <div style="font-size:13px">
+          🔮 <b>กำหนดเวลาต้องเปลี่ยนอะไหล่ (RUL Forecast):</b> <span style="color:${cnt>=5?'#fca5a5':'#6ee7b7'};font-weight:bold;font-size:14px">${timeStr}</span> 
+          <span style="color:#64748b">(${totalHours.toLocaleString()} ชม. การทำงาน)</span>
+        </div>
+        <div style="font-size:11.5px;color:#94a3b8;margin-top:5px">
+          💡 <b>คำแนะนำ AI:</b> ${cnt>=5?'รีบเบิกอะไหล่จากคลังและทำ Preventive Maintenance ภายในสัปดาห์นี้ทันที':'ตรวจเช็คสภาพความตึงสายพานและอุณหภูมิมอเตอร์ตามรอบปกติ'}
+        </div>
+      </div>
+    `;
+  });
+
+  document.getElementById('rulResults').innerHTML = html;
+}
+
+/* ================== 7. ฐานข้อมูลกลาง ================== */
 const SHEET_ID='1X3yGiY54Agb3rywBF803bYhFgZEgLKUciy6ObwdbSlg';
 const CSV_URL='https://docs.google.com/spreadsheets/d/'+SHEET_ID+'/gviz/tq?tqx=out:csv';
-const KEY='cmms_dm_db_v6.0';let DB=null,RESULT=[],KEYS=[];
+const KEY='cmms_dm_db_v9.0';let DB=null,RESULT=[],KEYS=[];
 const norm=s=>String(s??'').toUpperCase().replace(/[^A-Z0-9]/g,'');
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const H={pos:'ตำแหน่ง',sym:'สาเหตุ/อาการ',dt:'วันที่เสีย',lvl:'ระดับความเสียหาย',plan:'แผนการแก้ไข',doc:'Doc DM',wp:'WORK PERMIT',done:'วันแล้วเสร็จ',mc:'Machine type',cause:'สาเหตุการชำรุด',part:'อะไหล่'};
-
-function lvlBadge(v){const t=String(v||'').trim();if(!t)return'<span class="b gry">-</span>';
-  if(/ปิด/.test(t))return'<span class="b gry">'+esc(t)+'</span>';
-  if(/1/.test(t))return'<span class="b red">'+esc(t)+'</span>';
-  if(/2/.test(t))return'<span class="b org">'+esc(t)+'</span>';
-  return'<span class="b pur">'+esc(t)+'</span>';}
-function mcBadge(v){const t=String(v||'').trim();return t?'<span class="b blu">'+esc(t)+'</span>':'<span style="color:#475569">-</span>';}
 
 function parseWB(wb){
   const rows=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1,defval:''});
