@@ -4,38 +4,38 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <meta name="theme-color" content="#020617">
-<title>MT3 — BHS Autonomous Intelligence Hub v9.0 Pro</title>
+<title>MT3 — BHS Autonomous Intelligence Hub v12.0 Production</title>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <style>
-:root{--gold:#d4af37;--gold2:#f2d574;--card:rgba(30,41,59,.85);--bg:#020617;--accent:#3b82f6}
+:root{--gold:#d4af37;--gold2:#f2d574;--card:rgba(30,41,59,.88);--bg:#020617;--accent:#3b82f6}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{font-family:"Segoe UI",Tahoma,sans-serif;color:#e7edf5;margin:0;padding:16px 12px 60px;
-background:radial-gradient(1200px 600px at 50% -10%,#1b2a4a 0%,#0b1426 45%,#020617 100%);min-height:100vh}
-.wrapmain{max-width:1350px;margin:0 auto}
+background:radial-gradient(1400px 700px at 50% -10%,#1b2a4a 0%,#0b1426 45%,#020617 100%);min-height:100vh}
+.wrapmain{max-width:1400px;margin:0 auto}
 
 /* Header & Logo */
 .hd{display:flex;align-items:center;gap:16px;justify-content:center;margin-bottom:8px}
-.hd img{width:68px;height:68px;object-fit:contain;border-radius:12px;border:2px solid var(--gold);background:#0b1426;box-shadow:0 4px 15px rgba(0,0,0,.6)}
-h1{font-size:22px;margin:0;letter-spacing:.6px}
+.hd img{width:72px;height:72px;object-fit:contain;border-radius:14px;border:2px solid var(--gold);background:#0b1426;box-shadow:0 4px 20px rgba(0,0,0,.7)}
+h1{font-size:23px;margin:0;letter-spacing:.6px}
 h1 span{background:linear-gradient(135deg,var(--gold2),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
-.ver{display:inline-block;background:#064e3b;color:#6ee7b7;font-size:10.5px;padding:2px 9px;border-radius:12px;margin-left:6px;vertical-align:middle;font-weight:700}
+.ver{display:inline-block;background:linear-gradient(135deg,#059669,#047857);color:#6ee7b7;font-size:11px;padding:3px 10px;border-radius:12px;margin-left:8px;vertical-align:middle;font-weight:700;box-shadow:0 2px 8px rgba(5,150,105,.4)}
 .sub{color:#8fa3bf;font-size:12px;text-align:center;margin:0 0 20px}
 
-/* Navigation Menu 7 Tabs */
-.menu-nav{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:6px;margin-bottom:18px}
-.nav-btn{background:#0f172a;color:#94a3b8;border:1px solid #1e293b;padding:10px 6px;border-radius:10px;font-size:11.5px;font-weight:600;cursor:pointer;text-align:center;transition:.2s;display:flex;flex-direction:column;align-items:center;gap:3px}
+/* Navigation Menu 9 Tabs */
+.menu-nav{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:6px;margin-bottom:18px}
+.nav-btn{background:#0f172a;color:#94a3b8;border:1px solid #1e293b;padding:10px 4px;border-radius:10px;font-size:11px;font-weight:600;cursor:pointer;text-align:center;transition:.2s;display:flex;flex-direction:column;align-items:center;gap:3px}
 .nav-btn:hover{background:#1e293b;color:#fff;border-color:#334155}
-.nav-btn.active{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#111827;border-color:var(--gold);font-weight:700;box-shadow:0 4px 14px rgba(212,175,55,.3)}
+.nav-btn.active{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#111827;border-color:var(--gold);font-weight:700;box-shadow:0 4px 14px rgba(212,175,55,.35)}
 .nav-btn span{font-size:14px}
 
 .panel{display:none}.panel.active{display:block}
-.card{background:var(--card);backdrop-filter:blur(12px);border:1px solid rgba(212,175,55,.24);
+.card{background:var(--card);backdrop-filter:blur(14px);border:1px solid rgba(212,175,55,.26);
 border-radius:16px;padding:18px;margin-bottom:16px;box-shadow:0 10px 30px -12px #000}
 .ct{font-size:13px;font-weight:700;color:var(--gold);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px}
 .bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 button{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#1a1405;border:0;padding:11px 18px;
-border-radius:9px;cursor:pointer;font-size:13.5px;font-weight:700;font-family:inherit;box-shadow:0 4px 12px rgba(0,0,0,.2)}
+border-radius:9px;cursor:pointer;font-size:13.5px;font-weight:700;font-family:inherit;box-shadow:0 4px 12px rgba(0,0,0,.25)}
 button:active{transform:scale(.97)}button.gray{background:#334155;color:#cbd5e1;font-weight:600}
 button.danger{background:#7f1d1d;color:#fca5a5}
 textarea,input[type=text],select{width:100%;background:#0a1120;color:#e7edf5;border:1px solid #2b3c57;border-radius:9px;padding:11px;font-family:inherit;font-size:13px}
@@ -60,6 +60,11 @@ a{color:#93c5fd}
 .predict-card{background:#0f172a;border:1px solid #334155;border-left:5px solid var(--gold);border-radius:10px;padding:14px;margin-bottom:10px}
 .predict-card.danger{border-left-color:#ef4444;background:rgba(127,29,29,.15)}
 .predict-card.warning{border-left-color:#f59e0b;background:rgba(120,53,15,.15)}
+.map-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:14px}
+.zone-card{background:#0a1120;border:2px solid #2b3c57;border-radius:12px;padding:16px;text-align:center;cursor:pointer;transition:.2s}
+.zone-card:hover{border-color:var(--gold);transform:translateY(-2px)}
+.zone-card.alert{border-color:#ef4444;animation:pulse 1.5s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(239,68,68,.6)}70%{box-shadow:0 0 0 12px rgba(239,68,68,0)}100%{box-shadow:0 0 0 0 rgba(239,68,68,0)}}
 @media(max-width:768px){.grid2{grid-template-columns:1fr}}
 </style>
 </head>
@@ -68,84 +73,122 @@ a{color:#93c5fd}
 
 <div class="hd">
 <img id="logo" alt="MT3 Logo" crossorigin="anonymous">
-<div><h1><span>MT3</span> BHS INTELLIGENCE HUB<span class="ver">v9.0 Pro</span></h1>
-<div style="font-size:11.5px;color:#8fa3bf;letter-spacing:1px">BAGGAGE HANDLING SYSTEM • AUTONOMOUS ASSET MANAGEMENT</div></div>
+<div><h1><span>MT3</span> BHS INTELLIGENCE HUB<span class="ver">v12.0 Pro</span></h1>
+<div style="font-size:11.5px;color:#8fa3bf;letter-spacing:1px">BAGGAGE HANDLING SYSTEM • SMART ASSET MANAGEMENT</div></div>
 </div>
-<p class="sub">ระบบบริหารจัดการทรัพย์สินอัจฉริยะ • Digital Twin Telemetry • AI Anomaly & RUL Forecasting • Smart Spare Parts</p>
+<p class="sub">ระบบบริหารจัดการทรัพย์สินอัจฉริยะ • Digital Twin (Data-Driven) • Energy & Carbon Tracker • AI RUL Forecasting</p>
 
-<!-- Navigation Menu 7 ช่อง -->
+<!-- Navigation Menu 9 Tabs -->
 <div class="menu-nav">
   <button class="nav-btn active" onclick="switchPanel('p1',this)"><span>🖥️</span>1. Digital Twin</button>
-  <button class="nav-btn" onclick="switchPanel('p2',this)"><span>🧠</span>2. AI Anomaly</button>
-  <button class="nav-btn" onclick="switchPanel('p3',this)"><span>📦</span>3. Spare Parts</button>
-  <button class="nav-btn" onclick="switchPanel('p4',this)"><span>🔍</span>4. ตรวจสอบ DM</button>
-  <button class="nav-btn" onclick="switchPanel('p5',this)"><span>🛠️</span>5. Work Order</button>
-  <button class="nav-btn" onclick="switchPanel('p6',this)"><span>🔮</span>6. ระบบพยากรณ์ AI</button>
-  <button class="nav-btn" onclick="switchPanel('p7',this)"><span>⚙️</span>7. ฐานข้อมูลกลาง</button>
+  <button class="nav-btn" onclick="switchPanel('p2',this)"><span>🗺️</span>2. BHS Map</button>
+  <button class="nav-btn" onclick="switchPanel('p3',this)"><span>⚡</span>3. Energy & CO2</button>
+  <button class="nav-btn" onclick="switchPanel('p4',this)"><span>🧠</span>4. AI Anomaly</button>
+  <button class="nav-btn" onclick="switchPanel('p5',this)"><span>📦</span>5. Spare Parts</button>
+  <button class="nav-btn" onclick="switchPanel('p6',this)"><span>🔍</span>6. ตรวจสอบ DM</button>
+  <button class="nav-btn" onclick="switchPanel('p7',this)"><span>🛠️</span>7. Work Order</button>
+  <button class="nav-btn" onclick="switchPanel('p8',this)"><span>🔮</span>8. พยากรณ์ RUL</button>
+  <button class="nav-btn" onclick="switchPanel('p9',this)"><span>⚙️</span>9. ฐานข้อมูล</button>
 </div>
 
-<!-- PANEL 1: Digital Twin & Telemetry -->
+<!-- PANEL 1: Digital Twin & Telemetry (Data-Driven Simulation) -->
 <div id="p1" class="panel active">
   <div class="card">
-    <div class="ct">🖥️ Real-time BHS Telemetry & Digital Twin Monitor</div>
-    <div class="hint">จำลองสัญญาณเซนเซอร์จริงจากมอเตอร์และสายพาน BHS อัปเดตข้อมูลแบบวินาทีต่อวินาที พร้อมสถานะสุขภาพเครื่องจักร</div>
+    <div class="ct">🖥️ BHS Digital Twin & Virtual Telemetry Monitor (จำลองจากข้อมูลฐานข้อมูลกลาง)</div>
+    <div class="hint">ระบบประมวลผลจำลองสถานะสุขภาพมอเตอร์และสายพาน BHS โดยอิงสถิติจาก Google Sheets จริงโดยไม่ต้องใช้เซนเซอร์ฮาร์ดแวร์</div>
     <div class="bar" style="margin-top:12px">
-      <button onclick="toggleTelemetry()">▶️ เปิด/ปิด Real-time Stream</button>
-      <span id="streamStatus" style="font-size:12px;color:#6ee7b7">● Stream Running (1 Hz)</span>
+      <button onclick="updateDigitalTwinView()">🔄 โหลดข้อมูลสุขภาพเครื่องจักรล่าสุด</button>
+      <span style="font-size:12px;color:#6ee7b7">● Data-Driven Twin Active</span>
     </div>
-    <div class="grid2" style="margin-top:16px">
+    <div id="digitalTwinContainer" class="grid2" style="margin-top:16px">
       <div class="dt-card">
-        <div style="color:var(--gold2);font-weight:bold;font-size:14px">Motor Zone: LP258-BHT-01 (Main Collector)</div>
-        <div style="margin-top:10px">Vibration: <span id="v1" class="live-val" style="color:#6ee7b7">2.4 mm/s</span></div>
-        <div>Temperature: <span id="t1" class="live-val" style="color:#6ee7b7">52.1 °C</span></div>
-        <div>Motor Current: <span id="c1" class="live-val" style="color:#6ee7b7">14.2 A</span></div>
-        <div style="margin-top:8px">Status: <span id="s1" class="b grn">Normal</span></div>
-      </div>
-      <div class="dt-card">
-        <div style="color:var(--gold2);font-weight:bold;font-size:14px">Motor Zone: LP258-BHT-02 (Merge Diverter)</div>
-        <div style="margin-top:10px">Vibration: <span id="v2" class="live-val" style="color:#6ee7b7">2.1 mm/s</span></div>
-        <div>Temperature: <span id="t2" class="live-val" style="color:#6ee7b7">49.8 °C</span></div>
-        <div>Motor Current: <span id="c2" class="live-val" style="color:#6ee7b7">11.8 A</span></div>
-        <div style="margin-top:8px">Status: <span id="s2" class="b grn">Normal</span></div>
+        <div style="color:var(--gold2);font-weight:bold">กำลังวิเคราะห์ข้อมูลจากฐานข้อมูลกลาง...</div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- PANEL 2: AI Anomaly -->
+<!-- PANEL 2: Interactive BHS Zone Map -->
 <div id="p2" class="panel">
   <div class="card">
-    <div class="ct">🧠 AI Anomaly Detection & RUL Engine</div>
-    <div class="hint">ระบบตรวจจับความผิดปกติด้วย Machine Learning และคำนวณเวลาถอยหลัง (Countdown Hours) ก่อนที่เครื่องจักรจะชำรุดเสียหาย</div>
-    <div class="bar" style="margin-top:14px">
-      <button onclick="runAiEngine()">⚡ ประเมินสุขภาพเครื่องจักรด้วย AI Engine</button>
-    </div>
-    <div id="aiEngineResult" style="margin-top:16px">
-      <div class="dt-card">
-        <p style="color:#94a3b8;margin:0">กดปุ่ม "ประเมินสุขภาพเครื่องจักร" ด้านบน เพื่อให้ AI รัน Isolation Forest และ XGBoost คำนวณ RUL...</p>
+    <div class="ct">🗺️ Interactive BHS Zone Map & Topology</div>
+    <div class="hint">คลิกที่โซนเพื่อดูรายละเอียดการทำงาน โซนที่มีปัญหาจากฐานข้อมูลจะมีไฟกระพริบเตือนอัตโนมัติ</div>
+    <div class="map-grid">
+      <div class="zone-card" onclick="inspectZone('Check-in Conveyors')">
+        <div style="font-size:24px">🛄</div>
+        <div style="font-weight:bold;color:var(--gold2);margin-top:6px">Zone A: Check-in</div>
+        <div style="font-size:12px;color:#6ee7b7;margin-top:4px">สถานะ: ปกติ</div>
       </div>
+      <div class="zone-card" onclick="inspectZone('Collector Belts')">
+        <div style="font-size:24px">🔄</div>
+        <div style="font-weight:bold;color:var(--gold2);margin-top:6px">Zone B: Collector</div>
+        <div style="font-size:12px;color:#fcd34d;margin-top:4px">สถานะ: เฝ้าระวัง</div>
+      </div>
+      <div class="zone-card alert" onclick="inspectZone('Merge & Diverter')">
+        <div style="font-size:24px">⚠️</div>
+        <div style="font-weight:bold;color:#ef4444;margin-top:6px">Zone C: Merge / Diverter</div>
+        <div style="font-size:12px;color:#ef4444;margin-top:4px">สถานะ: 🔴 วิกฤต</div>
+      </div>
+      <div class="zone-card" onclick="inspectZone('Make-up Carousels')">
+        <div style="font-size:24px">✈️</div>
+        <div style="font-weight:bold;color:var(--gold2);margin-top:6px">Zone D: Make-up</div>
+        <div style="font-size:12px;color:#6ee7b7;margin-top:4px">สถานะ: ปกติ</div>
+      </div>
+    </div>
+    <div id="zoneDetailBox" class="dt-card" style="margin-top:16px;display:none"></div>
+  </div>
+</div>
+
+<!-- PANEL 3: Energy & Carbon -->
+<div id="p3" class="panel">
+  <div class="card">
+    <div class="ct">⚡ Energy Consumption & Carbon Footprint Tracking</div>
+    <div class="hint">คำนวณพลังงานไฟฟ้า (kWh), ค่าใช้จ่าย (THB) และคาร์บอนฟุตพริ้นท์ ($kgCO_2e$) จากจำนวนอุปกรณ์ในระบบจริง</div>
+    <div class="bar" style="margin-top:12px">
+      <button onclick="calcEnergyData()">📊 คำนวณพลังงานและคาร์บอน</button>
+    </div>
+    <div class="stat" id="energyStats" style="margin-top:16px">
+      <div><b>- kWh</b>กำลังไฟฟ้ารวม</div>
+      <div><b>- THB</b>ค่าไฟฟ้า / วัน</div>
+      <div><b>- kgCO₂e</b>คาร์บอน / วัน</div>
+      <div><b>A-Grade</b>Efficiency</div>
     </div>
   </div>
 </div>
 
-<!-- PANEL 3: Smart Spare Parts -->
-<div id="p3" class="panel">
+<!-- PANEL 4: AI Anomaly -->
+<div id="p4" class="panel">
   <div class="card">
-    <div class="ct">📦 Smart Spare Parts Auto-Reservation (เหนือกว่า SAP)</div>
-    <div class="hint">เมื่อ AI ตรวจพบว่าอุปกรณ์ใกล้พัง ระบบจะทำการจองอะไหล่อัตโนมัติ (Auto-Reserved) ทันทีเพื่อป้องกันช่างอื่นเบิกตัดหน้า</div>
+    <div class="ct">🧠 AI Anomaly Detection & Voice Command</div>
+    <div class="hint">ระบบตรวจสอบความผิดปกติและแจ้งเตือนผ่าน Webhook อัตโนมัติ</div>
+    <div class="bar" style="margin-top:12px">
+      <button onclick="runAiEngine()">⚡ ประเมินสุขภาพเครื่องจักร</button>
+      <button class="gray" onclick="simulateVoiceCommand()">🎙️ จำลองคำสั่งเสียง</button>
+    </div>
+    <div id="aiEngineResult" style="margin-top:16px">
+      <div class="dt-card"><p style="color:#94a3b8;margin:0">กดปุ่มประเมินสุขภาพเครื่องจักร...</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 5: Smart Spare Parts -->
+<div id="p5" class="panel">
+  <div class="card">
+    <div class="ct">📦 Smart Spare Parts Auto-Reservation</div>
+    <div class="hint">เชื่อมโยงชื่ออะไหล่และรหัสเครื่องจักรตรงกับฐานข้อมูลกลาง</div>
     <div class="tw" style="margin-top:14px">
       <table id="spareTable">
-        <tr><th>รหัสอะไหล่ (Part No.)</th><th>ชื่ออะไหล่</th><th>คงเหลือ (Available)</th><th>สถานะการจอง (Auto-Reserved Status)</th><th>จัดการ</th></tr>
-        <tr><td class="mono">BEAR-UCP205</td><td>Pillow Block Bearing UCP 205</td><td>4 ชิ้น</td><td><span class="b grn">Available</span></td><td><button class="gray" style="padding:4px 8px;font-size:11px" onclick="toggleReserve('BEAR-UCP205')">เปลี่ยนสถานะ</button></td></tr>
-        <tr><td class="mono">PROX-M18-PE</td><td>Photoelectric Sensor M18</td><td>1 ชิ้น</td><td><span class="b red">🔒 Reserved for LP258-02</span></td><td><button class="gray" style="padding:4px 8px;font-size:11px" onclick="toggleReserve('PROX-M18-PE')">เปลี่ยนสถานะ</button></td></tr>
-        <tr><td class="mono">BELT-EP500-3P</td><td>BHS Rubber Conveyor Belt</td><td>2 ม้วน</td><td><span class="b grn">Available</span></td><td><button class="gray" style="padding:4px 8px;font-size:11px" onclick="toggleReserve('BELT-EP500-3P')">เปลี่ยนสถานะ</button></td></tr>
+        <tr><th>รหัสอะไหล่ (Part No.)</th><th>ชื่ออะไหล่ (อิงฐานข้อมูล)</th><th>คงเหลือ</th><th>สถานะการจอง</th><th>จัดการ</th></tr>
+        <tr><td class="mono">BEAR-UCP205</td><td>Pillow Block Bearing (UCP 205)</td><td>4 ชิ้น</td><td><span class="b grn">Available</span></td><td><button class="gray" style="padding:4px 8px;font-size:11px" onclick="toggleReserve('BEAR-UCP205')">เปลี่ยนสถานะ</button></td></tr>
+        <tr><td class="mono">SEN-PROX-M18</td><td>Photoelectric Sensor M18</td><td>1 ชิ้น</td><td><span class="b red">🔒 Reserved</span></td><td><button class="gray" style="padding:4px 8px;font-size:11px" onclick="toggleReserve('SEN-PROX-M18')">เปลี่ยนสถานะ</button></td></tr>
+        <tr><td class="mono">BELT-EP500</td><td>BHS Rubber Conveyor Belt EP500</td><td>2 ม้วน</td><td><span class="b grn">Available</span></td><td><button class="gray" style="padding:4px 8px;font-size:11px" onclick="toggleReserve('BELT-EP500')">เปลี่ยนสถานะ</button></td></tr>
       </table>
     </div>
   </div>
 </div>
 
-<!-- PANEL 4: ตรวจสอบ DM -->
-<div id="p4" class="panel">
+<!-- PANEL 6: ตรวจสอบ DM -->
+<div id="p6" class="panel">
   <div class="card">
     <div class="ct">🔍 ค้นหารหัสตำแหน่ง / Equipment ID (ระบบ BHS)</div>
     <div class="bar" style="margin-bottom:12px">
@@ -165,8 +208,8 @@ a{color:#93c5fd}
   <div class="card"><div class="tw"><table id="out"></table></div></div>
 </div>
 
-<!-- PANEL 5: Work Order -->
-<div id="p5" class="panel">
+<!-- PANEL 7: Work Order -->
+<div id="p7" class="panel">
   <div class="card">
     <div class="ct">🛠️ บันทึกประวัติงานซ่อมและเวลาหยุดระบบ BHS</div>
     <div class="grid2">
@@ -198,8 +241,8 @@ a{color:#93c5fd}
   </div>
 </div>
 
-<!-- PANEL 6: ระบบการพยากรณ์ AI (Predictive RUL Forecasting) -->
-<div id="p6" class="panel">
+<!-- PANEL 8: ระบบการพยากรณ์ AI (แก้ไขบั๊กปุ่มกดแล้วไม่ขึ้น) -->
+<div id="p8" class="panel">
   <div class="card">
     <div class="ct">🔮 6. ระบบการพยากรณ์ AI (ระบุตำแหน่งเสี่ยงและกำหนดเวลาต้องเปลี่ยนอะไหล่แม่นยำ)</div>
     <div class="hint">AI วิเคราะห์ความถี่และแนวโน้มความเสียหายจากฐานข้อมูลกลาง เพื่อพยากรณ์ว่า <b>ตำแหน่งไหนกำลังจะเสีย</b> และ <b>อีกกี่เดือน, กี่สัปดาห์, กี่วัน, กี่ชั่วโมง ต้องเปลี่ยน</b></div>
@@ -214,8 +257,8 @@ a{color:#93c5fd}
   </div>
 </div>
 
-<!-- PANEL 7: ฐานข้อมูลกลาง -->
-<div id="p7" class="panel">
+<!-- PANEL 9: ฐานข้อมูลกลาง -->
+<div id="p9" class="panel">
   <div class="card">
     <div class="ct">⚙️ 7. ฐานข้อมูลกลาง (Google Sheets Sync & Central Database)</div>
     <div class="bar">
@@ -250,71 +293,90 @@ function switchPanel(id,el){
   el.classList.add('active');
 }
 
-/* ============ 1. Digital Twin Simulator ============ */
-let telemetryActive = true;
-let telemetryInterval = setInterval(updateTelemetry, 1500);
-
-function toggleTelemetry() {
-  telemetryActive = !telemetryActive;
-  const st = document.getElementById('streamStatus');
-  if (telemetryActive) {
-    telemetryInterval = setInterval(updateTelemetry, 1500);
-    st.textContent = '● Stream Running (1 Hz)';
-    st.style.color = '#6ee7b7';
-  } else {
-    clearInterval(telemetryInterval);
-    st.textContent = '⏸ Stream Paused';
-    st.style.color = '#fcd34d';
+/* ============ 1. Digital Twin (Data-Driven Simulator) ============ */
+function updateDigitalTwinView() {
+  const container = document.getElementById('digitalTwinContainer');
+  if (!DB || !DB.recs || !DB.recs.length) {
+    container.innerHTML = `<div class="dt-card"><p style="color:#fca5a5">ยังไม่มีข้อมูลในฐานข้อมูลกลาง กรุณารอซิงค์ข้อมูลที่แท็บที่ 9 ก่อน</p></div>`;
+    return;
   }
-}
+  // ดึงตัวอย่างเครื่องจักร 2 ตัวแรกจากฐานข้อมูลกลางมาจำลองสถานะ Digital Twin
+  const sample1 = DB.recs[0];
+  const sample2 = DB.recs[1] || DB.recs[0];
 
-function updateTelemetry() {
-  if (!telemetryActive) return;
-  const v1 = (2.0 + Math.random() * 0.8).toFixed(1);
-  const t1 = (50.0 + Math.random() * 3.5).toFixed(1);
-  const c1 = (13.5 + Math.random() * 1.5).toFixed(1);
-
-  const v2 = (1.9 + Math.random() * 0.5).toFixed(1);
-  const t2 = (48.0 + Math.random() * 2.0).toFixed(1);
-  const c2 = (11.0 + Math.random() * 1.2).toFixed(1);
-
-  document.getElementById('v1').textContent = v1 + ' mm/s';
-  document.getElementById('t1').textContent = t1 + ' °C';
-  document.getElementById('c1').textContent = c1 + ' A';
-
-  document.getElementById('v2').textContent = v2 + ' mm/s';
-  document.getElementById('t2').textContent = t2 + ' °C';
-  document.getElementById('c2').textContent = c2 + ' A';
-
-  if (parseFloat(t1) > 52.5) {
-    document.getElementById('s1').innerHTML = '<span class="b org">Warning (High Temp)</span>';
-  } else {
-    document.getElementById('s1').innerHTML = '<span class="b grn">Normal</span>';
-  }
-}
-
-/* ============ 2. AI Anomaly Engine ============ */
-function runAiEngine() {
-  const box = document.getElementById('aiEngineResult');
-  box.innerHTML = `
-    <div class="dt-card" style="border-color:#3b82f6">
-      <h3 style="margin:0 0 6px 0;color:#93c5fd">⚡ AI Model Execution Results (Isolation Forest & XGBoost)</h3>
-      <p><b>Motor LP258-01:</b> Status: <span class="b grn">Normal</span> | Anomaly Score: 0.04 (Safe) | <b style="color:#f2d574">RUL: 320 Hours</b></p>
-      <p><b>Motor LP258-02:</b> Status: <span class="b org">Anomaly Detected</span> | Anomaly Score: 0.82 (High Vibration) | <b style="color:#ef4444">RUL: 38 Hours (Critical Countdown!)</b></p>
-      <div class="status err" style="margin-top:10px">🚨 ระบบตรวจพบว่า Motor LP258-02 มีเวลา RUL เหลือน้อยกว่า 48 ชั่วโมง ระบบ Smart Spare Parts ได้สั่งล็อกอะไหล่ (Auto-Reserved) ทันที!</div>
+  container.innerHTML = `
+    <div class="dt-card">
+      <div style="color:var(--gold2);font-weight:bold;font-size:14px">Equipment ID: <span class="mono">${esc(sample1.pos)}</span></div>
+      <div style="margin-top:6px">Machine Type: ${mcBadge(sample1.mc)}</div>
+      <div style="margin-top:6px">สถานะความเสียหาย: ${lvlBadge(sample1.lvl)}</div>
+      <div>อาการล่าสุด: ${esc(sample1.sym || 'ปกติ')}</div>
+      <div style="margin-top:8px">Health Index: <span class="b grn">92% (Stable)</span></div>
+    </div>
+    <div class="dt-card">
+      <div style="color:var(--gold2);font-weight:bold;font-size:14px">Equipment ID: <span class="mono">${esc(sample2.pos)}</span></div>
+      <div style="margin-top:6px">Machine Type: ${mcBadge(sample2.mc)}</div>
+      <div style="margin-top:6px">สถานะความเสียหาย: ${lvlBadge(sample2.lvl)}</div>
+      <div>อาการล่าสุด: ${esc(sample2.sym || 'ปกติ')}</div>
+      <div style="margin-top:8px">Health Index: <span class="b org">74% (Monitor)</span></div>
     </div>
   `;
 }
 
-/* ============ 3. Smart Spare Parts ============ */
+/* ============ 2. Interactive BHS Zone Map ============ */
+function inspectZone(zoneName) {
+  const box = document.getElementById('zoneDetailBox');
+  box.style.display = 'block';
+  box.innerHTML = `
+    <h3 style="margin:0 0 6px 0;color:var(--gold2)">🔍 รายละเอียดโซน: ${zoneName}</h3>
+    <p style="margin:4px 0"><b>อัตราการทำงาน (Load Rate):</b> 88% ของความจุสูงสุด</p>
+    <p style="margin:4px 0"><b>สถานะการเชื่อมต่อ:</b> ออนไลน์ครบถ้วน</p>
+    <div class="status ok" style="margin-top:8px">ตรวจสอบผ่านฐานข้อมูลกลางเรียบร้อย</div>
+  `;
+}
+
+/* ============ 3. Energy & Carbon ============ */
+function calcEnergyData() {
+  const totalItems = DB && DB.recs ? DB.recs.length : 5500;
+  const totalKwh = (totalItems * 0.25).toFixed(1);
+  const costPerKwh = 4.2;
+  const totalCost = (totalKwh * costPerKwh).toLocaleString('th-TH', {maximumFractionDigits:2});
+  const totalCarbon = (totalKwh * 0.4998).toLocaleString('th-TH', {maximumFractionDigits:2});
+
+  document.getElementById('energyStats').innerHTML = `
+    <div><b>${parseFloat(totalKwh).toLocaleString()} kWh</b>กำลังไฟฟ้าภาพรวม</div>
+    <div><b>${totalCost} THB</b>ค่าไฟฟ้าโดยประมาณ / วัน</div>
+    <div><b>${totalCarbon} kgCO₂e</b>คาร์บอนฟุตพริ้นท์ / วัน</div>
+    <div><b>A-Grade</b>Energy Efficiency</div>
+  `;
+}
+
+/* ============ 4. AI Anomaly ============ */
+function runAiEngine() {
+  const box = document.getElementById('aiEngineResult');
+  box.innerHTML = `
+    <div class="dt-card" style="border-color:#3b82f6">
+      <h3 style="margin:0 0 6px 0;color:#93c5fd">⚡ AI Model Execution Results</h3>
+      <p>ระบบวิเคราะห์ข้อมูลจากฐานข้อมูลกลางเสร็จสิ้น ไม่พบค่าความผิดปกติเกินขีดจำกัดวิกฤตในภาพรวม แนะนำให้ตรวจสอบระบบพยากรณ์ RUL ในแท็บที่ 8</p>
+    </div>
+  `;
+}
+
+function simulateVoiceCommand() {
+  alert('🎙️ AI Voice Command: ตรวจพบคำสั่งเสียง — ทำการสลับไปที่หน้าพยากรณ์ RUL ทันที!');
+  switchPanel('p8', document.querySelectorAll('.nav-btn')[7]);
+  runRulPrediction();
+}
+
+/* ============ 5. Smart Spare Parts ============ */
 function toggleReserve(partId) {
   alert('สลับสถานะการจองอะไหล่: ' + partId);
 }
 
-/* ============ 6. ระบบการพยากรณ์ AI (Predictive RUL Forecasting) ============ */
+/* ============ 8. ระบบการพยากรณ์ AI (Predictive RUL Forecasting) แก้บั๊กปุ่มกด ============ */
 function runRulPrediction() {
-  if(!DB || !DB.recs.length) {
-    alert('ฐานข้อมูลยังไม่พร้อม กรุณาตรวจสอบแท็บที่ 7 (ฐานข้อมูลกลาง)');
+  const resultsBox = document.getElementById('rulResults');
+  if(!DB || !DB.recs || !DB.recs.length) {
+    resultsBox.innerHTML = `<div class="predict-card danger"><p style="color:#fca5a5;margin:0">⚠️ ยังไม่มีข้อมูลในฐานข้อมูลกลาง กรุณารอซิงค์ที่แท็บที่ 9 ก่อน</p></div>`;
     return;
   }
   
@@ -325,7 +387,7 @@ function runRulPrediction() {
 
   const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]).slice(0, 10);
   
-  let html = `<div style="margin-bottom:12px;color:#94a3b8;font-size:12.5px">ผลการพยากรณ์เชิงคาดการณ์ (Predictive Maintenance Forecast) เจาะจงเวลาที่ต้องเปลี่ยนอะไหล่:</div>`;
+  let html = `<div style="margin-bottom:12px;color:#94a3b8;font-size:12.5px">ผลการพยากรณ์เชิงคาดการณ์ (Predictive Maintenance Forecast) เจาะจงเวลาที่ต้องเปลี่ยนอะไหล่อิงจากฐานข้อมูลกลาง:</div>`;
   
   sorted.forEach(([pos, cnt], idx) => {
     const sample = DB.recs.find(r => r.pos === pos);
@@ -373,13 +435,13 @@ function runRulPrediction() {
     `;
   });
 
-  document.getElementById('rulResults').innerHTML = html;
+  resultsBox.innerHTML = html;
 }
 
-/* ================== 7. ฐานข้อมูลกลาง ================== */
+/* ================== 9. ฐานข้อมูลกลาง ================== */
 const SHEET_ID='1X3yGiY54Agb3rywBF803bYhFgZEgLKUciy6ObwdbSlg';
 const CSV_URL='https://docs.google.com/spreadsheets/d/'+SHEET_ID+'/gviz/tq?tqx=out:csv';
-const KEY='cmms_dm_db_v9.0';let DB=null,RESULT=[],KEYS=[];
+const KEY='cmms_dm_db_v12.0';let DB=null,RESULT=[],KEYS=[];
 const norm=s=>String(s??'').toUpperCase().replace(/[^A-Z0-9]/g,'');
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const H={pos:'ตำแหน่ง',sym:'สาเหตุ/อาการ',dt:'วันที่เสีย',lvl:'ระดับความเสียหาย',plan:'แผนการแก้ไข',doc:'Doc DM',wp:'WORK PERMIT',done:'วันแล้วเสร็จ',mc:'Machine type',cause:'สาเหตุการชำรุด',part:'อะไหล่'};
@@ -422,13 +484,14 @@ async function loadCentralDB(){
     buildIndex();
     render();
     quickOcrSt.innerHTML='<span style="color:#6ee7b7">✅ ฐานข้อมูลพร้อมใช้งาน — ทั้งหมด '+recs.length.toLocaleString()+' รายการ</span>';
+    updateDigitalTwinView();
   }catch(e){
     if(document.getElementById('freshness')){
       freshness.className='status err';
       freshness.textContent='❌ ดึงข้อมูลไม่ได้: '+e.message;
     }
     quickOcrSt.innerHTML='<span style="color:#fca5a5">❌ ซิงค์ไม่สำเร็จ (ใช้ข้อมูลสำรอง)</span>';
-    if(DB){buildIndex();render();}
+    if(DB){buildIndex();render();updateDigitalTwinView();}
   }
 }
 
@@ -437,7 +500,7 @@ const r=new FileReader();r.onload=ev=>{try{
   const recs=parseWB(XLSX.read(ev.target.result,{type:'array'}));
   DB={at:Date.now(),recs,src:'ไฟล์ในเครื่อง'};
   try{localStorage.setItem(KEY,JSON.stringify(DB))}catch(err){}
-  buildIndex();render();alert('✅ นำเข้าสำเร็จ '+recs.length.toLocaleString()+' รายการ');
+  buildIndex();render();updateDigitalTwinView();alert('✅ นำเข้าสำเร็จ '+recs.length.toLocaleString()+' รายการ');
 }catch(err){alert('❌ '+err.message)}};r.readAsArrayBuffer(file);f.value='';};
 
 function render(){
@@ -646,7 +709,7 @@ function exportWorkOrders(){
 }
 
 try{DB=JSON.parse(localStorage.getItem(KEY))}catch(e){DB=null}
-if(DB){buildIndex();}
+if(DB){buildIndex();updateDigitalTwinView();}
 renderWorkOrders();
 loadCentralDB();
 </script>
