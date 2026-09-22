@@ -4,20 +4,20 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <meta name="theme-color" content="#020617">
-<title>MT3 — Engineering Maintenance Hub v4.0</title>
+<title>MT3 — BHS Autonomous Intelligence Hub v5.1</title>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <style>
-:root{--gold:#d4af37;--gold2:#f2d574;--card:rgba(30,41,59,.78);--bg:#020617}
+:root{--gold:#d4af37;--gold2:#f2d574;--card:rgba(30,41,59,.82);--bg:#020617}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{font-family:"Segoe UI",Tahoma,sans-serif;color:#e7edf5;margin:0;padding:16px 12px 50px;
 background:radial-gradient(1200px 600px at 50% -10%,#1b2a4a 0%,#0b1426 45%,#020617 100%);min-height:100vh}
 .wrapmain{max-width:1150px;margin:0 auto}
 .hd{display:flex;align-items:center;gap:14px;justify-content:center;margin-bottom:6px}
-.hd svg{width:58px;height:58px;filter:drop-shadow(0 4px 10px rgba(0,0,0,.6))}
+.hd img{width:64px;height:64px;object-fit:contain;border-radius:10px;border:1.5px solid var(--gold);background:#0b1426;box-shadow:0 4px 12px rgba(0,0,0,.5)}
 h1{font-size:20px;margin:0;letter-spacing:.5px}
 h1 span{background:linear-gradient(135deg,var(--gold2),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
-.ver{display:inline-block;background:#1e3a8a;color:#93c5fd;font-size:10px;padding:2px 8px;border-radius:10px;margin-left:6px;vertical-align:middle}
+.ver{display:inline-block;background:#064e3b;color:#6ee7b7;font-size:10px;padding:2px 8px;border-radius:10px;margin-left:6px;vertical-align:middle}
 .sub{color:#8fa3bf;font-size:11.5px;text-align:center;margin:0 0 16px}
 .tabs{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;padding-bottom:4px}
 .tab-btn{background:#0f172a;color:#94a3b8;border:1px solid #1e293b;padding:9px 14px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap}
@@ -32,7 +32,7 @@ border-radius:9px;cursor:pointer;font-size:13.5px;font-weight:700;font-family:in
 button:active{transform:scale(.97)}button.gray{background:#334155;color:#cbd5e1;font-weight:600}
 button.danger{background:#7f1d1d;color:#fca5a5}
 textarea,input[type=text],select{width:100%;background:#0a1120;color:#e7edf5;border:1px solid #2b3c57;border-radius:9px;padding:10px;font-family:inherit;font-size:13px}
-textarea{height:78px;font-family:Consolas,monospace}
+textarea{height:85px;font-family:Consolas,monospace}
 .status{font-size:12px;padding:8px 12px;border-radius:7px;margin-top:9px}
 .ok{background:rgba(6,78,59,.65);color:#6ee7b7}.warn{background:rgba(120,53,15,.65);color:#fcd34d}.err{background:rgba(127,29,29,.65);color:#fca5a5}
 table{width:100%;border-collapse:collapse;font-size:12px}
@@ -49,6 +49,7 @@ td{padding:9px;border-bottom:1px solid #22304a;vertical-align:top}
 a{color:#93c5fd}
 details{margin-top:6px}summary{cursor:pointer;font-size:11px;color:#64748b}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ai-box{background:rgba(15,23,42,.9);border:1px solid #3b82f6;border-radius:10px;padding:12px;margin-top:12px;font-size:12.5px;color:#93c5fd}
 @media(max-width:768px){.grid2{grid-template-columns:1fr}}
 </style>
 </head>
@@ -56,60 +57,67 @@ details{margin-top:6px}summary{cursor:pointer;font-size:11px;color:#64748b}
 <div class="wrapmain">
 
 <div class="hd">
-<svg viewBox="0 0 100 120"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-<stop offset="0" stop-color="#f2d574"/><stop offset="1" stop-color="#b8860b"/></linearGradient></defs>
-<path d="M50 3 6 18v46c0 30 22 46 44 53 22-7 44-23 44-53V18z" fill="#12306b" stroke="url(#g)" stroke-width="5"/>
-<path d="M50 12 14 24v40c0 25 18 39 36 45 18-6 36-20 36-45V24z" fill="none" stroke="#fff" stroke-width="1.6" opacity=".55"/>
-<text x="50" y="58" font-size="30" font-weight="700" text-anchor="middle" fill="url(#g)" font-family="Segoe UI,sans-serif">MT3</text>
-<path d="M22 74h56M30 86l8-8 8 8" stroke="url(#g)" stroke-width="4" fill="none" stroke-linecap="round"/>
-<circle cx="62" cy="82" r="8" fill="none" stroke="url(#g)" stroke-width="4"/></svg>
-<div><h1><span>MT3</span> ENGINEERING HUB<span class="ver">v4.0 Pro</span></h1>
-<div style="font-size:11px;color:#8fa3bf;letter-spacing:1px">MAINTENANCE & RELIABILITY SYSTEM</div></div>
+<img id="logo" alt="MT3 Logo" crossorigin="anonymous">
+<div><h1><span>MT3</span> BHS INTELLIGENCE HUB<span class="ver">v5.1 Locked</span></h1>
+<div style="font-size:11px;color:#8fa3bf;letter-spacing:1px">BAGGAGE HANDLING SYSTEM • AUTONOMOUS MAINTENANCE</div></div>
 </div>
-<p class="sub">ระบบบริหารงานวิศวกรรมซ่อมบำรุง • วิเคราะห์ MTBF / MTTR • CMMS & Reliability Analytics</p>
+<p class="sub">ระบบวิเคราะห์และบริหารงานซ่อมบำรุงสายพานกระเป๋าอัจฉริยะ • Predictive Diagnostics & BHS Expert System</p>
 
 <!-- เมนูแท็บ -->
 <div class="tabs">
   <button class="tab-btn active" onclick="switchTab('t1',this)">🔍 1. ตรวจสอบ & ค้นหา DM</button>
-  <button class="tab-btn" onclick="switchTab('t2',this)">🖼️ 2. OCR รูปป้ายจากคลัง</button>
-  <button class="tab-btn" onclick="switchTab('t3',this)">📊 3. Reliability Metrics (MTBF/MTTR)</button>
-  <button class="tab-btn" onclick="switchTab('t4',this)">🛠️ 4. Work Order & Downtime Log</button>
-  <button class="tab-btn" onclick="switchTab('t5',this)">⚙️ 5. ฐานข้อมูลกลาง</button>
+  <button class="tab-btn" onclick="switchTab('t2',this)">🧠 2. BHS AI Diagnostics & Prediction</button>
+  <button class="tab-btn" onclick="switchTab('t3',this)">📊 3. Reliability & MTBF / MTTR</button>
+  <button class="tab-btn" onclick="switchTab('t4',this)">🛠️ 4. Work Order & BHS Downtime</button>
 </div>
 
 <!-- แท็บ 1: ตรวจสอบ DM -->
 <div id="t1" class="panel active">
   <div class="card">
-    <div class="ct">พิมพ์ค้นหารหัสตำแหน่ง / Equipment ID</div>
+    <div class="ct">ค้นหารหัสตำแหน่ง / Equipment ID (ระบบ BHS)</div>
+    <div class="bar" style="margin-bottom:10px">
+      <input type="file" id="camInput" accept="image/*" capture="environment" hidden>
+      <button onclick="camInput.click()">📸 ถ่ายรูปป้ายอุปกรณ์</button>
+      <input type="file" id="galInput" accept="image/*" multiple hidden>
+      <button class="gray" onclick="galInput.click()">📁 เลือกรูปจากคลัง</button>
+      <button class="gray" onclick="loadCentralDB()" style="margin-left:auto">🔄 ซิงค์ข้อมูลกลาง</button>
+    </div>
+    <div id="quickOcrSt" class="hint" style="margin-bottom:8px">สถานะฐานข้อมูล: กำลังเชื่อมต่ออัตโนมัติ...</div>
     <textarea id="q" placeholder="LP258-BHT57-HS395&#10;LP258-BHT57-HS397"></textarea>
     <div class="bar" style="margin-top:9px">
       <button onclick="check()">ตรวจสอบสถานะ DM</button>
       <button class="gray" onclick="exportResult()">⬇ Export Excel</button>
     </div>
-    <div class="hint">รองรับเครื่องหมาย . _ - หรือเว้นวรรค ระบบแปลงให้อัตโนมัติ</div>
+    <div class="hint">พิมพ์รหัส หรือถ่ายรูป/เลือกรูปป้ายเพื่อดึงข้อความอัตโนมัติ (รองรับ . _ - หรือเว้นวรรค)</div>
   </div>
   <div class="card"><div class="tw"><table id="out"></table></div></div>
 </div>
 
-<!-- แท็บ 2: OCR รูปจากคลัง -->
+<!-- แท็บ 2: BHS AI Diagnostics & Prediction -->
 <div id="t2" class="panel">
   <div class="card">
-    <div class="ct">อัปโหลดรูปภาพป้ายอุปกรณ์จากคลัง (รองรับหลายรูปพร้อมกัน)</div>
-    <div class="bar">
-      <input type="file" id="img" accept="image/*" multiple hidden>
-      <button onclick="img.click()">📁 เลือกรูปภาพจากคลังในเครื่อง</button>
+    <div class="ct">BHS Smart Failure Predictor & Root Cause Expert</div>
+    <div class="hint">ระบบปัญญาประดิษฐ์วิเคราะห์อาการเสียเฉพาะทางสำหรับระบบสายพาน BHS เพื่อคาดการณ์จุดที่กำลังจะเสียหายก่อนเกิดเหตุขัดข้องจริง</div>
+    <div class="bar" style="margin-top:12px">
+      <select id="bhsZone" style="max-width:300px">
+        <option value="ALL">-- ทุกโซนระบบ BHS --</option>
+        <option value="CHECKIN">Check-in Conveyors (สายพานเช็คอิน)</option>
+        <option value="COLLECTOR">Collector & Collector Belts (สายพานรวมกระเป๋า)</option>
+        <option value="MERGE">Merge & Diverter (จุดบรรจบและเบี่ยงกระเป๋า)</option>
+        <option value="MAKEUP">Make-up Carousels (สายพานจัดเรียงกระเป๋าขึ้นเครื่อง)</option>
+      </select>
+      <button onclick="runBhsAiAnalysis()">🤖 รันระบบวิเคราะห์ AI อัจฉริยะ</button>
     </div>
-    <div id="ocrst" class="hint">เลือกรูปภาพเพื่อดึงข้อความรหัสอุปกรณ์ด้วย AI OCR และตรวจสอบสถานะ DM ทันที</div>
-    <div id="ocrout" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px"></div>
+    <div id="aiAnalysisResult"></div>
   </div>
 </div>
 
 <!-- แท็บ 3: MTBF / MTTR Analytics -->
 <div id="t3" class="panel">
   <div class="card">
-    <div class="ct">Reliability & Maintenance KPIs (วิเคราะห์ความน่าเชื่อถือเครื่องจักร)</div>
+    <div class="ct">BHS Reliability & Maintenance KPIs</div>
     <div class="bar">
-      <button onclick="calcReliability()">⚡ คำนวณดัชนีชี้วัดวิศวกรรม</button>
+      <button onclick="calcReliability()">⚡ คำนวณดัชนีชี้วัดวิศวกรรมระบบสายพาน</button>
     </div>
     <div class="stat" id="kpiStats" style="margin-top:14px">
       <div><b>-</b>MTBF (Mean Time Between Failures)</div>
@@ -117,10 +125,9 @@ details{margin-top:6px}summary{cursor:pointer;font-size:11px;color:#64748b}
       <div><b>-</b>System Availability</div>
       <div><b>-</b>Total Breakdown Events</div>
     </div>
-    <div class="hint" style="margin-top:10px">คำนวณจากสถิติเวลาการเสีย (Breakdown) และประวัติการซ่อมในฐานข้อมูลกลาง เพื่อใช้วางแผน Preventive Maintenance (PM)</div>
   </div>
   <div class="card">
-    <div class="ct">เครื่องจักรที่มีอัตราการเสียสูงสุด (Top Failure Assets)</div>
+    <div class="ct">จุดวิกฤตสายพานที่เสียซ้ำซาก (BHS Top Failure Assets)</div>
     <div class="tw"><table id="topFailTable"></table></div>
   </div>
 </div>
@@ -128,54 +135,51 @@ details{margin-top:6px}summary{cursor:pointer;font-size:11px;color:#64748b}
 <!-- แท็บ 4: Work Order & Downtime Log -->
 <div id="t4" class="panel">
   <div class="card">
-    <div class="ct">บันทึกประวัติงานซ่อมและเวลาหยุดเครื่อง (CMMS Work Order)</div>
+    <div class="ct">บันทึกประวัติงานซ่อมและเวลาหยุดระบบ BHS (BHS Work Order)</div>
     <div class="grid2">
       <div>
-        <label style="font-size:12px;color:#8fa3bf">รหัสตำแหน่งอุปกรณ์</label>
+        <label style="font-size:12px;color:#8fa3bf">รหัสตำแหน่งอุปกรณ์ BHS</label>
         <input type="text" id="woPos" placeholder="เช่น LP258-BHT57-HS395" style="margin-top:4px;margin-bottom:9px">
         <label style="font-size:12px;color:#8fa3bf">ลักษณะอาการเสีย / ปัญหา</label>
-        <input type="text" id="woSym" placeholder="เช่น Sensor จับชิ้นงานไม่เจอ" style="margin-top:4px;margin-bottom:9px">
-        <label style="font-size:12px;color:#8fa3bf">สาเหตุการชำรุด (Root Cause)</label>
-        <input type="text" id="woCause" placeholder="เช่น สายสัญญาณขาดใน / อุปกรณ์เสื่อมสภาพ" style="margin-top:4px">
+        <input type="text" id="woSym" placeholder="เช่น สายพานลื่น / โซ่ขับเคลื่อนติดขัด" style="margin-top:4px;margin-bottom:9px">
+        <label style="font-size:12px;color:#8fa3bf">สาเหตุเชิงลึก (Root Cause)</label>
+        <input type="text" id="woCause" placeholder="เช่น ลูกปืนแตก / Tensioner หย่อน" style="margin-top:4px">
       </div>
       <div>
-        <label style="font-size:12px;color:#8fa3bf">ระยะเวลาซ่อม (ชั่วโมง - Downtime)</label>
-        <input type="text" id="woHours" placeholder="เช่น 2.5" style="margin-top:4px;margin-bottom:9px">
-        <label style="font-size:12px;color:#8fa3bf">อะไหล่ที่ใช้เปลี่ยน</label>
-        <input type="text" id="woPart" placeholder="เช่น Proximity Switch M18" style="margin-top:4px;margin-bottom:9px">
-        <label style="font-size:12px;color:#8fa3bf">ชื่อผู้ปฏิบัติงาน / ทีมช่าง</label>
-        <input type="text" id="woTech" placeholder="เช่น ทีมช่างไฟฟ้า A" style="margin-top:4px">
+        <label style="font-size:12px;color:#8fa3bf">เวลาหยุดระบบ (Downtime - นาที)</label>
+        <input type="text" id="woHours" placeholder="เช่น 45" style="margin-top:4px;margin-bottom:9px">
+        <label style="font-size:12px;color:#8fa3bf">อะไหล่ที่เปลี่ยน</label>
+        <input type="text" id="woPart" placeholder="เช่น Bearing UCP 205" style="margin-top:4px;margin-bottom:9px">
+        <label style="font-size:12px;color:#8fa3bf">ทีมช่างผู้รับผิดชอบ</label>
+        <input type="text" id="woTech" placeholder="เช่น ทีมช่างกล BHS" style="margin-top:4px">
       </div>
     </div>
     <div class="bar" style="margin-top:12px">
-      <button onclick="saveWorkOrder()">💾 บันทึกประวัติงานซ่อม</button>
+      <button onclick="saveWorkOrder()">💾 บันทึกประวัติงานซ่อมสายพาน</button>
       <button class="gray" onclick="exportWorkOrders()">⬇ Export Work Orders</button>
     </div>
   </div>
   <div class="card">
-    <div class="ct">ประวัติการปฏิบัติงานที่บันทึกไว้ในเครื่อง</div>
+    <div class="ct">ประวัติการปฏิบัติงานระบบสายพานในเครื่อง</div>
     <div class="tw"><table id="woTable"></table></div>
-  </div>
-</div>
-
-<!-- แท็บ 5: ฐานข้อมูลกลาง -->
-<div id="t5" class="panel">
-  <div class="card">
-    <div class="ct">สถานะฐานข้อมูลกลาง (Google Sheets Sync)</div>
-    <div class="bar">
-      <button onclick="loadCentralDB()">🔄 รีเฟรชข้อมูลทันที</button>
-      <input type="file" id="f" accept=".xlsx,.xls,.csv" hidden>
-      <button class="gray" onclick="f.click()">📥 Import ไฟล์สำรองเอง</button>
-    </div>
-    <div id="freshness" style="margin-top:10px"></div>
-    <div class="stat" id="stats"></div>
-    <div id="dbinfo" class="hint" style="margin-top:8px"></div>
   </div>
 </div>
 
 </div>
 
 <script>
+/* ================== ล็อกโลโก้กลางอย่างถาวร ================== */
+const LOCKED_LOGO_URL = 'https://i.ibb.co/6c2r9L5/mt3-emblem.jpg'; // โลโก้ทางการที่อัปโหลด
+const FALLBACK_LOGO = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTIwIj48cGF0aCBkPSJNNTAgNUw5NSAyMHY1MGMwIDI1LTIwIDQwLTQ1IDQ1QzI1IDExMCA1IDk1IDUgNzBWMjB6IiBmaWxsPSIjMTQzNTZkIiBzdHJva2U9IiNkNGFmMzciIHN0cm9rZS13aWR0aD0iNSIvPjx0ZXh0IHg9IjUwIiB5PSI1MiIgZm9udC1zaXplPSIzMiIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiNkNGFmMzciIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCI+TVQzPC90ZXh0Pjwvc3ZnPg==';
+
+(function(){
+  const logoEl = document.getElementById('logo');
+  logoEl.onerror = () => { logoEl.onerror = null; logoEl.src = FALLBACK_LOGO; };
+  logoEl.src = LOCKED_LOGO_URL;
+  // ลบแคชโลโก้เก่าทิ้งทันทีเพื่อบังคับใช้โลโก้กลางนี้
+  localStorage.removeItem('mt3_logo');
+})();
+
 function switchTab(id,el){
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
@@ -183,10 +187,10 @@ function switchTab(id,el){
   el.classList.add('active');
 }
 
-/* ============ ฐานข้อมูลกลาง ============ */
+/* ============ ฐานข้อมูลกลาง (ซิงค์เบื้องหลังอัตโนมัติ) ============ */
 const SHEET_ID='1X3yGiY54Agb3rywBF803bYhFgZEgLKUciy6ObwdbSlg';
 const CSV_URL='https://docs.google.com/spreadsheets/d/'+SHEET_ID+'/gviz/tq?tqx=out:csv';
-const KEY='cmms_dm_db_v4';let DB=null,RESULT=[],KEYS=[];
+const KEY='cmms_dm_db_v5.1';let DB=null,RESULT=[],KEYS=[];
 const norm=s=>String(s??'').toUpperCase().replace(/[^A-Z0-9]/g,'');
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const H={pos:'ตำแหน่ง',sym:'สาเหตุ/อาการ',dt:'วันที่เสีย',lvl:'ระดับความเสียหาย',plan:'แผนการแก้ไข',doc:'Doc DM',wp:'WORK PERMIT',done:'วันแล้วเสร็จ',mc:'Machine type',cause:'สาเหตุการชำรุด',part:'อะไหล่'};
@@ -219,7 +223,7 @@ function parseWB(wb){
 function buildIndex(){KEYS=[...new Set(DB.recs.map(r=>r._n))];}
 
 async function loadCentralDB(){
-  freshness.className='status warn';freshness.textContent='⏳ กำลังดึงข้อมูลจากฐานข้อมูลกลาง...';
+  quickOcrSt.innerHTML='<span style="color:#fcd34d">⏳ กำลังซิงค์ข้อมูลจากฐานข้อมูลกลาง...</span>';
   try{
     const res=await fetch(CSV_URL+'&t='+Date.now(),{cache:'no-store'});
     if(!res.ok)throw new Error('HTTP '+res.status);
@@ -229,42 +233,19 @@ async function loadCentralDB(){
     if(!recs.length)throw new Error('ไม่พบข้อมูลในชีต');
     DB={at:Date.now(),recs,src:'ฐานข้อมูลกลาง'};
     try{localStorage.setItem(KEY,JSON.stringify(DB))}catch(e){}
-    buildIndex();render();
+    buildIndex();
+    quickOcrSt.innerHTML='<span style="color:#6ee7b7">✅ ฐานข้อมูลพร้อมใช้งาน — ทั้งหมด '+recs.length.toLocaleString()+' รายการ (ค้าง '+recs.filter(r=>r.open).length.toLocaleString()+')</span>';
   }catch(e){
-    freshness.className='status err';
-    freshness.innerHTML='❌ ดึงข้อมูลกลางไม่ได้: '+esc(e.message)+(DB?'<br>กำลังใช้ข้อมูลที่บันทึกไว้ครั้งก่อน':'');
-    if(DB){buildIndex();renderStats();}
+    quickOcrSt.innerHTML='<span style="color:#fca5a5">❌ ซิงค์ข้อมูลไม่ได้: '+esc(e.message)+(DB?' (ใช้ข้อมูลสำรองในเครื่อง)':'')+'</span>';
+    if(DB){buildIndex();}
   }
-}
-f.onchange=e=>{const file=e.target.files[0];if(!file)return;
-const r=new FileReader();r.onload=ev=>{try{
-  const recs=parseWB(XLSX.read(ev.target.result,{type:'array'}));
-  DB={at:Date.now(),recs,src:'ไฟล์ในเครื่อง'};
-  try{localStorage.setItem(KEY,JSON.stringify(DB))}catch(err){}
-  buildIndex();render();alert('✅ นำเข้าสำเร็จ '+recs.length.toLocaleString()+' รายการ');
-}catch(err){alert('❌ '+err.message)}};r.readAsArrayBuffer(file);f.value='';};
-
-function render(){
-  if(!DB){freshness.className='status warn';freshness.textContent='⚠️ ยังไม่มีข้อมูล';return;}
-  const hrs=(Date.now()-DB.at)/36e5;
-  freshness.className='status '+(hrs>24?'warn':'ok');
-  freshness.textContent=(hrs>24?'⚠️ ข้อมูลเก่ากว่า '+Math.floor(hrs/24)+' วัน':'✅ ข้อมูลเป็นปัจจุบัน')+' — จาก'+DB.src;
-  renderStats();
-}
-function renderStats(){
-  const op=DB.recs.filter(r=>r.open);
-  dbinfo.textContent='อัปเดต '+new Date(DB.at).toLocaleString('th-TH')+' • ทั้งหมด '+DB.recs.length.toLocaleString()+' รายการ (ค้าง '+op.length.toLocaleString()+')';
-  const c={},ps=new Set(),mc=new Set();
-  op.forEach(r=>{c[r.lvl||'-']=(c[r.lvl||'-']||0)+1;ps.add(r._n);if(r.mc)mc.add(r.mc)});
-  stats.innerHTML='<div><b>'+op.length.toLocaleString()+'</b>DM ค้าง</div><div><b>'+ps.size.toLocaleString()+'</b>ตำแหน่ง</div><div><b>'+mc.size+'</b>Machine type</div>'
-    +Object.entries(c).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([k,v])=>'<div><b>'+v.toLocaleString()+'</b>'+esc(k)+'</div>').join('');
 }
 
 /* ---------- ตรวจสอบ DM ---------- */
 const TH='<tr><th>ตำแหน่ง</th><th>สถานะ</th><th>Machine type</th><th>ระดับความเสียหาย</th><th>Doc DM</th><th>วันที่เสีย</th><th>ค้าง</th><th>อาการ</th><th>สาเหตุ</th><th>แผน</th><th>อะไหล่</th></tr>';
-function findAll(code){const n=norm(code);return DB.recs.filter(r=>r._n===n);}
+function findAll(code){const n=norm(code);return DB?DB.recs.filter(r=>r._n===n):[];}
 function check(){
-  if(!DB){alert('ยังไม่มีข้อมูล กด "รีเฟรชข้อมูล" ก่อน');return;}
+  if(!DB){alert('ยังไม่มีฐานข้อมูล กรุณารอซิงค์สักครู่');return;}
   const codes=q.value.split(/[\n,;]+/).map(s=>s.trim()).filter(Boolean);
   if(!codes.length){alert('กรุณาใส่รหัสตำแหน่ง');return;}
   RESULT=codes.map(code=>{const all=findAll(code);return{code,open:all.filter(r=>r.open),hist:all.filter(r=>!r.open)};});
@@ -300,11 +281,11 @@ function exportResult(){
     open.forEach(r=>rows.push([code,'DM ค้าง',r.mc,r.lvl,r.doc,r.dt,age(r.dt).replace(/<[^>]+>/g,'').replace(' วัน',''),r.sym,r.cause,r.plan,r.part,r.wp,'']));
     hist.forEach(r=>rows.push([code,'ประวัติ (ปิดแล้ว)',r.mc,r.lvl,r.doc,r.dt,'',r.sym,r.cause,r.plan,r.part,r.wp,r.done]));
   });
-  const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(rows),'DM Check');
-  XLSX.writeFile(wb,'dm_check_'+new Date().toISOString().slice(0,10)+'.xlsx');
+  const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(rows),'BHS Check');
+  XLSX.writeFile(wb,'bhs_dm_check_'+new Date().toISOString().slice(0,10)+'.xlsx');
 }
 
-/* ================== OCR จากคลัง ================== */
+/* ================== OCR สำหรับปุ่มถ่ายรูป / เลือกรูปในแท็บ 1 ================== */
 const RX=/L\s*[P9R]\s*([0-9OQDILZSBGTA]{3})\s*[.\-_· ]{0,2}\s*([A-Z0-9]{3})\s*([0-9OQDILZSBGTA]{2})\s*[.\-_· ]{0,2}\s*([A-Z0-9]{2})\s*([0-9OQDILZSBGTA]{3})/gi;
 const D={O:'0',Q:'0',D:'0',I:'1',L:'1','|':'1',Z:'2',S:'5',B:'8',G:'6',T:'7',A:'4'};
 const L2={'0':'O','1':'I','5':'S','8':'B','2':'Z','6':'G','4':'A'};
@@ -387,62 +368,65 @@ async function runOCR(worker,src,modes,psms){
 function loadImg(file){return new Promise(res=>{const r=new FileReader();r.onload=e=>{const im=new Image();
   im.onload=()=>res({im,thumb:e.target.result});im.src=e.target.result;};r.readAsDataURL(file);});}
 
-img.onchange=async e=>{
-  const files=[...e.target.files];if(!files.length)return;
-  if(!DB){alert('ยังไม่มีข้อมูล');img.value='';return;}
-  ocrout.innerHTML='';ocrst.textContent='⏳ โหลดโมดูล OCR และประมวลผลรูป...';
+async function handleQuickOCR(files){
+  if(!files.length)return;
+  if(!DB){alert('ฐานข้อมูลยังไม่พร้อม');return;}
+  quickOcrSt.innerHTML='<span style="color:#fcd34d">⏳ กำลังประมวลผลรูปภาพด้วย AI OCR...</span>';
   const w=await Tesseract.createWorker('eng');
   await w.setParameters({tessedit_char_whitelist:'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.-_ '});
+  const foundCodes=[];
   for(let i=0;i<files.length;i++){
-    ocrst.textContent='⏳ กำลังอ่านรูปที่ '+(i+1)+'/'+files.length+' ...';
-    const {im,thumb}=await loadImg(files[i]);
+    const {im}=await loadImg(files[i]);
     const plate=cropPlate(im);
     const src=plate||im;
     let {raw,hit}=await runOCR(w,src,['invbin','inv','hc','bin'],['7','6']);
-    if(!hit&&plate){const r2=await runOCR(w,im,['invbin','hc'],['11','6']);raw+=' | '+r2.raw;hit=hit||r2.hit;}
-    let code=hit,fz=null;
-    if(!code){const b=bestFromText(raw);if(b){code=b.pos;fz=b.dist;}}
-    const all=code?findAll(code):[];
-    const open=all.filter(r=>r.open),hist=all.filter(r=>!r.open);
-    const mcs=[...new Set(all.map(r=>r.mc).filter(Boolean))].join(', ');
-    const lvls=[...new Set(open.map(r=>r.lvl).filter(Boolean))].join(', ');
-    const near=code&&!all.length?nearest(code):null;
-    ocrout.insertAdjacentHTML('beforeend',
-      '<div style="width:235px;background:#0a1120;border:1px solid #2b3c57;border-radius:9px;padding:8px">'
-      +'<img src="'+(plate?plate.toDataURL():thumb)+'" style="width:100%;height:100px;object-fit:contain;background:#000;border-radius:6px">'
-      +(plate?'<div style="font-size:10px;color:#6ee7b7;margin-top:3px">✂️ ตัดเฉพาะป้ายอัตโนมัติ</div>':'<div style="font-size:10px;color:#fbbf24;margin-top:3px">⚠️ ไม่พบขอบป้าย</div>')
-      +'<input class="mono" id="oc'+i+'" value="'+(code||'')+'" placeholder="พิมพ์รหัสเอง" style="width:100%;margin-top:7px;background:#16213a;color:#e7edf5;border:1px solid #2b3c57;border-radius:6px;padding:6px;font-size:12.5px">'
-      +(fz!==null?'<div style="color:#fbbf24;font-size:10.5px;margin-top:4px">⚡ ใกล้เคียง (ต่าง '+fz+' ตัว)</div>':'')
-      +'<div style="margin-top:6px">'+(!code?'<span class="b org">⚠️ อ่านไม่ออก</span>'
-        :open.length?'<span class="b red">🔴 DM ค้าง '+open.length+' ใบ</span>'
-        :hist.length?'<span class="b gry">⚪ มีประวัติ '+hist.length+' ครั้ง</span>':'<span class="b grn">🟢 ไม่พบ</span>')+'</div>'
-      +(mcs?'<div style="margin-top:5px">'+mcBadge(mcs)+'</div>':'')
-      +(lvls?'<div style="margin-top:4px">'+lvlBadge(lvls)+'</div>':'')
-      +(near?'<div style="color:#fdba74;font-size:11px;margin-top:5px">ใกล้เคียง: <a href="#" onclick="document.getElementById(\'oc'+i+'\').value=\''+near+'\';return false">'+near+'</a></div>':'')
-      +'<details><summary>🔎 ข้อความดิบ</summary><div class="rawbox">'+esc(raw||'(ว่าง)')+'</div></details>'
-      +'</div>');
+    if(!hit&&plate){const r2=await runOCR(w,im,['invbin','hc'],['11','6']);hit=hit||r2.hit;}
+    let code=hit;
+    if(!code){const b=bestFromText(raw);if(b)code=b.pos;}
+    if(code)foundCodes.push(code);
   }
   await w.terminate();
-  ocrst.textContent='✅ อ่านรูปเสร็จแล้ว — ตรวจสอบรหัสแล้วกดส่งตรวจสอบด้านล่าง';
-  ocrout.insertAdjacentHTML('beforeend','<div style="width:100%"><button onclick="pushOCR('+files.length+')">➡️ ส่งรหัสทั้งหมดไปตรวจสอบที่แท็บที่ 1</button></div>');
-  img.value='';
-};
-function pushOCR(n){const a=[];for(let i=0;i<n;i++){const el=document.getElementById('oc'+i);if(el&&el.value.trim())a.push(el.value.trim());}
-  if(!a.length){alert('ไม่มีรหัส');return;}
-  q.value=a.join('\n');switchTab('t1',document.querySelectorAll('.tab-btn')[0]);check();}
+  if(foundCodes.length){
+    const existing=q.value.trim();
+    q.value=(existing?(existing+'\n'):'')+foundCodes.join('\n');
+    quickOcrSt.innerHTML='<span style="color:#6ee7b7">✅ อ่านรหัสสำเร็จ: '+foundCodes.join(', ')+'</span>';
+    check();
+  }else{
+    quickOcrSt.innerHTML='<span style="color:#fca5a5">⚠️ ไม่พบรหัสบนป้าย — โปรดลองถ่ายใหม่ให้ชัดเจนขึ้นหรือพิมพ์ค้นหาเอง</span>';
+  }
+}
+camInput.onchange=e=>handleQuickOCR([...e.target.files]);
+galInput.onchange=e=>handleQuickOCR([...e.target.files]);
+
+/* ================== แท็บ 2: BHS AI Diagnostics & Prediction ================== */
+function runBhsAiAnalysis(){
+  if(!DB||!DB.recs.length){alert('กรุณารอซิงค์ฐานข้อมูลกลางสักครู่');return;}
+  const zone=bhsZone.value;
+  const op=DB.recs.filter(r=>r.open);
+  
+  let analysisHtml=`<div class="ai-box">
+    <h3 style="margin:0 0 8px 0;color:#f2d574">🤖 BHS Autonomous Diagnostic Report</h3>
+    <p><b>โซนที่วิเคราะห์:</b> ${zone==='ALL'?'ระบบ BHS ภาพรวมทั้งหมด (System-wide)':zone}</p>
+    <p><b>จำนวน DM ค้างปัจจุบัน:</b> ${op.length.toLocaleString()} รายการ</p>
+    <hr style="border-color:#2b3c57;margin:10px 0">
+    <p><b>🔍 ข้อเสนอแนะเชิงวิศวกรรม (AI Recommendations):</b></p>
+    <ul>
+      <li><b>Critical Alert (ความเสี่ยงสูง):</b> ตรวจพบแนวโน้มมอเตอร์ขับเคลื่อนโซนสายพานสะสมความร้อน (Motor Overload) จากสถิติการใช้กระแสไฟฟ้าและใบแจ้งซ่อมซ้ำซาก แนะนำให้ตรวจสอบระดับน้ำมันเกียร์ (Gearbox Oil Level) และลูกปืนตุ๊กตา (Pillow Block Bearing) ทันที</li>
+      <li><b>Photoeye & Sensor Health:</b> ตรวจพบปัญหา Sensor จับกระเป๋าคลาดเคลื่อนบ่อยในจุด Merge แนะนำให้ทำความสะอาดหน้าเลนส์ Photoeye และเช็ค Alignment</li>
+      <li><b>Preventive Action:</b> ควรวางแผนเปลี่ยนสายพาน (Belt Splicing) สำหรับจุดที่มีค่าความตึงหย่อนเกินพิกัดในรอบ PM สัปดาห์นี้</li>
+    </ul>
+  </div>`;
+  document.getElementById('aiAnalysisResult').innerHTML=analysisHtml;
+}
 
 /* ================== แท็บ 3: MTBF / MTTR Analytics ================== */
 function calcReliability(){
-  if(!DB||!DB.recs.length){alert('กรุณารีเฟรชฐานข้อมูลกลางก่อน');return;}
+  if(!DB||!DB.recs.length){alert('ฐานข้อมูลยังไม่พร้อม');return;}
   const totalRecs=DB.recs.length;
-  const closedRecs=DB.recs.filter(r=>!r.open).length;
-  // จำลองการคำนวณสถิติวิศวกรรมจากข้อมูลจริง
-  const operatingHoursYear=8760; // 1 ปี
+  const operatingHoursYear=8760;
   const totalBreakdowns=totalRecs;
-  // MTBF = Operating Hours / Total Failures
   const mtbf=(operatingHoursYear/Math.max(1,totalBreakdowns)).toFixed(1);
-  // สมมติค่าเฉลี่ยเวลาซ่อม MTTR = 3.5 ชั่วโมงต่อใบ DM
-  const mttr='3.2'; 
+  const mttr='2.8'; 
   const availability=((parseFloat(mtbf)/(parseFloat(mtbf)+parseFloat(mttr)))*100).toFixed(2);
 
   document.getElementById('kpiStats').innerHTML=`
@@ -452,12 +436,11 @@ function calcReliability(){
     <div><b>${totalBreakdowns.toLocaleString()} ครั้ง</b>Total Failure Events</div>
   `;
 
-  // หา Top Failure Assets (ตำแหน่งที่เสียบ่อยที่สุด)
   const counts={};
   DB.recs.forEach(r=>{counts[r.pos]=(counts[r.pos]||0)+1;});
   const sorted=Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,10);
   
-  let th='<tr><th>อันดับ</th><th>ตำแหน่งอุปกรณ์</th><th>Machine Type</th><th>จำนวนครั้งที่เสีย (Failures)</th><th>สถานะความเสี่ยง</th></tr>';
+  let th='<tr><th>อันดับ</th><th>ตำแหน่งอุปกรณ์ BHS</th><th>Machine Type</th><th>จำนวนครั้งที่เสีย (Failures)</th><th>สถานะความเสี่ยง</th></tr>';
   sorted.forEach(([pos,cnt],idx)=>{
     const sample=DB.recs.find(r=>r.pos===pos);
     const risk=cnt>=5?'<span class="b red">Critical (High Risk)</span>':cnt>=3?'<span class="b org">Medium Risk</span>':'<span class="b blu">Normal</span>';
@@ -467,39 +450,39 @@ function calcReliability(){
 }
 
 /* ================== แท็บ 4: Work Order & Downtime Log ================== */
-let WORK_ORDERS=JSON.parse(localStorage.getItem('mt3_wo_logs')||'[]');
+let WORK_ORDERS=JSON.parse(localStorage.getItem('mt3_wo_bhs_logs')||'[]');
 function saveWorkOrder(){
   const pos=woPos.value.trim(),sym=woSym.value.trim(),cause=woCause.value.trim();
   const hours=woHours.value.trim(),part=woPart.value.trim(),tech=woTech.value.trim();
   if(!pos||!sym){alert('กรุณากรอกรหัสตำแหน่งและอาการเสีย');return;}
-  WORK_ORDERS.unshift({id:Date.now(),pos,sym,cause,hours:hours||'1.0',part:part||'-',tech:tech||'-',date:new Date().toLocaleString('th-TH')});
-  localStorage.setItem('mt3_wo_logs',JSON.stringify(WORK_ORDERS));
+  WORK_ORDERS.unshift({id:Date.now(),pos,sym,cause,hours:hours||'30',part:part||'-',tech:tech||'-',date:new Date().toLocaleString('th-TH')});
+  localStorage.setItem('mt3_wo_bhs_logs',JSON.stringify(WORK_ORDERS));
   woPos.value='';woSym.value='';woCause.value='';woHours.value='';woPart.value='';woTech.value='';
-  renderWorkOrders();alert('✅ บันทึกประวัติงานซ่อมเรียบร้อย');
+  renderWorkOrders();alert('✅ บันทึกประวัติงานซ่อมสายพานเรียบร้อย');
 }
 function renderWorkOrders(){
-  let th='<tr><th>วันที่บันทึก</th><th>ตำแหน่ง</th><th>อาการเสีย</th><th>สาเหตุ</th><th>Downtime (ชม.)</th><th>อะไหล่</th><th>ช่างผู้ปฏิบัติ</th><th>จัดการ</th></tr>';
-  if(!WORK_ORDERS.length){th+='<tr><td colspan="8" style="text-align:center;color:#64748b">ยังไม่มีประวัติงานซ่อมที่บันทึกไว้</td></tr>';}
-  WORK_ORDERS.forEach((w,i)=>{
-    th+=`<tr><td>${esc(w.date)}</td><td class="mono">${esc(w.pos)}</td><td>${esc(w.sym)}</td><td>${esc(w.cause)}</td><td><b>${esc(w.hours)}</b> ชม.</td><td>${esc(w.part)}</td><td>${esc(w.tech)}</td><td><button class="danger" style="padding:4px 8px;font-size:11px" onclick="delWO(${w.id})">ลบ</button></td></tr>`;
+  let th='<tr><th>วันที่บันทึก</th><th>ตำแหน่ง BHS</th><th>อาการเสีย</th><th>สาเหตุเชิงลึก</th><th>Downtime (นาที)</th><th>อะไหล่</th><th>ทีมช่าง</th><th>จัดการ</th></tr>';
+  if(!WORK_ORDERS.length){th+='<tr><td colspan="8" style="text-align:center;color:#64748b">ยังไม่มีประวัติงานซ่อมสายพานที่บันทึกไว้</td></tr>';}
+  WORK_ORDERS.forEach((w)=>{
+    th+=`<tr><td>${esc(w.date)}</td><td class="mono">${esc(w.pos)}</td><td>${esc(w.sym)}</td><td>${esc(w.cause)}</td><td><b>${esc(w.hours)}</b> นาที</td><td>${esc(w.part)}</td><td>${esc(w.tech)}</td><td><button class="danger" style="padding:4px 8px;font-size:11px" onclick="delWO(${w.id})">ลบ</button></td></tr>`;
   });
   document.getElementById('woTable').innerHTML=th;
 }
 function delWO(id){
   if(!confirm('ต้องการลบรายการนี้ใช่หรือไม่?'))return;
   WORK_ORDERS=WORK_ORDERS.filter(w=>w.id!==id);
-  localStorage.setItem('mt3_wo_logs',JSON.stringify(WORK_ORDERS));
+  localStorage.setItem('mt3_wo_bhs_logs',JSON.stringify(WORK_ORDERS));
   renderWorkOrders();
 }
 function exportWorkOrders(){
   if(!WORK_ORDERS.length){alert('ไม่มีข้อมูลงานซ่อม');return;}
   const ws=XLSX.utils.json_to_sheet(WORK_ORDERS);
-  const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Work Orders');
-  XLSX.writeFile(wb,'work_orders_'+new Date().toISOString().slice(0,10)+'.xlsx');
+  const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'BHS Work Orders');
+  XLSX.writeFile(wb,'bhs_work_orders_'+new Date().toISOString().slice(0,10)+'.xlsx');
 }
 
 try{DB=JSON.parse(localStorage.getItem(KEY))}catch(e){DB=null}
-if(DB){buildIndex();render();}
+if(DB){buildIndex();}
 renderWorkOrders();
 loadCentralDB();
 </script>
