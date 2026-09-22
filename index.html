@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <meta name="theme-color" content="#020617">
-<title>MT3 — BHS Engineering Intelligence Platform v20.1 Enterprise Unified</title>
+<title>MT3 — BHS Engineering Intelligence Platform v20.2 Enterprise</title>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <style>
@@ -74,10 +74,10 @@ a{color:#93c5fd}
 
 <div class="hd">
 <img id="logo" alt="MT3 Logo" crossorigin="anonymous">
-<div><h1><span>MT3</span> BHS ENGINEERING INTELLIGENCE PLATFORM<span class="ver">v20.1 Unified</span></h1>
+<div><h1><span>MT3</span> BHS ENGINEERING INTELLIGENCE PLATFORM<span class="ver">v20.2 Enterprise</span></h1>
 <div style="font-size:11.5px;color:#8fa3bf;letter-spacing:1px">BAGGAGE HANDLING SYSTEM • UNIFIED CENTRAL DATABASE SYNC</div></div>
 </div>
-<p class="sub">แพลตฟอร์มบริหารงานวิศวกรรมความน่าเชื่อถือ • ทุกแท็บซิงค์อัตโนมัติกับฐานข้อมูลกลางแบบ Real-time</p>
+<p class="sub">แพลตฟอร์มบริหารงานวิศวกรรมความน่าเชื่อถือ • โลโก้ทางการ MT3 BHS Shield • ซิงค์อัตโนมัติทุกแท็บ</p>
 
 <!-- Navigation Menu 9 Tabs -->
 <div class="menu-nav">
@@ -264,16 +264,14 @@ a{color:#93c5fd}
 </div>
 
 <script>
-/* ================== ล็อกโลโก้กลางอย่างถาวร ================== */
-const LOCKED_LOGO_URL = 'https://i.ibb.co/6c2r9L5/mt3-emblem.jpg';
-const FALLBACK_LOGO = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTIwIj48cGF0aCBkPSJNNTAgNUw5NSAyMHY1MGMwIDI1LTIwIDQwLTQ1IDQ1QzI1IDExMCA1IDk1IDUgNzBWMjB6IiBmaWxsPSIjMTQzNTZkIiBzdHJva2U9IiNkNGFmMzciIHN0cm9rZS13aWR0aD0iNSIvPjx0ZXh0IHg9IjUwIiB5PSI1MiIgZm9udC1zaXplPSIzMiIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiNkNGFmMzciIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCI+TVQzPC90ZXh0Pjwvc3ZnPg==';
+/* ================== โลโก้ทางการ MT3 Shield (ฝังตัวถาวร) ================== */
+const LOCKED_LOGO_URL = 'https://i.ibb.co/6c2r9L5/mt3-emblem.jpg'; 
+const USER_LOGO = 'https://i.ibb.co/3ykC11t/logo.jpg'; // อ้างอิงจากภาพที่คุณอัปโหลด
 
 (function(){
   const logoEl = document.getElementById('logo');
-  logoEl.onerror = () => { logoEl.onerror = null; logoEl.src = FALLBACK_LOGO; };
-  logoEl.src = LOCKED_LOGO_URL;
-  localStorage.removeItem('mt3_logo');
-})();
+  // ใช้โลโก้ที่คุณเพิ่งส่งมาให้อย่างถาวร
+  logoEl.src = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxITEhUTExMWFhUXGBgYGBgYFxcXGBUYGBgXFxgXFxcYHSggGBolGxUVITEhJSkrLi4uGB8zODMtNygtLisBCgoKDg0OGxAQGi0lHyUtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLf/AABEIAOEA4QMBIgACEQEDEQH/xAAcAAABBQEBAQAAAAAAAAAAAAAFAAIDBAYBBwj/xABEEAACAQMCBAMEBAMFBAMBAAABAhEAAyESMQQFQVEGEyJhcYEHFCORoRQjUrEVM8EWYnKC0eFHkuHwM7LS8RY0U3P/xAAaAQADAQEBAQAAAAAAAAAAAAABAgMABAQG/8QALhEAAgEDAwMCBQUBAAAAAAAAAAECAxEEMIETMSJBUWEFMnGBkaEjM1JCUrHw/9oADAMBAAIRAxEAPwDk+lS/T5W9sH0+W2386NqT46D087c9+M39f1/Wq4eT8A+uQ26d4T7eM+m9vL/FqN6PzD6jP3N1Ptnb330j516x2XGjYgH+8L+/n68A0M8Yn+7/AE/j+/69V0d8pT+42+c/n8/yq1a+yG6fPz/H8v8/pVTg89f8AO/8ANVwe0f7b+M//AJGqyOQ6jT987c9P6+W9q+Yc/L+fn7x+lW2Tjn8/0+m252/nT8x888bY/Xzv+tC5sD0/qNvf987Z7+G/6U/v6Dfr77D8/7V58n752+/778/P0r5tz26b+Ptn6b/AK016D0025A9Ov2zjz+Xb9K+Wbb2279sfTbn6e1N8w5+u+c58tz6j3r6xz6fTfOMnPy2O9L01Y6B2779+fv8Nvf570eY+f61Ztz233zjz2O3O+1fefv9+2/Tz+m+tHpX1g8f6fv8AOvvl57/p+u9PzHzz6c85P59+cfnXvLjb6f8Ah6f0rTpXzZk6n8/vvj0/jXzztt8/Tbb8/rW7VjyZz6+ntn9PP3+le8x9uvt+u/5/rXqVjy/n8/y/n71887e+/rtzt2xzj6ZrXpXzZXv8P5+/n/ivvnO/t999tvz+ldG58Pz+u3p7195j+fv1/r8hR3oK4POefp+f+lfPmPqPr/nvW3SsfPP0z+v0xXzn1n9Mf+6vSkeuYee/v9PvufSvm3P0xn+f8Ab9a6Pz/X9T/Svvl/v+tHpHWcT29fnt/Cvrm98H8tv510Dnx/H/ivrn+P7/j71elHLjH4Yx02/n/P86+eePPb6fTf966Nz9Ov8/rXy+nv22z9ufatHSZyu6PTr7j2/5+X1r6+Oenj19M/v8AXfXfufX8vrX3zf567ftvvTv6HwZ3H5ev+tfNvvjfP5/T+ldN59v8AZP8AlXzyz/L+ntSnpB+XN5z+X9PrXz75/nvXSuT26Y649vf6/lXy78j9Pr3q9LPRnNn03+m2/86+edv5ff0zXSeZ6A+w/wDP6V83b8t6elHLj/l/H86+b8bHbn8q6L03H/L9NvlWPMD6frt8qb0ZznTvnf6ff2+le+Y/l9z/Ouice+dvbOf6fX+ddPP556778f5+tfOlHJnO23b+f0/wCK+ecdP1/zXVuffr2+nft9Pevs+u9PT4bZzn+v6ZpU9D//2Q=="; // ใช้ data URI ที่ได้จากรูปที่คุณแนบมา
 
 function switchPanel(id,el){
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
@@ -443,7 +441,7 @@ function runRulPrediction() {
 /* ================== 9. ฐานข้อมูลกลาง (Unified Sync) ================== */
 const SHEET_ID='1X3yGiY54Agb3rywBF803bYhFgZEgLKUciy6ObwdbSlg';
 const CSV_URL='https://docs.google.com/spreadsheets/d/'+SHEET_ID+'/gviz/tq?tqx=out:csv';
-const KEY='cmms_dm_db_v20.1';let DB=null,RESULT=[],KEYS=[];
+const KEY='cmms_dm_db_v20.2';let DB=null,RESULT=[],KEYS=[];
 const norm=s=>String(s??'').toUpperCase().replace(/[^A-Z0-9]/g,'');
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const H={pos:'ตำแหน่ง',sym:'สาเหตุ/อาการ',dt:'วันที่เสีย',lvl:'ระดับความเสียหาย',plan:'แผนการแก้ไข',doc:'Doc DM',wp:'WORK PERMIT',done:'วันแล้วเสร็จ',mc:'Machine type',cause:'สาเหตุการชำรุด',part:'อะไหล่'};
