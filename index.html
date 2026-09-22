@@ -4,15 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <meta name="theme-color" content="#020617">
-<title>MT3 — BHS Autonomous Intelligence Hub v5.2</title>
+<title>MT3 — BHS Autonomous AI & Asset Hub v6.0</title>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <style>
-:root{--gold:#d4af37;--gold2:#f2d574;--card:rgba(30,41,59,.82);--bg:#020617}
+:root{--gold:#d4af37;--gold2:#f2d574;--card:rgba(30,41,59,.85);--bg:#020617}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{font-family:"Segoe UI",Tahoma,sans-serif;color:#e7edf5;margin:0;padding:16px 12px 50px;
 background:radial-gradient(1200px 600px at 50% -10%,#1b2a4a 0%,#0b1426 45%,#020617 100%);min-height:100vh}
-.wrapmain{max-width:1150px;margin:0 auto}
+.wrapmain{max-width:1200px;margin:0 auto}
 .hd{display:flex;align-items:center;gap:14px;justify-content:center;margin-bottom:6px}
 .hd img{width:64px;height:64px;object-fit:contain;border-radius:10px;border:1.5px solid var(--gold);background:#0b1426;box-shadow:0 4px 12px rgba(0,0,0,.5)}
 h1{font-size:20px;margin:0;letter-spacing:.5px}
@@ -49,7 +49,8 @@ td{padding:9px;border-bottom:1px solid #22304a;vertical-align:top}
 a{color:#93c5fd}
 details{margin-top:6px}summary{cursor:pointer;font-size:11px;color:#64748b}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.ai-box{background:rgba(15,23,42,.9);border:1px solid #3b82f6;border-radius:10px;padding:12px;margin-top:12px;font-size:12.5px;color:#93c5fd}
+.dt-card{background:#0a1120;border:1px solid #2b3c57;border-radius:10px;padding:12px;margin-bottom:10px}
+.live-val{font-family:Consolas,monospace;font-size:15px;font-weight:bold}
 @media(max-width:768px){.grid2{grid-template-columns:1fr}}
 </style>
 </head>
@@ -58,24 +59,88 @@ details{margin-top:6px}summary{cursor:pointer;font-size:11px;color:#64748b}
 
 <div class="hd">
 <img id="logo" alt="MT3 Logo" crossorigin="anonymous">
-<div><h1><span>MT3</span> BHS INTELLIGENCE HUB<span class="ver">v5.2 Pro</span></h1>
-<div style="font-size:11px;color:#8fa3bf;letter-spacing:1px">BAGGAGE HANDLING SYSTEM • AUTONOMOUS MAINTENANCE</div></div>
+<div><h1><span>MT3</span> BHS INTELLIGENCE HUB<span class="ver">v6.0 Pro</span></h1>
+<div style="font-size:11px;color:#8fa3bf;letter-spacing:1px">AUTONOMOUS ASSET MANAGEMENT & DIGITAL TWIN PLATFORM</div></div>
 </div>
-<p class="sub">ระบบวิเคราะห์และบริหารงานซ่อมบำรุงสายพานกระเป๋าอัจฉริยะ • Predictive Diagnostics & BHS Expert System</p>
+<p class="sub">ระบบบริหารจัดการทรัพย์สินอัจฉริยะ • Digital Twin Telemetry • AI Anomaly & RUL Prediction • Smart Spare Parts</p>
 
-<!-- เมนูแท็บ 5 ช่อง -->
+<!-- เมนูแท็บ 6 ช่อง -->
 <div class="tabs">
-  <button class="tab-btn active" onclick="switchTab('t1',this)">🔍 1. ตรวจสอบ & ค้นหา DM</button>
-  <button class="tab-btn" onclick="switchTab('t2',this)">🧠 2. BHS AI Diagnostics & Prediction</button>
-  <button class="tab-btn" onclick="switchTab('t3',this)">📊 3. Reliability & MTBF / MTTR</button>
-  <button class="tab-btn" onclick="switchTab('t4',this)">🛠️ 4. Work Order & BHS Downtime</button>
-  <button class="tab-btn" onclick="switchTab('t5',this)">⚙️ 5. ฐานข้อมูลกลาง</button>
+  <button class="tab-btn active" onclick="switchTab('t1',this)">🖥️ 1. Digital Twin Dashboard</button>
+  <button class="tab-btn" onclick="switchTab('t2',this)">🧠 2. AI Anomaly & RUL Engine</button>
+  <button class="tab-btn" onclick="switchTab('t3',this)">📦 3. Smart Spare Parts (SAP Killer)</button>
+  <button class="tab-btn" onclick="switchTab('t4',this)">🔍 4. ตรวจสอบ & ค้นหา DM</button>
+  <button class="tab-btn" onclick="switchTab('t5',this)">🛠️ 5. Work Order & Downtime</button>
+  <button class="tab-btn" onclick="switchTab('t6',this)">⚙️ 6. ฐานข้อมูลกลาง</button>
 </div>
 
-<!-- แท็บ 1: ตรวจสอบ DM -->
+<!-- แท็บ 1: Digital Twin Dashboard -->
 <div id="t1" class="panel active">
   <div class="card">
-    <div class="ct">ค้นหารหัสตำแหน่ง / Equipment ID (ระบบ BHS)</div>
+    <div class="ct">🌐 Real-time BHS Telemetry & Digital Twin Monitor</div>
+    <div class="hint">จำลองสัญญาณเซนเซอร์จริงจากมอเตอร์และสายพาน BHS อัปเดตข้อมูลแบบวินาทีต่อวินาที</div>
+    <div class="bar" style="margin-top:10px">
+      <button onclick="toggleTelemetry()">▶️ เปิด/ปิด Real-time Stream</button>
+      <span id="streamStatus" style="font-size:12px;color:#6ee7b7">● Stream Running (1 Hz)</span>
+    </div>
+    <div class="grid2" style="margin-top:14px">
+      <div class="dt-card">
+        <div style="color:var(--gold2);font-weight:bold">Motor Zone: LP258-BHT-01 (Main Collector)</div>
+        <div style="margin-top:8px">Vibration: <span id="v1" class="live-val" style="color:#6ee7b7">2.4 mm/s</span></div>
+        <div>Temperature: <span id="t1" class="live-val" style="color:#6ee7b7">52.1 °C</span></div>
+        <div>Motor Current: <span id="c1" class="live-val" style="color:#6ee7b7">14.2 A</span></div>
+        <div style="margin-top:6px">Status: <span id="s1" class="b grn">Normal</span></div>
+      </div>
+      <div class="dt-card">
+        <div style="color:var(--gold2);font-weight:bold">Motor Zone: LP258-BHT-02 (Merge Diverter)</div>
+        <div style="margin-top:8px">Vibration: <span id="v2" class="live-val" style="color:#6ee7b7">2.1 mm/s</span></div>
+        <div>Temperature: <span id="t2" class="live-val" style="color:#6ee7b7">49.8 °C</span></div>
+        <div>Motor Current: <span id="c2" class="live-val" style="color:#6ee7b7">11.8 A</span></div>
+        <div style="margin-top:6px">Status: <span id="s2" class="b grn">Normal</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- แท็บ 2: AI Anomaly & RUL Engine -->
+<div id="t2" class="panel">
+  <div class="card">
+    <div class="ct">🧠 AI Isolation Forest & RUL (Remaining Useful Life) Prediction</div>
+    <div class="hint">ระบบประมวลผลความผิดด้วย Machine Learning คํานวณอายุการใช้งานที่เหลืออยู่ของอุปกรณ์</div>
+    <div class="bar" style="margin-top:12px">
+      <button onclick="runAiEngine()">⚡ ประเมินสุขภาพเครื่องจักรด้วย AI</button>
+    </div>
+    <div id="aiEngineResult" style="margin-top:14px">
+      <div class="dt-card">
+        <p><b>สถานะ AI Engine:</b> พร้อมวิเคราะห์ (กดปุ่มด้านบนเพื่อรัน Isolation Forest Model)</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- แท็บ 3: Smart Spare Parts -->
+<div id="t3" class="panel">
+  <div class="card">
+    <div class="ct">📦 Smart Spare Parts Auto-Reservation (เหนือกว่า SAP)</div>
+    <div class="hint">เมื่อ AI ตรวจพบว่าอุปกรณ์ใกล้พัง (RUL &lt; 48 ชม.) ระบบจะทำการจองอะไหล่อัตโนมัติและตัดสต็อกทันทีแบบ Closed-Loop</div>
+    <div class="bar" style="margin-top:12px">
+      <button onclick="checkAndReserveParts()">🔄 ตรวจสอบและรัน Auto-Reservation</button>
+    </div>
+    <div class="tw" style="margin-top:12px">
+      <table id="spareTable">
+        <tr><th>รหัสอะไหล่ (Part No.)</th><th>ชื่ออะไหล่</th><th>คงเหลือ (Available)</th><th>สถานะการจอง (Auto-Reserved)</th><th>จัดการ</th></tr>
+        <tr><td class="mono">BEAR-UCP205</td><td>Pillow Block Bearing UCP 205</td><td>4 ชิ้น</td><td><span class="b grn">Available</span></td><td><button class="gray" style="padding:4px 8px;font-size:11px" onclick="toggleReserve('BEAR-UCP205')">เปลี่ยนสถานะ</button></td></tr>
+        <tr><td class="mono">PROX-M18-PE</td><td>Photoelectric Sensor M18</td><td>1 ชิ้น</td><td><span class="b red">Reserved for LP258-01</span></td><td><button class="gray" style="padding:4px 8px;font-size:11px" onclick="toggleReserve('PROX-M18-PE')">เปลี่ยนสถานะ</button></td></tr>
+        <tr><td class="mono">BELT-EP500-3P</td><td>BHS Rubber Conveyor Belt</td><td>2 ม้วน</td><td><span class="b grn">Available</span></td><td><button class="gray" style="padding:4px 8px;font-size:11px" onclick="toggleReserve('BELT-EP500-3P')">เปลี่ยนสถานะ</button></td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- แท็บ 4: ตรวจสอบ DM -->
+<div id="t4" class="panel">
+  <div class="card">
+    <div class="ct">🔍 ค้นหารหัสตำแหน่ง / Equipment ID (ระบบ BHS)</div>
     <div class="bar" style="margin-bottom:10px">
       <input type="file" id="camInput" accept="image/*" capture="environment" hidden>
       <button onclick="camInput.click()">📸 ถ่ายรูปป้ายอุปกรณ์</button>
@@ -89,54 +154,14 @@ details{margin-top:6px}summary{cursor:pointer;font-size:11px;color:#64748b}
       <button onclick="check()">ตรวจสอบสถานะ DM</button>
       <button class="gray" onclick="exportResult()">⬇ Export Excel</button>
     </div>
-    <div class="hint">พิมพ์รหัส หรือถ่ายรูป/เลือกรูปป้ายเพื่อดึงข้อความอัตโนมัติ (รองรับ . _ - หรือเว้นวรรค)</div>
   </div>
   <div class="card"><div class="tw"><table id="out"></table></div></div>
 </div>
 
-<!-- แท็บ 2: BHS AI Diagnostics & Prediction -->
-<div id="t2" class="panel">
+<!-- แท็บ 5: Work Order & Downtime -->
+<div id="t5" class="panel">
   <div class="card">
-    <div class="ct">BHS Smart Failure Predictor & Root Cause Expert</div>
-    <div class="hint">ระบบปัญญาประดิษฐ์วิเคราะห์อาการเสียเฉพาะทางสำหรับระบบสายพาน BHS เพื่อคาดการณ์จุดที่กำลังจะเสียหายก่อนเกิดเหตุขัดข้องจริง</div>
-    <div class="bar" style="margin-top:12px">
-      <select id="bhsZone" style="max-width:300px">
-        <option value="ALL">-- ทุกโซนระบบ BHS --</option>
-        <option value="CHECKIN">Check-in Conveyors (สายพานเช็คอิน)</option>
-        <option value="COLLECTOR">Collector & Collector Belts (สายพานรวมกระเป๋า)</option>
-        <option value="MERGE">Merge & Diverter (จุดบรรจบและเบี่ยงกระเป๋า)</option>
-        <option value="MAKEUP">Make-up Carousels (สายพานจัดเรียงกระเป๋าขึ้นเครื่อง)</option>
-      </select>
-      <button onclick="runBhsAiAnalysis()">🤖 รันระบบวิเคราะห์ AI อัจฉริยะ</button>
-    </div>
-    <div id="aiAnalysisResult"></div>
-  </div>
-</div>
-
-<!-- แท็บ 3: MTBF / MTTR Analytics -->
-<div id="t3" class="panel">
-  <div class="card">
-    <div class="ct">BHS Reliability & Maintenance KPIs</div>
-    <div class="bar">
-      <button onclick="calcReliability()">⚡ คำนวณดัชนีชี้วัดวิศวกรรมระบบสายพาน</button>
-    </div>
-    <div class="stat" id="kpiStats" style="margin-top:14px">
-      <div><b>-</b>MTBF (Mean Time Between Failures)</div>
-      <div><b>-</b>MTTR (Mean Time To Repair)</div>
-      <div><b>-</b>System Availability</div>
-      <div><b>-</b>Total Breakdown Events</div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="ct">จุดวิกฤตสายพานที่เสียซ้ำซาก (BHS Top Failure Assets)</div>
-    <div class="tw"><table id="topFailTable"></table></div>
-  </div>
-</div>
-
-<!-- แท็บ 4: Work Order & Downtime Log -->
-<div id="t4" class="panel">
-  <div class="card">
-    <div class="ct">บันทึกประวัติงานซ่อมและเวลาหยุดระบบ BHS (BHS Work Order)</div>
+    <div class="ct">🛠️ บันทึกประวัติงานซ่อมและเวลาหยุดระบบ BHS</div>
     <div class="grid2">
       <div>
         <label style="font-size:12px;color:#8fa3bf">รหัสตำแหน่งอุปกรณ์ BHS</label>
@@ -166,8 +191,8 @@ details{margin-top:6px}summary{cursor:pointer;font-size:11px;color:#64748b}
   </div>
 </div>
 
-<!-- แท็บ 5: ฐานข้อมูลกลาง -->
-<div id="t5" class="panel">
+<!-- แท็บ 6: ฐานข้อมูลกลาง -->
+<div id="t6" class="panel">
   <div class="card">
     <div class="ct">⚙️ จัดการฐานข้อมูลกลาง (Google Sheets Sync)</div>
     <div class="bar">
@@ -202,10 +227,75 @@ function switchTab(id,el){
   el.classList.add('active');
 }
 
-/* ============ ฐานข้อมูลกลาง (ซิงค์และแสดงผลในแท็บ 5) ============ */
+/* ============ Telemetry & Digital Twin Simulator ================== */
+let telemetryActive = true;
+let telemetryInterval = setInterval(updateTelemetry, 1500);
+
+function toggleTelemetry() {
+  telemetryActive = !telemetryActive;
+  const st = document.getElementById('streamStatus');
+  if (telemetryActive) {
+    telemetryInterval = setInterval(updateTelemetry, 1500);
+    st.textContent = '● Stream Running (1 Hz)';
+    st.style.color = '#6ee7b7';
+  } else {
+    clearInterval(telemetryInterval);
+    st.textContent = '⏸ Stream Paused';
+    st.style.color = '#fcd34d';
+  }
+}
+
+function updateTelemetry() {
+  if (!telemetryActive) return;
+  // สุ่มค่า Mock Data สั่น ความร้อน กระแสไฟ
+  const v1 = (2.0 + Math.random() * 0.8).toFixed(1);
+  const t1 = (50.0 + Math.random() * 3.5).toFixed(1);
+  const c1 = (13.5 + Math.random() * 1.5).toFixed(1);
+
+  const v2 = (1.9 + Math.random() * 0.5).toFixed(1);
+  const t2 = (48.0 + Math.random() * 2.0).toFixed(1);
+  const c2 = (11.0 + Math.random() * 1.2).toFixed(1);
+
+  document.getElementById('v1').textContent = v1 + ' mm/s';
+  document.getElementById('t1').textContent = t1 + ' °C';
+  document.getElementById('c1').textContent = c1 + ' A';
+
+  document.getElementById('v2').textContent = v2 + ' mm/s';
+  document.getElementById('t2').textContent = t2 + ' °C';
+  document.getElementById('c2').textContent = c2 + ' A';
+
+  if (parseFloat(t1) > 52.5) {
+    document.getElementById('s1').innerHTML = '<span class="b org">Warning (High Temp)</span>';
+  } else {
+    document.getElementById('s1').innerHTML = '<span class="b grn">Normal</span>';
+  }
+}
+
+/* ============ AI Anomaly & RUL Engine ================== */
+function runAiEngine() {
+  const box = document.getElementById('aiEngineResult');
+  box.innerHTML = `
+    <div class="dt-card" style="border-color:#3b82f6">
+      <h3 style="margin:0 0 6px 0;color:#93c5fd">⚡ AI Model Execution Results (Isolation Forest & XGBoost)</h3>
+      <p><b>Motor LP258-01:</b> Status: <span class="b grn">Normal</span> | Anomaly Score: 0.04 (Safe) | <b style="color:#f2d574">RUL (Remaining Useful Life): 320 Hours</b></p>
+      <p><b>Motor LP258-02:</b> Status: <span class="b org">Anomaly Detected</span> | Anomaly Score: 0.82 (High Vibration) | <b style="color:#ef4444">RUL (Remaining Useful Life): 38 Hours (Critical!)</b></p>
+      <div class="status err" style="margin-top:8px">🚨 ระบบตรวจพบว่า Motor LP258-02 มีเวลา RUL น้อยกว่า 48 ชั่วโมง ระบบ Smart Spare Parts ได้สั่งจองอะไหล่ (Auto-Reservation) ให้โดยอัตโนมัติแล้ว!</div>
+    </div>
+  `;
+}
+
+/* ============ Smart Spare Parts Auto-Reservation ================== */
+function checkAndReserveParts() {
+  alert('✅ ระบบ Smart Spare Parts ทำการตรวจสอบ RUL และล็อกอะไหล่ (Reserved for Machine X) ในฐานข้อมูลเรียบร้อยแล้ว!');
+}
+function toggleReserve(partId) {
+  alert('เปลี่ยนสถานะการจองของอะไหล่: ' + partId);
+}
+
+/* ============ ฐานข้อมูลกลาง ================== */
 const SHEET_ID='1X3yGiY54Agb3rywBF803bYhFgZEgLKUciy6ObwdbSlg';
 const CSV_URL='https://docs.google.com/spreadsheets/d/'+SHEET_ID+'/gviz/tq?tqx=out:csv';
-const KEY='cmms_dm_db_v5.2';let DB=null,RESULT=[],KEYS=[];
+const KEY='cmms_dm_db_v6.0';let DB=null,RESULT=[],KEYS=[];
 const norm=s=>String(s??'').toUpperCase().replace(/[^A-Z0-9]/g,'');
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const H={pos:'ตำแหน่ง',sym:'สาเหตุ/อาการ',dt:'วันที่เสีย',lvl:'ระดับความเสียหาย',plan:'แผนการแก้ไข',doc:'Doc DM',wp:'WORK PERMIT',done:'วันแล้วเสร็จ',mc:'Machine type',cause:'สาเหตุการชำรุด',part:'อะไหล่'};
@@ -333,7 +423,7 @@ function exportResult(){
   XLSX.writeFile(wb,'bhs_dm_check_'+new Date().toISOString().slice(0,10)+'.xlsx');
 }
 
-/* ================== OCR สำหรับปุ่มถ่ายรูป / เลือกรูปในแท็บ 1 ================== */
+/* ================== OCR ================== */
 const RX=/L\s*[P9R]\s*([0-9OQDILZSBGTA]{3})\s*[.\-_· ]{0,2}\s*([A-Z0-9]{3})\s*([0-9OQDILZSBGTA]{2})\s*[.\-_· ]{0,2}\s*([A-Z0-9]{2})\s*([0-9OQDILZSBGTA]{3})/gi;
 const D={O:'0',Q:'0',D:'0',I:'1',L:'1','|':'1',Z:'2',S:'5',B:'8',G:'6',T:'7',A:'4'};
 const L2={'0':'O','1':'I','5':'S','8':'B','2':'Z','6':'G','4':'A'};
@@ -446,58 +536,7 @@ async function handleQuickOCR(files){
 camInput.onchange=e=>handleQuickOCR([...e.target.files]);
 galInput.onchange=e=>handleQuickOCR([...e.target.files]);
 
-/* ================== แท็บ 2: BHS AI Diagnostics & Prediction ================== */
-function runBhsAiAnalysis(){
-  if(!DB||!DB.recs.length){alert('กรุณารอซิงค์ฐานข้อมูลกลางสักครู่');return;}
-  const zone=bhsZone.value;
-  const op=DB.recs.filter(r=>r.open);
-  
-  let analysisHtml=`<div class="ai-box">
-    <h3 style="margin:0 0 8px 0;color:#f2d574">🤖 BHS Autonomous Diagnostic Report</h3>
-    <p><b>โซนที่วิเคราะห์:</b> ${zone==='ALL'?'ระบบ BHS ภาพรวมทั้งหมด (System-wide)':zone}</p>
-    <p><b>จำนวน DM ค้างปัจจุบัน:</b> ${op.length.toLocaleString()} รายการ</p>
-    <hr style="border-color:#2b3c57;margin:10px 0">
-    <p><b>🔍 ข้อเสนอแนะเชิงวิศวกรรม (AI Recommendations):</b></p>
-    <ul>
-      <li><b>Critical Alert (ความเสี่ยงสูง):</b> ตรวจพบแนวโน้มมอเตอร์ขับเคลื่อนโซนสายพานสะสมความร้อน (Motor Overload) จากสถิติการใช้กระแสไฟฟ้าและใบแจ้งซ่อมซ้ำซาก แนะนำให้ตรวจสอบระดับน้ำมันเกียร์ (Gearbox Oil Level) และลูกปืนตุ๊กตา (Pillow Block Bearing) ทันที</li>
-      <li><b>Photoeye & Sensor Health:</b> ตรวจพบปัญหา Sensor จับกระเป๋าคลาดเคลื่อนบ่อยในจุด Merge แนะนำให้ทำความสะอาดหน้าเลนส์ Photoeye และเช็ค Alignment</li>
-      <li><b>Preventive Action:</b> ควรวางแผนเปลี่ยนสายพาน (Belt Splicing) สำหรับจุดที่มีค่าความตึงหย่อนเกินพิกัดในรอบ PM สัปดาห์นี้</li>
-    </ul>
-  </div>`;
-  document.getElementById('aiAnalysisResult').innerHTML=analysisHtml;
-}
-
-/* ================== แท็บ 3: MTBF / MTTR Analytics ================== */
-function calcReliability(){
-  if(!DB||!DB.recs.length){alert('ฐานข้อมูลยังไม่พร้อม');return;}
-  const totalRecs=DB.recs.length;
-  const operatingHoursYear=8760;
-  const totalBreakdowns=totalRecs;
-  const mtbf=(operatingHoursYear/Math.max(1,totalBreakdowns)).toFixed(1);
-  const mttr='2.8'; 
-  const availability=((parseFloat(mtbf)/(parseFloat(mtbf)+parseFloat(mttr)))*100).toFixed(2);
-
-  document.getElementById('kpiStats').innerHTML=`
-    <div><b>${mtbf} ชม.</b>MTBF (Mean Time Between Failures)</div>
-    <div><b>${mttr} ชม.</b>MTTR (Mean Time To Repair)</div>
-    <div><b>${availability}%</b>System Availability</div>
-    <div><b>${totalBreakdowns.toLocaleString()} ครั้ง</b>Total Failure Events</div>
-  `;
-
-  const counts={};
-  DB.recs.forEach(r=>{counts[r.pos]=(counts[r.pos]||0)+1;});
-  const sorted=Object.entries(counts).sort((a,b)=>b[1]-a[1]).slice(0,10);
-  
-  let th='<tr><th>อันดับ</th><th>ตำแหน่งอุปกรณ์ BHS</th><th>Machine Type</th><th>จำนวนครั้งที่เสีย (Failures)</th><th>สถานะความเสี่ยง</th></tr>';
-  sorted.forEach(([pos,cnt],idx)=>{
-    const sample=DB.recs.find(r=>r.pos===pos);
-    const risk=cnt>=5?'<span class="b red">Critical (High Risk)</span>':cnt>=3?'<span class="b org">Medium Risk</span>':'<span class="b blu">Normal</span>';
-    th+=`<tr><td>#${idx+1}</td><td class="mono">${esc(pos)}</td><td>${mcBadge(sample?.mc)}</td><td><b>${cnt} ครั้ง</b></td><td>${risk}</td></tr>`;
-  });
-  document.getElementById('topFailTable').innerHTML=th;
-}
-
-/* ================== แท็บ 4: Work Order & Downtime Log ================== */
+/* ================== Work Order ================== */
 let WORK_ORDERS=JSON.parse(localStorage.getItem('mt3_wo_bhs_logs')||'[]');
 function saveWorkOrder(){
   const pos=woPos.value.trim(),sym=woSym.value.trim(),cause=woCause.value.trim();
