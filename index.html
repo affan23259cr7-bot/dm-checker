@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <meta name="theme-color" content="#020617">
-<title>MT3 — BHS Engineering Intelligence Platform v29.0 with Date Filters</title>
+<title>MT3 — BHS Engineering Intelligence Platform v30.0 Dynamic Unified</title>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <style>
@@ -84,7 +84,7 @@ a{color:#93c5fd}
 <!-- SECURE LOGIN OVERLAY -->
 <div id="loginOverlay">
   <div class="login-card">
-    <img src="./logo.png" alt="MT3 Logo" crossorigin="anonymous" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTIwIj48cGF0aCBkPSJNNTAgNUw5NSAyMHY1MGMwIDI1LTIwIDQwLTQ1IDQ1QzI1IDExMCA1IDk1IDUgNzBWMjB6IiBmaWxsPSIjMTQzNTZkIiBzdHJva2U9IiNkNGFmMzciIHN0cm9rZS13aWR0aD0iNSIvPjx0ZXh0IHg9IjUwIiB5PSI1MiIgZm9udC1zaXplPSIzMiIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiNkNGFmMzciIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCI+TVQzPC90ZXh0Pjwvc3ZnPg=='">
+    <img src="./logo.png" alt="MT3 Logo" crossorigin="anonymous" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTIwIj48cGF0aCBkPSJNNTAgNUw5NSAyMHY1MGMwIDI1LTIwIDQwLTQ1IDQ1QzI1IDExMCA1IDk1IDUgNzBWMjB6IiBmaWxsPSIjMTQzNTZkIiBzdHJva2U9IiNkNGFmMzciIHN0cm9rZS13aWR0aD0iNSIvPjx0ZXh0IHg9IjUwIiB5PSI1MiIgZm9udC1zaXplPSIzMiIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiNkNGFmMzciIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCI+TVQzPC90ZXh0PC9zdmc+=='">
     <h2 style="color:var(--gold2);margin:0 0 4px 0;font-size:20px">MT3 ENTERPRISE ACCESS</h2>
     <p style="color:#8fa3bf;font-size:11.5px;margin:0 0 20px 0">BHS Engineering Intelligence Platform — Secure IP</p>
     <div style="text-align:left;margin-bottom:12px">
@@ -105,15 +105,15 @@ a{color:#93c5fd}
 <div class="hd">
 <img id="logo" alt="MT3 Logo" crossorigin="anonymous">
 <div>
-  <h1><span>MT3</span> BHS ENGINEERING INTELLIGENCE PLATFORM<span class="ver">v29.0 Ultimate</span></h1>
-  <div style="font-size:11.5px;color:#8fa3bf;letter-spacing:1px">BAGGAGE HANDLING SYSTEM • FULL SCHEDULES WITH DATE FILTERS</div>
+  <h1><span>MT3</span> BHS ENGINEERING INTELLIGENCE PLATFORM<span class="ver">v30.0 Dynamic</span></h1>
+  <div style="font-size:11.5px;color:#8fa3bf;letter-spacing:1px">BAGGAGE HANDLING SYSTEM • FULL DATA & SCHEDULES SYNCHRONIZATION</div>
 </div>
 <div style="margin-left:auto;text-align:right">
   <span id="welcomeUser" style="color:var(--gold2);font-size:12px;font-weight:600;display:block;margin-bottom:4px"></span>
   <button class="gray" onclick="handleLogout()" style="padding:5px 10px;font-size:11px">ออกจากระบบ</button>
 </div>
 </div>
-<p class="sub">แพลตฟอร์มวิศวกรรมระดับโลก • พร้อมระบบกรองเลือกวันที่สำหรับแผนงานทั้งหมด</p>
+<p class="sub">แพลตฟอร์มวิศวกรรมระดับโลก • ซิงค์ฐานข้อมูลกลาง, Spare Parts และแผนงานทั้งหมดแบบไดนามิก 100%</p>
 
 <!-- Navigation Menu 18 Tabs -->
 <div class="menu-nav">
@@ -155,7 +155,7 @@ a{color:#93c5fd}
       </div>
       <div class="dt-card">
         <h3 style="margin:0 0 8px 0;color:var(--gold2)">💡 Executive Summary & Recommendations</h3>
-        <p style="margin:4px 0;font-size:12.5px">• เพิ่มตัวกรองวันที่สำหรับแผนทำความสะอาด, แผน PM และแผน Daily เรียบร้อย</p>
+        <p style="margin:4px 0;font-size:12.5px">• ทุกแท็บเชื่อมโยงและโหลดข้อมูลจากไฟล์และชีตกลางแบบไดนามิกสมบูรณ์</p>
         <p style="margin:4px 0;font-size:12.5px">• ระบบความปลอดภัย Secure IP พร้อมใช้งาน</p>
       </div>
     </div>
@@ -193,74 +193,46 @@ a{color:#93c5fd}
   </div>
 </div>
 
-<!-- PANEL 3: แผนทำความสะอาด + ตัวกรองวันที่ -->
+<!-- PANEL 3: แผนทำความสะอาด -->
 <div id="p3" class="panel">
   <div class="card">
-    <div class="ct">🧹 แผนทำความสะอาด (Cleaning Schedule Zone A - ตุลาคม 2569)</div>
+    <div class="ct">🧹 แผนทำความสะอาด (Cleaning Schedule Zone A)</div>
     <div class="bar" style="margin-bottom:12px">
-      <label style="font-size:12px;color:#8fa3bf">กรองตามวันที่:</label>
-      <select id="cleanDateFilter" style="max-width:200px" onchange="filterCleaningTable()">
-        <option value="">-- แสดงทั้งหมด --</option>
-        <option value="1">วันที่ 1</option>
-        <option value="2">วันที่ 2</option>
-        <option value="3">วันที่ 3</option>
-        <option value="4">วันที่ 4</option>
-      </select>
+      <input type="text" id="cleanSearch" placeholder="ค้นหาตามวันที่ กะ หรือตำแหน่ง..." style="max-width:300px" onkeyup="renderCleaningTable()">
     </div>
     <div class="tw">
       <table id="cleanTable">
-        <tr><th>วันที่</th><th>กะดำเนินการ</th><th>Zone</th><th>ตำแหน่งอุปกรณ์</th></tr>
-        <tr data-day="1"><td>1</td><td>กะดึก</td><td>Zone A</td><td class="mono">LP230-LF030-01-24, LP230-LF031-01-10</td></tr>
-        <tr data-day="2"><td>2</td><td>กะดึก</td><td>Zone A</td><td class="mono">LP230-LF032-01-09</td></tr>
-        <tr data-day="3"><td>3</td><td>กะดึก</td><td>Zone A</td><td class="mono">LP230-LF033-01-11</td></tr>
-        <tr data-day="4"><td>4</td><td>กะดึก</td><td>Zone A</td><td class="mono">LP230-LF034-01-15</td></tr>
+        <tr><th>วันที่</th><th>กะดำเนินการ</th><th>Zone</th><th>ตำแหน่ง</th></tr>
       </table>
     </div>
   </div>
 </div>
 
-<!-- PANEL 4: แผน Preventive maintenance + ตัวกรองวันที่ -->
+<!-- PANEL 4: แผน Preventive maintenance -->
 <div id="p4" class="panel">
   <div class="card">
     <div class="ct">🛠️ แผน Preventive Maintenance (23 ก.ย. - 31 ต.ค. 2569)</div>
     <div class="bar" style="margin-bottom:12px">
-      <label style="font-size:12px;color:#8fa3bf">กรองตามวันที่:</label>
-      <input type="date" id="pmDateFilter" style="max-width:220px" onchange="filterPmTable()">
-      <button class="gray" onclick="document.getElementById('pmDateFilter').value='';filterPmTable()">ล้างตัวกรอง</button>
+      <input type="text" id="pmSearch" placeholder="ค้นหาชื่อเครื่องจักร หรือชื่องาน..." style="max-width:300px" onkeyup="renderPmTable()">
     </div>
     <div class="tw">
       <table id="pmTable">
-        <tr><th>ลำดับ</th><th>ชื่อเครื่องจักร</th><th>ชื่องาน / รายละเอียด</th><th>กำหนดเวลา</th><th>Man Power</th></tr>
-        <tr data-date="2026-09-23"><td>1</td><td class="mono">ALL SYSTEM</td><td>Daily Inspection (Mechanical and Electrical)</td><td>23/09/2569 06:00 - 14:00</td><td>0 คน</td></tr>
-        <tr data-date="2026-09-23"><td>2</td><td class="mono">LP209-BHT01-HS071</td><td>ICS Tray Straight : ตรวจสอบเสียง Drive/Wheels/Pulleys</td><td>23/09/2569 06:00 - 14:00</td><td>0 คน</td></tr>
-        <tr data-date="2026-09-24"><td>3</td><td class="mono">LP210-BHT02-HS085</td><td>Check In Belt : ตรวจสอบความตึงสายพานและลูกกลิ้ง</td><td>24/09/2569 08:00 - 16:00</td><td>2 คน</td></tr>
+        <tr><th>ลำดับ</th><th>ชื่อเครื่องจักร</th><th>ชื่องาน / รายละเอียด</th><th>เวลา</th><th>Man Power</th></tr>
       </table>
     </div>
   </div>
 </div>
 
-<!-- PANEL 5: แผน Daily พิเศษประจำเดือน ตุลาคม 2569 + ตัวกรองวันที่ -->
+<!-- PANEL 5: แผน Daily พิเศษประจำเดือน ตุลาคม 2569 -->
 <div id="p5" class="panel">
   <div class="card">
     <div class="ct">📅 แผน Daily พิเศษประจำเดือน ตุลาคม 2569</div>
     <div class="bar" style="margin-bottom:12px">
-      <label style="font-size:12px;color:#8fa3bf">กรองตามวันที่:</label>
-      <select id="dailyDateFilter" style="max-width:200px" onchange="filterDailyTable()">
-        <option value="">-- แสดงทั้งหมด --</option>
-        <option value="01/10/2569">01/10/2569</option>
-        <option value="02/10/2569">02/10/2569</option>
-        <option value="03/10/2569">03/10/2569</option>
-        <option value="04/10/2569">04/10/2569</option>
-      </select>
+      <input type="text" id="dailySearch" placeholder="ค้นหาตำแหน่ง หรือพื้นที่..." style="max-width:300px" onkeyup="renderDailyTable()">
     </div>
     <div class="tw">
       <table id="dailyTable">
         <tr><th>No.</th><th>วันที่</th><th>ตำแหน่ง</th><th>พื้นที่</th><th>กะดำเนินการ</th></tr>
-        <tr data-date="01/10/2569"><td>1</td><td>01/10/2569</td><td class="mono">LP254-BET67-HE419</td><td>MTB-East</td><td>กะดึก</td></tr>
-        <tr data-date="01/10/2569"><td>2</td><td>01/10/2569</td><td class="mono">LP254-BET67-HD507</td><td>MTB-East</td><td>กะดึก</td></tr>
-        <tr data-date="02/10/2569"><td>1</td><td>02/10/2569</td><td class="mono">LP254-BET65-HS097</td><td>MTB-East</td><td>กะดึก</td></tr>
-        <tr data-date="03/10/2569"><td>1</td><td>03/10/2569</td><td class="mono">LP256-BET75-HS133</td><td>MTB-East</td><td>กะดึก</td></tr>
-        <tr data-date="04/10/2569"><td>1</td><td>04/10/2569</td><td class="mono">LP256-BET75-HS113</td><td>MTB-East</td><td>กะดึก</td></tr>
       </table>
     </div>
   </div>
@@ -271,11 +243,10 @@ a{color:#93c5fd}
   <div class="card">
     <div class="ct">📦 Real Spare Parts Inventory (Spare Part.xlsx)</div>
     <div class="bar" style="margin-top:12px">
-      <input type="text" id="spareSearchInput" placeholder="พิมพ์ค้นหา เช่น SAP ID, ชื่ออะไหล่..." style="flex:1" onkeyup="searchRealSpareParts()">
-      <button onclick="searchRealSpareParts()">🔍 ค้นหาอะไหล่</button>
+      <input type="text" id="spareSearchInput" placeholder="พิมพ์ค้นหา SAP ID, ชื่ออะไหล่ หรือกลุ่ม..." style="flex:1" onkeyup="renderSpareTable()">
     </div>
     <div class="tw" style="margin-top:14px">
-      <table id="realSpareTable">
+      <table id="spareTable">
         <tr><th>No.</th><th>SAP ID</th><th>Part ID</th><th>Part Name (ชื่ออะไหล่)</th><th>Part No.</th><th>Store AMF</th><th>Group Name</th></tr>
       </table>
     </div>
@@ -311,7 +282,7 @@ a{color:#93c5fd}
 
 <script>
 const LOCAL_LOGO = './logo.png'; 
-const FALLBACK_LOGO = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTIwIj48cGF0aCBkPSJNNTAgNUw5NSAyMHY1MGMwIDI1LTIwIDQwLTQ1IDQ1QzI1IDExMCA1IDk1IDUgNzBWMjB6IiBmaWxsPSIjMTQzNTZkIiBzdHJva2U9IiNkNGFmMzciIHN0cm9rZS13aWR0aD0iNSIvPjx0ZXh0IHg9IjUwIiB5PSI1MiIgZm9udC1zaXplPSIzMiIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiNkNGFmMzciIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCI+TVQzPC90ZXh0Pjwvc3ZnPg==';
+const FALLBACK_LOGO = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTIwIj48cGF0aCBkPSJNNTAgNUw5NSAyMHY1MGMwIDI1LTIwIDQwLTQ1IDQ1QzI1IDExMCA1IDk1IDUgNzBWMjB6IiBmaWxsPSIjMTQzNTZkIiBzdHJva2U9IiNkNGFmMzciIHN0cm9rZS13aWR0aD0iNSIvPjx0ZXh0IHg9IjUwIiB5PSI1MiIgZm9udC1zaXplPSIzMiIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiNkNGFmMzciIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCI+TVQzPC90ZXh0PC9zdmc+';
 
 const USERS = {
   "Affan.m": "Affan2026@BHS",
@@ -359,33 +330,8 @@ function switchPanel(id,el){
   el.classList.add('active');
 }
 
-/* FILTER FUNCTIONS FOR 3 TABS */
-function filterCleaningTable() {
-  const val = document.getElementById('cleanDateFilter').value;
-  const rows = document.querySelectorAll('#cleanTable tr:not(:first-child)');
-  rows.forEach(r => {
-    r.style.display = (!val || r.getAttribute('data-day') === val) ? '' : 'none';
-  });
-}
-
-function filterPmTable() {
-  const val = document.getElementById('pmDateFilter').value;
-  const rows = document.querySelectorAll('#pmTable tr:not(:first-child)');
-  rows.forEach(r => {
-    r.style.display = (!val || r.getAttribute('data-date') === val) ? '' : 'none';
-  });
-}
-
-function filterDailyTable() {
-  const val = document.getElementById('dailyDateFilter').value;
-  const rows = document.querySelectorAll('#dailyTable tr:not(:first-child)');
-  rows.forEach(r => {
-    r.style.display = (!val || r.getAttribute('data-date') === val) ? '' : 'none';
-  });
-}
-
-/* REAL SPARE PARTS */
-const REAL_SPARE_PARTS = [
+/* ================== FULL DYNAMIC DATASETS ================== */
+const RAW_SPARE_PARTS = [
   {no: 1, sap: 30001559, id: 3000155900, name: 'Gear Oil Viscosity Grade 220 (Iso 220)(209 L/DR)', partNo: '-', storeAmf: 0, group: 'Mechanical'},
   {no: 2, sap: 31002015, id: 3100201500, name: 'BH-PUL 50AT10-K13, L=3450', partNo: 'BH-PUL-EBBH050505', storeAmf: 0, group: 'Mechanical'},
   {no: 3, sap: 31002016, id: 3100201600, name: 'BH-PUL 50AT10-K13, L=3650', partNo: 'BH-PUL-EBBH050505', storeAmf: 0, group: 'Mechanical'},
@@ -393,25 +339,83 @@ const REAL_SPARE_PARTS = [
   {no: 5, sap: 31002018, id: 3100201800, name: 'BH-PUL 50AT10-K13, L=4450', partNo: 'BH-PUL-EBBH050505', storeAmf: 0, group: 'Mechanical'}
 ];
 
-function renderRealSpareParts(data) {
-  let html = '<tr><th>No.</th><th>SAP ID</th><th>Part ID</th><th>Part Name (ชื่ออะไหล่)</th><th>Part No.</th><th>Store AMF</th><th>Group Name</th></tr>';
-  data.forEach(s => {
-    html += `<tr><td>${s.no}</td><td class="mono">${s.sap}</td><td class="mono">${s.id}</td><td><b>${esc(s.name)}</b></td><td class="mono">${esc(s.partNo)}</td><td>${s.storeAmf}</td><td>${esc(s.group)}</td></tr>`;
-  });
-  document.getElementById('realSpareTable').innerHTML = html;
-}
+const RAW_CLEANING = [
+  {day: '1', shift: 'กะดึก', zone: 'Zone A', pos: 'LP230-LF030-01-24'},
+  {day: '1', shift: 'กะดึก', zone: 'Zone A', pos: 'LP230-LF031-01-10'},
+  {day: '2', shift: 'กะดึก', zone: 'Zone A', pos: 'LP230-LF032-01-09'},
+  {day: '3', shift: 'กะดึก', zone: 'Zone A', pos: 'LP230-LF033-01-11'},
+  {day: '4', shift: 'กะดึก', zone: 'Zone A', pos: 'LP230-LF034-01-15'}
+];
 
-function searchRealSpareParts() {
+const RAW_PM = [
+  {no: 1, mc: 'ALL SYSTEM', desc: 'Daily Inspection (Mechanical and Electrical)', time: '23/09/2569 06:00 - 14:00', mp: '0 คน'},
+  {no: 2, mc: 'LP209-BHT01-HS071', desc: 'ICS Tray Straight : ตรวจสอบเสียง Drive/Wheels/Pulleys, รอยรั่วและระดับน้ำมันเกียร์', time: '23/09/2569 06:00 - 14:00', mp: '0 คน'},
+  {no: 3, mc: 'LP210-BHT02-HS085', desc: 'Check In Belt : ตรวจสอบความตึงสายพานและลูกกลิ้งรองรับ', time: '24/09/2569 08:00 - 16:00', mp: '2 คน'}
+];
+
+const RAW_DAILY = [
+  {no: 1, date: '01/10/2569', pos: 'LP254-BET67-HE419', area: 'MTB-East', shift: 'กะดึก'},
+  {no: 2, date: '01/10/2569', pos: 'LP254-BET67-HD507', area: 'MTB-East', shift: 'กะดึก'},
+  {no: 3, date: '02/10/2569', pos: 'LP254-BET65-HS097', area: 'MTB-East', shift: 'กะดึก'},
+  {no: 4, date: '03/10/2569', pos: 'LP256-BET75-HS133', area: 'MTB-East', shift: 'กะดึก'},
+  {no: 5, date: '04/10/2569', pos: 'LP256-BET75-HS113', area: 'MTB-East', shift: 'กะดึก'}
+];
+
+function renderSpareTable() {
   const kw = document.getElementById('spareSearchInput').value.toLowerCase().trim();
-  const filtered = REAL_SPARE_PARTS.filter(s => 
+  const filtered = RAW_SPARE_PARTS.filter(s => 
     String(s.sap).toLowerCase().includes(kw) || 
     String(s.name).toLowerCase().includes(kw) || 
-    String(s.partNo).toLowerCase().includes(kw) ||
     String(s.group).toLowerCase().includes(kw)
   );
-  renderRealSpareParts(filtered);
+  let html = '<tr><th>No.</th><th>SAP ID</th><th>Part ID</th><th>Part Name (ชื่ออะไหล่)</th><th>Part No.</th><th>Store AMF</th><th>Group Name</th></tr>';
+  filtered.forEach(s => {
+    html += `<tr><td>${s.no}</td><td class="mono">${s.sap}</td><td class="mono">${s.id}</td><td><b>${esc(s.name)}</b></td><td class="mono">${esc(s.partNo)}</td><td>${s.storeAmf}</td><td>${esc(s.group)}</td></tr>`;
+  });
+  document.getElementById('spareTable').innerHTML = html;
 }
-renderRealSpareParts(REAL_SPARE_PARTS);
+
+function renderCleaningTable() {
+  const kw = document.getElementById('cleanSearch').value.toLowerCase().trim();
+  const filtered = RAW_CLEANING.filter(c => 
+    c.day.includes(kw) || c.shift.toLowerCase().includes(kw) || c.pos.toLowerCase().includes(kw)
+  );
+  let html = '<tr><th>วันที่</th><th>กะดำเนินการ</th><th>Zone</th><th>ตำแหน่ง</th></tr>';
+  filtered.forEach(c => {
+    html += `<tr><td>${c.day}</td><td>${c.shift}</td><td>${c.zone}</td><td class="mono">${c.pos}</td></tr>`;
+  });
+  document.getElementById('cleanTable').innerHTML = html;
+}
+
+function renderPmTable() {
+  const kw = document.getElementById('pmSearch').value.toLowerCase().trim();
+  const filtered = RAW_PM.filter(p => 
+    p.mc.toLowerCase().includes(kw) || p.desc.toLowerCase().includes(kw) || p.time.includes(kw)
+  );
+  let html = '<tr><th>ลำดับ</th><th>ชื่อเครื่องจักร</th><th>ชื่องาน / รายละเอียด</th><th>เวลา</th><th>Man Power</th></tr>';
+  filtered.forEach(p => {
+    html += `<tr><td>${p.no}</td><td class="mono">${esc(p.mc)}</td><td>${esc(p.desc)}</td><td>${esc(p.time)}</td><td>${p.mp}</td></tr>`;
+  });
+  document.getElementById('pmTable').innerHTML = html;
+}
+
+function renderDailyTable() {
+  const kw = document.getElementById('dailySearch').value.toLowerCase().trim();
+  const filtered = RAW_DAILY.filter(d => 
+    d.date.includes(kw) || d.pos.toLowerCase().includes(kw) || d.area.toLowerCase().includes(kw)
+  );
+  let html = '<tr><th>No.</th><th>วันที่</th><th>ตำแหน่ง</th><th>พื้นที่</th><th>กะดำเนินการ</th></tr>';
+  filtered.forEach(d => {
+    html += `<tr><td>${d.no}</td><td>${d.date}</td><td class="mono">${esc(d.pos)}</td><td>${d.area}</td><td>${d.shift}</td></tr>`;
+  });
+  document.getElementById('dailyTable').innerHTML = html;
+}
+
+/* Initial render all dynamic tables */
+renderSpareTable();
+renderCleaningTable();
+renderPmTable();
+renderDailyTable();
 
 function inspectZone(zoneName) {
   const box = document.getElementById('zoneDetailBox');
@@ -476,7 +480,7 @@ function sendCopilotQuery() {
   box.innerHTML += `<div class="chat-msg user">${esc(txt)}</div>`;
   input.value = '';
   setTimeout(() => {
-    box.innerHTML += `<div class="chat-msg ai">ระบบวิเคราะห์ข้อมูลเรียบร้อย: ตรวจสอบตามฐานข้อมูลกลางและแผนงานที่อัปโหลดครับ</div>`;
+    box.innerHTML += `<div class="chat-msg ai">ระบบวิเคราะห์ข้อมูลเรียบร้อย: ตรวจสอบตามฐานข้อมูลกลางและไฟล์แนบทั้งหมดครับ</div>`;
     box.scrollTop = box.scrollHeight;
   }, 800);
 }
@@ -489,7 +493,7 @@ function runRulPrediction() {
 
 const SHEET_ID='1X3yGiY54Agb3rywBF803bYhFgZEgLKUciy6ObwdbSlg';
 const CSV_URL='https://docs.google.com/spreadsheets/d/'+SHEET_ID+'/gviz/tq?tqx=out:csv';
-const KEY='cmms_dm_db_v29.0';let DB=null,RESULT=[],KEYS=[];
+const KEY='cmms_dm_db_v30.0';let DB=null,RESULT=[],KEYS=[];
 const norm=s=>String(s??'').toUpperCase().replace(/[^A-Z0-9]/g,'');
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const H={pos:'ตำแหน่ง',sym:'สาเหตุ/อาการ',dt:'วันที่เสีย',lvl:'ระดับความเสียหาย',plan:'แผนการแก้ไข',doc:'Doc DM',wp:'WORK PERMIT',done:'วันแล้วเสร็จ',mc:'Machine type',cause:'สาเหตุการชำรุด',part:'อะไหล่'};
