@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <meta name="theme-color" content="#020617">
-<title>MT3 — BHS Engineering Intelligence Platform v36.0 Enterprise Elite</title>
+<title>MT3 — BHS Engineering Intelligence Platform v36.1 Elite Large Tabs</title>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <style>
@@ -27,12 +27,12 @@ h1 span{background:linear-gradient(135deg,var(--gold2),var(--gold));-webkit-back
 .ver{display:inline-block;background:linear-gradient(135deg,#3b82f6,#1d4ed8);color:#93c5fd;font-size:11px;padding:3px 10px;border-radius:12px;margin-left:8px;vertical-align:middle;font-weight:700;box-shadow:0 2px 8px rgba(59,130,246,.4)}
 .sub{color:#8fa3bf;font-size:12px;text-align:center;margin:0 0 20px}
 
-/* Enterprise Navigation Menu 9 Tabs */
-.menu-nav{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:6px;margin-bottom:18px}
-.nav-btn{background:#0f172a;color:#94a3b8;border:1px solid #1e293b;padding:10px 4px;border-radius:10px;font-size:11.5px;font-weight:600;cursor:pointer;text-align:center;transition:.2s;display:flex;flex-direction:column;align-items:center;gap:3px}
-.nav-btn:hover{background:#1e293b;color:#fff;border-color:#334155}
-.nav-btn.active{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#111827;border-color:var(--gold);font-weight:700;box-shadow:0 4px 14px rgba(212,175,55,.35)}
-.nav-btn span{font-size:15px}
+/* Enterprise Navigation Menu 9 Tabs (Enlarged & Clear) */
+.menu-nav{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;margin-bottom:20px}
+.nav-btn{background:#0f172a;color:#cbd5e1;border:1px solid #334155;padding:14px 10px;border-radius:12px;font-size:13px;font-weight:600;cursor:pointer;text-align:center;transition:.2s;display:flex;flex-direction:column;align-items:center;gap:5px;box-shadow:0 4px 12px rgba(0,0,0,.3)}
+.nav-btn:hover{background:#1e293b;color:#fff;border-color:var(--gold)}
+.nav-btn.active{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#111827;border-color:var(--gold);font-weight:700;box-shadow:0 6px 18px rgba(212,175,55,.45)}
+.nav-btn span{font-size:20px}
 
 .panel{display:none}.panel.active{display:block}
 .card{background:var(--card);backdrop-filter:blur(14px);border:1px solid rgba(212,175,55,.26);
@@ -100,7 +100,7 @@ a{color:#93c5fd}
 <div class="hd">
 <img id="logo" alt="MT3 Logo" crossorigin="anonymous">
 <div>
-  <h1><span>MT3</span> BHS ENGINEERING INTELLIGENCE PLATFORM<span class="ver">v36.0 Elite</span></h1>
+  <h1><span>MT3</span> BHS ENGINEERING INTELLIGENCE PLATFORM<span class="ver">v36.1 Elite</span></h1>
   <div style="font-size:11.5px;color:#8fa3bf;letter-spacing:1px">BAGGAGE HANDLING SYSTEM • UNIFIED CENTRAL DATABASE SYNC</div>
 </div>
 <div style="margin-left:auto;text-align:right">
@@ -108,9 +108,9 @@ a{color:#93c5fd}
   <button class="gray" onclick="handleLogout()" style="padding:5px 10px;font-size:11px">ออกจากระบบ</button>
 </div>
 </div>
-<p class="sub">แพลตฟอร์มบริหารงานวิศวกรรมความน่าเชื่อถือระดับสูง • ระบบหลักเดิมสมบูรณ์ 100% • ซิงค์อัตโนมัติทุกแท็บ</p>
+<p class="sub">แพลตฟอร์มบริหารงานวิศวกรรมความน่าเชื่อถือระดับสูง • ปุ่มเมนูแท็บขนาดใหญ่ใช้งานง่าย • ซิงค์อัตโนมัติทุกแท็บ</p>
 
-<!-- Navigation Menu 9 Tabs -->
+<!-- Navigation Menu 9 Tabs (Enlarged) -->
 <div class="menu-nav">
   <button class="nav-btn active" onclick="switchPanel('p1',this)"><span>📊</span>1. Command Center</button>
   <button class="nav-btn" onclick="switchPanel('p2',this)"><span>🧬</span>2. Asset Graph</button>
