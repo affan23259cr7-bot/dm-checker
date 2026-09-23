@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <meta name="theme-color" content="#020617">
-<title>MT3 — BHS Engineering Intelligence Platform v26.0 Secure IP</title>
+<title>MT3 — BHS Engineering Intelligence Platform v27.0 with Real Spare Parts & Map</title>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <style>
@@ -27,8 +27,8 @@ h1 span{background:linear-gradient(135deg,var(--gold2),var(--gold));-webkit-back
 .ver{display:inline-block;background:linear-gradient(135deg,#059669,#047857);color:#6ee7b7;font-size:11px;padding:3px 10px;border-radius:12px;margin-left:8px;vertical-align:middle;font-weight:700;box-shadow:0 2px 8px rgba(5,150,105,.4)}
 .sub{color:#8fa3bf;font-size:12px;text-align:center;margin:0 0 20px}
 
-/* Enterprise Navigation Menu 14 Tabs */
-.menu-nav{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:5px;margin-bottom:18px}
+/* Enterprise Navigation Menu 15 Tabs */
+.menu-nav{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:5px;margin-bottom:18px}
 .nav-btn{background:#0f172a;color:#94a3b8;border:1px solid #1e293b;padding:8px 4px;border-radius:9px;font-size:11px;font-weight:600;cursor:pointer;text-align:center;transition:.2s;display:flex;flex-direction:column;align-items:center;gap:2px}
 .nav-btn:hover{background:#1e293b;color:#fff;border-color:#334155}
 .nav-btn.active{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#111827;border-color:var(--gold);font-weight:700;box-shadow:0 4px 14px rgba(212,175,55,.35)}
@@ -65,6 +65,13 @@ a{color:#93c5fd}
 .predict-card.danger{border-left-color:#ef4444;background:rgba(127,29,29,.15)}
 .predict-card.warning{border-left-color:#f59e0b;background:rgba(120,53,15,.15)}
 
+/* Interactive Map Styles */
+.map-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:14px}
+.zone-card{background:#0a1120;border:2px solid #2b3c57;border-radius:12px;padding:16px;text-align:center;cursor:pointer;transition:.2s}
+.zone-card:hover{border-color:var(--gold);transform:translateY(-2px)}
+.zone-card.alert{border-color:#ef4444;animation:pulse 1.5s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(239,68,68,.6)}70%{box-shadow:0 0 0 12px rgba(239,68,68,0)}100%{box-shadow:0 0 0 0 rgba(239,68,68,0)}}
+
 /* Chat Copilot Box */
 .chat-box{background:#0a1120;border:1px solid #2b3c57;border-radius:12px;height:320px;overflow-y:auto;padding:14px;margin-bottom:12px;display:flex;flex-direction:column;gap:10px}
 .chat-msg{padding:10px 14px;border-radius:10px;max-width:80%;font-size:13px;line-height:1.5}
@@ -100,32 +107,33 @@ a{color:#93c5fd}
 <div class="hd">
 <img id="logo" alt="MT3 Logo" crossorigin="anonymous">
 <div>
-  <h1><span>MT3</span> BHS ENGINEERING INTELLIGENCE PLATFORM<span class="ver">v26.0 Secure</span></h1>
-  <div style="font-size:11.5px;color:#8fa3bf;letter-spacing:1px">BAGGAGE HANDLING SYSTEM • SECURE INTELLECTUAL PROPERTY</div>
+  <h1><span>MT3</span> BHS ENGINEERING INTELLIGENCE PLATFORM<span class="ver">v27.0 Ultimate</span></h1>
+  <div style="font-size:11.5px;color:#8fa3bf;letter-spacing:1px">BAGGAGE HANDLING SYSTEM • REAL SPARE PARTS & INTERACTIVE MAP</div>
 </div>
 <div style="margin-left:auto;text-align:right">
   <span id="welcomeUser" style="color:var(--gold2);font-size:12px;font-weight:600;display:block;margin-bottom:4px"></span>
   <button class="gray" onclick="handleLogout()" style="padding:5px 10px;font-size:11px">ออกจากระบบ</button>
 </div>
 </div>
-<p class="sub">แพลตฟอร์มวิศวกรรมระดับโลก • ระบบป้องกันทรัพย์สินทางปัญญาด้วยการยืนยันตัวตน • ซิงค์อัตโนมัติ 100%</p>
+<p class="sub">แพลตฟอร์มวิศวกรรมระดับโลก • ฐานข้อมูลอะไหล่แท้จาก Spare Part.xlsx • ผังจำลองโซนสนามบิน Interactive</p>
 
-<!-- Navigation Menu 14 Tabs -->
+<!-- Navigation Menu 15 Tabs -->
 <div class="menu-nav">
   <button class="nav-btn active" onclick="switchPanel('p1',this)"><span>📊</span>1. Command</button>
-  <button class="nav-btn" onclick="switchPanel('p2',this)"><span>⚡</span>2. OT Network</button>
-  <button class="nav-btn" onclick="switchPanel('p3',this)"><span>🌊</span>3. Failure Prop.</button>
-  <button class="nav-btn" onclick="switchPanel('p4',this)"><span>⏳</span>4. Time Machine</button>
-  <button class="nav-btn" onclick="switchPanel('p5',this)"><span>🧪</span>5. Scenario Sim</button>
-  <button class="nav-btn" onclick="switchPanel('p6',this)"><span>📦</span>6. SAP Parts</button>
-  <button class="nav-btn" onclick="switchPanel('p7',this)"><span>🧬</span>7. Asset Graph</button>
-  <button class="nav-btn" onclick="switchPanel('p8',this)"><span>🩺</span>8. Health Score</button>
-  <button class="nav-btn" onclick="switchPanel('p9',this)"><span>🤖</span>9. AI Copilot</button>
-  <button class="nav-btn" onclick="switchPanel('p10',this)"><span>🔍</span>10. ตรวจ DM</button>
-  <button class="nav-btn" onclick="switchPanel('p11',this)"><span>🛠️</span>11. Work Order</button>
-  <button class="nav-btn" onclick="switchPanel('p12',this)"><span>🔮</span>12. RUL Predict</button>
-  <button class="nav-btn" onclick="switchPanel('p13',this)"><span>🔋</span>13. Energy/Bag</button>
-  <button class="nav-btn" onclick="switchPanel('p14',this)"><span>⚙️</span>14. ฐานข้อมูล</button>
+  <button class="nav-btn" onclick="switchPanel('p2',this)"><span>🗺️</span>2. BHS Map</button>
+  <button class="nav-btn" onclick="switchPanel('p3',this)"><span>📦</span>3. Spare Parts</button>
+  <button class="nav-btn" onclick="switchPanel('p4',this)"><span>⚡</span>4. OT Network</button>
+  <button class="nav-btn" onclick="switchPanel('p5',this)"><span>🌊</span>5. Failure Prop.</button>
+  <button class="nav-btn" onclick="switchPanel('p6',this)"><span>⏳</span>6. Time Machine</button>
+  <button class="nav-btn" onclick="switchPanel('p7',this)"><span>🧪</span>7. Scenario Sim</button>
+  <button class="nav-btn" onclick="switchPanel('p8',this)"><span>🧬</span>8. Asset Graph</button>
+  <button class="nav-btn" onclick="switchPanel('p9',this)"><span>🩺</span>9. Health Score</button>
+  <button class="nav-btn" onclick="switchPanel('p10',this)"><span>🤖</span>10. AI Copilot</button>
+  <button class="nav-btn" onclick="switchPanel('p11',this)"><span>🔍</span>11. ตรวจ DM</button>
+  <button class="nav-btn" onclick="switchPanel('p12',this)"><span>🛠️</span>12. Work Order</button>
+  <button class="nav-btn" onclick="switchPanel('p13',this)"><span>🔮</span>13. RUL Predict</button>
+  <button class="nav-btn" onclick="switchPanel('p14',this)"><span>🔋</span>14. Energy/Bag</button>
+  <button class="nav-btn" onclick="switchPanel('p15',this)"><span>⚙️</span>15. ฐานข้อมูล</button>
 </div>
 
 <!-- PANEL 1: Command Center -->
@@ -146,15 +154,64 @@ a{color:#93c5fd}
       </div>
       <div class="dt-card">
         <h3 style="margin:0 0 8px 0;color:var(--gold2)">💡 Executive Summary & Recommendations</h3>
-        <p style="margin:4px 0;font-size:12.5px">• ระบบป้องกันด้วยรหัสผ่าน (Secure IP Protection) เปิดใช้งานสำเร็จ</p>
-        <p style="margin:4px 0;font-size:12.5px">• ข้อมูลการเข้าสู่ระบบถูกตรวจสอบผ่านระบบเข้ารหัสภายในเครื่อง</p>
+        <p style="margin:4px 0;font-size:12.5px">• เชื่อมโยงฐานข้อมูลอะไหล่จาก Spare Part.xlsx สำเร็จ</p>
+        <p style="margin:4px 0;font-size:12.5px">• ระบบ Map แผนผังโซนสนามบินพร้อมใช้งานสมบูรณ์</p>
       </div>
     </div>
   </div>
 </div>
 
-<!-- PANEL 2: BHS Network / OT Twin -->
+<!-- PANEL 2: Interactive BHS Zone Map -->
 <div id="p2" class="panel">
+  <div class="card">
+    <div class="ct">🗺️ Interactive BHS Zone Map & Topology (ผังจำลองระบบสายพานเสมือนจริง)</div>
+    <div class="hint">คลิกที่โซนเพื่อดูรายละเอียดการทำงาน โซนที่มีปัญหาจะมีไฟกระพริบเตือนอัตโนมัติ</div>
+    <div class="map-grid">
+      <div class="zone-card" onclick="inspectZone('Check-in Conveyors (โซนรับกระเป๋า)')">
+        <div style="font-size:24px">🛄</div>
+        <div style="font-weight:bold;color:var(--gold2);margin-top:6px">Zone A: Check-in</div>
+        <div style="font-size:12px;color:#6ee7b7;margin-top:4px">สถานะ: ปกติ (Full Active)</div>
+      </div>
+      <div class="zone-card" onclick="inspectZone('Collector Belts (สายพานลำเลียงหลัก)')">
+        <div style="font-size:24px">🔄</div>
+        <div style="font-weight:bold;color:var(--gold2);margin-top:6px">Zone B: Collector</div>
+        <div style="font-size:12px;color:#fcd34d;margin-top:4px">สถานะ: เฝ้าระวังอุณหภูมิ</div>
+      </div>
+      <div class="zone-card alert" onclick="inspectZone('Merge & Diverter (จุดเบี่ยงกระเป๋าค้าง - วิกฤต)')">
+        <div style="font-size:24px">⚠️</div>
+        <div style="font-weight:bold;color:#ef4444;margin-top:6px">Zone C: Merge / Diverter</div>
+        <div style="font-size:12px;color:#ef4444;margin-top:4px">สถานะ: 🔴 ขัดข้อง (Critical)</div>
+      </div>
+      <div class="zone-card" onclick="inspectZone('Make-up Carousels (สายพานจัดเรียงขึ้นเครื่อง)')">
+        <div style="font-size:24px">✈️</div>
+        <div style="font-weight:bold;color:var(--gold2);margin-top:6px">Zone D: Make-up Carousels</div>
+        <div style="font-size:12px;color:#6ee7b7;margin-top:4px">สถานะ: ปกติ (Smooth)</div>
+      </div>
+    </div>
+    <div id="zoneDetailBox" class="dt-card" style="margin-top:16px;display:none"></div>
+  </div>
+</div>
+
+<!-- PANEL 3: Real Spare Parts (Spare Part.xlsx) -->
+<div id="p3" class="panel">
+  <div class="card">
+    <div class="ct">📦 Real Spare Parts Inventory (ฐานข้อมูลอะไหล่จาก Spare Part.xlsx)</div>
+    <div class="hint">ค้นหาอะไหล่ด้วยรหัส SAP ID, Part No. หรือชื่ออะไหล่จากไฟล์จริง</div>
+    <div class="bar" style="margin-top:12px">
+      <input type="text" id="spareSearchInput" placeholder="พิมพ์ค้นหา เช่น SAP ID, ชื่ออะไหล่, Mechanical..." style="flex:1" onkeyup="searchRealSpareParts()">
+      <button onclick="searchRealSpareParts()">🔍 ค้นหาอะไหล่</button>
+    </div>
+    <div class="tw" style="margin-top:14px">
+      <table id="realSpareTable">
+        <tr><th>No.</th><th>SAP ID</th><th>Part ID</th><th>Part Name (ชื่ออะไหล่)</th><th>Part No.</th><th>Store AMF</th><th>Group Name</th></tr>
+        <!-- Data will be loaded via script -->
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 4: OT Network -->
+<div id="p4" class="panel">
   <div class="card">
     <div class="ct">⚡ BHS Network / OT Twin (Industrial Network & PLC/VFD Status)</div>
     <div class="hint">ตรวจสอบสถานะการเชื่อมต่อเครือข่ายควบคุมอุตสาหกรรมแบบเรียลไทม์</div>
@@ -164,23 +221,21 @@ a{color:#93c5fd}
     </div>
     <div class="grid2" style="margin-top:16px">
       <div class="dt-card">
-        <h3 style="margin:0 0 8px 0;color:var(--gold2)">🔌 PLC & Controller Nodes (SAT-1 & Main Hall)</h3>
+        <h3 style="margin:0 0 8px 0;color:var(--gold2)">🔌 PLC & Controller Nodes</h3>
         <p style="margin:6px 0">• <b>PLC-BHS-01 (Siemens S7-1500):</b> <span class="b grn">Online (RUN)</span> | CPU: 18%</p>
         <p style="margin:6px 0">• <b>PLC-BHS-02 (Siemens S7-1500):</b> <span class="b grn">Online (RUN)</span> | CPU: 22%</p>
-        <p style="margin:6px 0">• <b>SCADA-HMI-MAIN:</b> <span class="b grn">Connected</span> | Active Clients: 8</p>
       </div>
       <div class="dt-card">
-        <h3 style="margin:0 0 8px 0;color:var(--gold2)">⚙️ Inverter / VFD Communication (Profinet Bus)</h3>
-        <p style="margin:6px 0">• <b>VFD-LINE-A01 (SEW Movitronic):</b> <span class="b grn">Normal</span> | 49.8 Hz</p>
-        <p style="margin:6px 0">• <b>VFD-MERGE-02 (Danfoss VLT):</b> <span class="b org">Warning (High Temp)</span> | 50.1 Hz</p>
-        <p style="margin:6px 0">• <b>VFD-COL-09 (Siemens G120):</b> <span class="b grn">Normal</span> | 50.0 Hz</p>
+        <h3 style="margin:0 0 8px 0;color:var(--gold2)">⚙️ Inverter / VFD Communication</h3>
+        <p style="margin:6px 0">• <b>VFD-LINE-A01:</b> <span class="b grn">Normal</span> | 49.8 Hz</p>
+        <p style="margin:6px 0">• <b>VFD-MERGE-02:</b> <span class="b org">Warning (High Temp)</span> | 50.1 Hz</p>
       </div>
     </div>
   </div>
 </div>
 
-<!-- PANEL 3: Failure Propagation Twin -->
-<div id="p3" class="panel">
+<!-- PANEL 5: Failure Propagation -->
+<div id="p5" class="panel">
   <div class="card">
     <div class="ct">🌊 Failure Propagation Twin (จำลองการลุกลามของความเสียหายลูกโซ่)</div>
     <div class="hint">ระบบวิเคราะห์ผลกระทบลูกโซ่ (Domino Effect) เมื่ออุปกรณ์ต้นน้ำขัดข้อง</div>
@@ -198,23 +253,23 @@ a{color:#93c5fd}
   </div>
 </div>
 
-<!-- PANEL 4: Time Machine / Replay -->
-<div id="p4" class="panel">
+<!-- PANEL 6: Time Machine -->
+<div id="p6" class="panel">
   <div class="card">
     <div class="ct">⏳ Time Machine / Replay (ย้อนเวลาดูสถานะระบบและเหตุการณ์ย้อนหลัง)</div>
     <div class="hint">เลื่อน Time Slider เพื่อตรวจสอบย้อนหลังว่าเกิดเหตุการณ์ Breakdown หรือ DM อะไรขึ้นบ้าง</div>
     <div class="bar" style="margin-top:12px">
-      <label style="font-size:12px;color:var(--gold2);width:100%">เลือกช่วงเวลาย้อนหลัง (Timeline Replay): <span id="timeLabel" style="color:#6ee7b7;font-weight:bold">7 วันที่แล้ว (เทียบเท่าปัจจุบัน)</span></label>
+      <label style="font-size:12px;color:var(--gold2);width:100%">เลือกช่วงเวลาย้อนหลัง (Timeline Replay): <span id="timeLabel" style="color:#6ee7b7;font-weight:bold">7 วันที่แล้ว</span></label>
       <input type="range" id="timeSlider" min="1" max="30" value="7" oninput="updateTimeReplay(this.value)">
     </div>
     <div id="timeReplayResult" class="dt-card" style="margin-top:16px">
-      <p style="color:#94a3b8;margin:0">สถานะย้อนหลัง: ระบบทำงานปกติ ไม่มีเหตุการณ์รุนแรงในช่วงเวลานี้</p>
+      <p style="color:#94a3b8;margin:0">สถานะย้อนหลัง: ระบบทำงานปกติ สมบูรณ์ 100%</p>
     </div>
   </div>
 </div>
 
-<!-- PANEL 5: Maintenance Scenario Simulator -->
-<div id="p5" class="panel">
+<!-- PANEL 7: Scenario Simulator -->
+<div id="p7" class="panel">
   <div class="card">
     <div class="ct">🧪 Maintenance Scenario Simulator (จำลองสถานการณ์และประเมินงบประมาณ)</div>
     <div class="hint">ทดลองปรับเปลี่ยนแผนการทำ Preventive Maintenance หรือการเปลี่ยนอะไหล่ล่วงหน้า</div>
@@ -233,39 +288,17 @@ a{color:#93c5fd}
       <div class="dt-card" id="simResultBox">
         <h3 style="margin:0 0 8px 0;color:var(--gold2)">📈 ผลลัพธ์การจำลอง (Simulation Output)</h3>
         <p style="margin:4px 0;font-size:12.5px">• คาดการณ์ Downtime ลดลง: <b>-- %</b></p>
-        <p style="margin:4px 0;font-size:12.5px">• อัตราความพร้อมของระบบ (Availability): <b>-- %</b></p>
-        <p style="margin:4px 0;font-size:12.5px">• ความคุ้มค่าทางเศรษฐศาสตร์: <b>รอดำเนินการจำลอง</b></p>
+        <p style="margin:4px 0;font-size:12.5px">• อัตราความพร้อมของระบบ: <b>-- %</b></p>
       </div>
     </div>
   </div>
 </div>
 
-<!-- PANEL 6: SAP Parts Search -->
-<div id="p6" class="panel">
-  <div class="card">
-    <div class="ct">📦 SAP Part Number & Description Search Engine (ค้นหาเลข SAP และชื่ออะไหล่)</div>
-    <div class="hint">ค้นหาอะไหล่ด้วยรหัส SAP Part Number หรือชื่อเรียกเพื่อตรวจสอบสต็อกและการใช้งาน</div>
-    <div class="bar" style="margin-top:12px">
-      <input type="text" id="sapSearchInput" placeholder="พิมพ์ค้นหา เช่น: Bearing, UCP 205, Sensor, 4001258 หรือชื่ออะไหล่..." style="flex:1" onkeyup="searchSapParts()">
-      <button onclick="searchSapParts()">🔍 ค้นหาอะไหล่ SAP</button>
-    </div>
-    <div class="tw" style="margin-top:14px">
-      <table id="sapTable">
-        <tr><th>รหัส SAP Part No.</th><th>ชื่ออะไหล่ (Description)</th><th>หมวดหมู่</th><th>สต็อกคงเหลือ</th><th>ตำแหน่งที่ใช้งานร่วมกัน</th></tr>
-        <tr><td class="mono">SAP-3004821</td><td>Pillow Block Bearing UCP 205 Seize</td><td>Mechanical</td><td>4 ชิ้น</td><td>LP258-BHT-01, LP258-COL-02</td></tr>
-        <tr><td class="mono">SAP-4009124</td><td>Photoelectric Sensor M18 Diffuse</td><td>Electrical / Sensor</td><td>1 ชิ้น</td><td>LP258-MERGE-02</td></tr>
-        <tr><td class="mono">SAP-8002310</td><td>BHS Rubber Conveyor Belt EP500/3</td><td>Conveyor Belt</td><td>2 ม้วน</td><td>Line A Main Collector</td></tr>
-        <tr><td class="mono">SAP-1005528</td><td>Danfoss VLT Frequency Inverter 5.5kW</td><td>Automation / VFD</td><td>2 เครื่อง</td><td>Merge & Diverter Drives</td></tr>
-      </table>
-    </div>
-  </div>
-</div>
-
-<!-- PANEL 7: Asset Intelligence Graph -->
-<div id="p7" class="panel">
+<!-- PANEL 8: Asset Graph -->
+<div id="p8" class="panel">
   <div class="card">
     <div class="ct">🧬 BHS Asset Intelligence Graph & Topology</div>
-    <div class="hint">โครงสร้างความสัมพันธ์เครือข่ายอุปกรณ์ (Knowledge Graph) อิงตาม Machine Type</div>
+    <div class="hint">โครงสร้างความสัมพันธ์เครือข่ายอุปกรณ์ (Knowledge Graph)</div>
     <div class="bar" style="margin-top:12px">
       <select id="graphTarget" style="max-width:320px">
         <option value="SAT1-LINE-A">SAT-1 ➔ Conveyor Line A (CV-001)</option>
@@ -279,24 +312,24 @@ a{color:#93c5fd}
   </div>
 </div>
 
-<!-- PANEL 8: Advanced Health Score Matrix -->
-<div id="p8" class="panel">
+<!-- PANEL 9: Health Score -->
+<div id="p9" class="panel">
   <div class="card">
     <div class="ct">🩺 Advanced Health Score & Degradation Trend Analysis</div>
     <div class="hint">ระบบประเมินคะแนนสุขภาพเครื่องจักรจากฐานข้อมูลกลางแบบ Real-time</div>
     <div id="healthMatrixBox" style="margin-top:12px">
-      <div class="dt-card"><p style="color:#94a3b8;margin:0">กำลังโหลดข้อมูลสุขภาพเครื่องจักรจากฐานข้อมูลกลาง...</p></div>
+      <div class="dt-card"><p style="color:#94a3b8;margin:0">กำลังโหลดข้อมูลสุขภาพเครื่องจักร...</p></div>
     </div>
   </div>
 </div>
 
-<!-- PANEL 9: AI Engineering Copilot -->
-<div id="p9" class="panel">
+<!-- PANEL 10: AI Copilot -->
+<div id="p10" class="panel">
   <div class="card">
     <div class="ct">🤖 AI Engineering Copilot & Root Cause Analyzer (RCA)</div>
-    <div class="hint">แชทบอทวิศวกรรมที่ดึงข้อมูลสถิติจริงจากฐานข้อมูลกลางมาวิเคราะห์แบบเฉพาะเจาะจง</div>
+    <div class="hint">แชทบอทวิศวกรรมที่ดึงข้อมูลสถิติจริงจากฐานข้อมูลกลางมาวิเคราะห์</div>
     <div class="chat-box" id="chatBox">
-      <div class="chat-msg ai">สวัสดีครับ ผมคือ MT3 AI Engineering Copilot พร้อมวิเคราะห์ข้อมูลจากฐานข้อมูลกลางที่คุณซิงค์ครับ มีข้อสงสัยหรือต้องการให้วิเคราะห์อุปกรณ์ตัวไหนสอบถามได้เลยครับ!</div>
+      <div class="chat-msg ai">สวัสดีครับ ผมคือ MT3 AI Engineering Copilot พร้อมวิเคราะห์ข้อมูลจากฐานข้อมูลกลางและคลังอะไหล่ Spare Part.xlsx แล้วครับ!</div>
     </div>
     <div class="bar">
       <input type="text" id="copilotInput" placeholder="พิมพ์คำถาม เช่น: สรุปภาพรวม DM ค้างในระบบให้หน่อย" style="flex:1" onkeydown="if(event.key==='Enter')sendCopilotQuery()">
@@ -305,8 +338,8 @@ a{color:#93c5fd}
   </div>
 </div>
 
-<!-- PANEL 10: ตรวจสอบ DM & OCR -->
-<div id="p10" class="panel">
+<!-- PANEL 11: ตรวจสอบ DM -->
+<div id="p11" class="panel">
   <div class="card">
     <div class="ct">🔍 ค้นหารหัสตำแหน่ง / Equipment ID (ระบบ BHS)</div>
     <div class="bar" style="margin-bottom:12px">
@@ -326,8 +359,8 @@ a{color:#93c5fd}
   <div class="card"><div class="tw"><table id="out"></table></div></div>
 </div>
 
-<!-- PANEL 11: Work Order -->
-<div id="p11" class="panel">
+<!-- PANEL 12: Work Order -->
+<div id="p12" class="panel">
   <div class="card">
     <div class="ct">🛠️ Work Order Orchestration & Smart Spare Parts</div>
     <div class="hint">ระบบจัดการใบงานซ่อมและคลังอะไหล่อัจฉริยะ</div>
@@ -360,8 +393,8 @@ a{color:#93c5fd}
   </div>
 </div>
 
-<!-- PANEL 12: RUL Forecasting -->
-<div id="p12" class="panel">
+<!-- PANEL 13: RUL Forecasting -->
+<div id="p13" class="panel">
   <div class="card">
     <div class="ct">🔮 Predictive RUL Forecasting (พยากรณ์เวลาต้องเปลี่ยนอะไหล่แม่นยำ)</div>
     <div class="hint">วิเคราะห์ความถี่ความเสียหายจากฐานข้อมูลกลาง เพื่อพยากรณ์เวลาที่ต้องเปลี่ยนอะไหล่ล่วงหน้า</div>
@@ -376,8 +409,8 @@ a{color:#93c5fd}
   </div>
 </div>
 
-<!-- PANEL 13: Energy / Bag -->
-<div id="p13" class="panel">
+<!-- PANEL 14: Energy / Bag -->
+<div id="p14" class="panel">
   <div class="card">
     <div class="ct">🔋 Energy Consumption & Carbon Footprint per Bag (kWh / Bag)</div>
     <div class="hint">คำนวณพลังงานอิงจากจำนวนอุปกรณ์จริงที่ซิงค์มาในฐานข้อมูลกลาง</div>
@@ -390,8 +423,8 @@ a{color:#93c5fd}
   </div>
 </div>
 
-<!-- PANEL 14: ฐานข้อมูลกลาง -->
-<div id="p14" class="panel">
+<!-- PANEL 15: ฐานข้อมูลกลาง -->
+<div id="p15" class="panel">
   <div class="card">
     <div class="ct">⚙️ ฐานข้อมูลกลาง (Google Sheets Sync & Central Database)</div>
     <div class="bar">
@@ -410,9 +443,8 @@ a{color:#93c5fd}
 <script>
 /* ================== CONFIGURATION & AUTHENTICATION ================== */
 const LOCAL_LOGO = './logo.png'; 
-const FALLBACK_LOGO = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTIwIj48cGF0aCBkPSJNNTAgNUw5NSAyMHY1MGMwIDI1LTIwIDQwLTQ1IDQ1QzI1IDExMCA1IDk1IDUgNzBWMjB6IiBmaWxsPSIjMTQzNTZkIiBzdHJva2U9IiNkNGFmMzciIHN0cm9rZS13aWR0aD0iNSIvPjx0ZXh0IHg9IjUwIiB5PSI1MiIgZm9udC1zaXplPSIzMiIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiNkNGFmMzciIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCI+TVQzPC90ZXh0PC9zdmc+';
+const FALLBACK_LOGO = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTIwIj48cGF0aCBkPSJNNTAgNUw5NSAyMHY1MGMwIDI1LTIwIDQwLTQ1IDQ1QzI1IDExMCA1IDk1IDUgNzBWMjB6IiBmaWxsPSIjMTQzNTZkIiBzdHJva2U9IiNkNGFmMzciIHN0cm9rZS13aWR0aD0iNSIvPjx0ZXh0IHg9IjUwIiB5PSI1MiIgZm9udC1zaXplPSIzMiIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiNkNGFmMzciIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCI+TVQzPC90ZXh0Pjwvc3ZnPg==';
 
-// รายชื่อผู้มีสิทธิ์เข้าใช้งานระบบ (Intellectual Property Protection)
 const USERS = {
   "Affan.m": "Affan2026@BHS",
   "Yuttichai.m": "Yuttichai2026@BHS"
@@ -443,7 +475,6 @@ function handleLogout() {
   logoEl.onerror = () => { logoEl.onerror = null; logoEl.src = FALLBACK_LOGO; };
   logoEl.src = LOCAL_LOGO;
 
-  // ตรวจสอบสถานะการล็อกอิน
   const loggedUser = localStorage.getItem('mt3_logged_user');
   if(loggedUser && USERS[loggedUser]) {
     document.getElementById('loginOverlay').style.display = 'none';
@@ -458,6 +489,49 @@ function switchPanel(id,el){
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   el.classList.add('active');
+}
+
+/* ================== REAL SPARE PARTS FROM Spare Part.xlsx ================== */
+const REAL_SPARE_PARTS = [
+  {no: 1, sap: 30001559, id: 3000155900, name: 'Gear Oil Viscosity Grade 220 (Iso 220)(209 L/DR)', partNo: '-', storeAmf: 0, group: 'Mechanical'},
+  {no: 2, sap: 31002015, id: 3100201500, name: 'BH-PUL 50AT10-K13, L=3450', partNo: 'BH-PUL-EBBH050505', storeAmf: 0, group: 'Mechanical'},
+  {no: 3, sap: 31002016, id: 3100201600, name: 'BH-PUL 50AT10-K13, L=3650', partNo: 'BH-PUL-EBBH050505', storeAmf: 0, group: 'Mechanical'},
+  {no: 4, sap: 31002017, id: 3100201700, name: 'BH-PUL 50AT10-K13, L=4050', partNo: 'BH-PUL-EBBH050505', storeAmf: 36, group: 'Mechanical'},
+  {no: 5, sap: 31002018, id: 3100201800, name: 'BH-PUL 50AT10-K13, L=4450', partNo: 'BH-PUL-EBBH050505', storeAmf: 0, group: 'Mechanical'}
+];
+
+function renderRealSpareParts(data) {
+  let html = '<tr><th>No.</th><th>SAP ID</th><th>Part ID</th><th>Part Name (ชื่ออะไหล่)</th><th>Part No.</th><th>Store AMF</th><th>Group Name</th></tr>';
+  data.forEach(s => {
+    html += `<tr><td>${s.no}</td><td class="mono">${s.sap}</td><td class="mono">${s.id}</td><td><b>${esc(s.name)}</b></td><td class="mono">${esc(s.partNo)}</td><td>${s.storeAmf}</td><td>${esc(s.group)}</td></tr>`;
+  });
+  document.getElementById('realSpareTable').innerHTML = html;
+}
+
+function searchRealSpareParts() {
+  const kw = document.getElementById('spareSearchInput').value.toLowerCase().trim();
+  const filtered = REAL_SPARE_PARTS.filter(s => 
+    String(s.sap).toLowerCase().includes(kw) || 
+    String(s.name).toLowerCase().includes(kw) || 
+    String(s.partNo).toLowerCase().includes(kw) ||
+    String(s.group).toLowerCase().includes(kw)
+  );
+  renderRealSpareParts(filtered);
+}
+
+// Initial render spare parts
+renderRealSpareParts(REAL_SPARE_PARTS);
+
+/* ================== ZONE MAP INSPECT ================== */
+function inspectZone(zoneName) {
+  const box = document.getElementById('zoneDetailBox');
+  box.style.display = 'block';
+  box.innerHTML = `
+    <h3 style="margin:0 0 6px 0;color:var(--gold2)">🔍 รายละเอียดโซน: ${zoneName}</h3>
+    <p style="margin:4px 0"><b>อัตราการทำงาน (Load Rate):</b> 88% ของความจุสูงสุด</p>
+    <p style="margin:4px 0"><b>สถานะเซนเซอร์:</b> ออนไลน์ครบถ้วน สมบูรณ์</p>
+    <div class="status ok" style="margin-top:8px">เชื่อมโยงผังจำลอง Interactive เรียบร้อย</div>
+  `;
 }
 
 /* ================== UNIFIED SYNC HOOK ================== */
@@ -508,7 +582,7 @@ function runFailurePropagation() {
     <p style="margin:2px 0;color:#fca5a5">1. 🔴 ${root} (Stopped)</p>
     <p style="margin:2px 0;color:#fdba74">2. 🟠 Upstream Buffer Zone (Bag Accumulation Warning - 85% Capacity)</p>
     <p style="margin:2px 0;color:#fcd34d">3. 🟡 Downstream Merge / Diverter (Flow Rate Reduced by 50%)</p>
-    <div class="status err" style="margin-top:8px">⚠️ <b>AI Recommendation:</b> แนะนำให้เปิดระบบสะสมกระเป๋า (Recirculation Loop) และแจ้งเตือนผู้โดยสารบริเวณสายพานรับกระเป๋า</div>
+    <div class="status err" style="margin-top:8px">⚠️ <b>AI Recommendation:</b> แนะนำให้เปิดระบบสะสมกระเป๋า (Recirculation Loop)</div>
   `;
 }
 
@@ -517,11 +591,9 @@ function updateTimeReplay(val) {
   document.getElementById('timeLabel').textContent = val + ' วันที่แล้ว';
   const box = document.getElementById('timeReplayResult');
   if(val > 20) {
-    box.innerHTML = `<p style="color:#fca5a5;margin:0">⏳ Replay (${val} วันก่อน): พบเหตุการณ์แจ้งซ่อมด่วน (Critical DM) ที่โซน Merge 02 ทีมช่างเข้าแก้ไขใช้เวลา 1.5 ชั่วโมง</p>`;
-  } else if(val > 10) {
-    box.innerHTML = `<p style="color:#fcd34d;margin:0">⏳ Replay (${val} วันก่อน): ตรวจพบอุณหภูมิมอเตอร์ Collector สูงผิดปกติ ทำการเปลี่ยนลูกปืนตามรอบ PM สำเร็จ</p>`;
+    box.innerHTML = `<p style="color:#fca5a5;margin:0">⏳ Replay (${val} วันก่อน): พบเหตุการณ์แจ้งซ่อมด่วน (Critical DM) ที่โซน Merge 02</p>`;
   } else {
-    box.innerHTML = `<p style="color:#6ee7b7;margin:0">⏳ Replay (${val} วันก่อน): ระบบทำงานปกติ สมบูรณ์ 100% ไม่มีรายงานข้อขัดข้อง</p>`;
+    box.innerHTML = `<p style="color:#6ee7b7;margin:0">⏳ Replay (${val} วันก่อน): ระบบทำงานปกติ สมบูรณ์ 100%</p>`;
   }
 }
 
@@ -537,20 +609,10 @@ function runScenarioSimulation() {
   box.innerHTML = `
     <h3 style="margin:0 0 8px 0;color:var(--gold2)">📈 ผลลัพธ์การจำลอง (PM Every ${interval} Days)</h3>
     <p style="margin:4px 0;font-size:12.5px">• คาดการณ์ Downtime ลดลง: <b style="color:#6ee7b7">${red}</b></p>
-    <p style="margin:4px 0;font-size:12.5px">• อัตราความพร้อมของระบบ (Availability): <b style="color:#6ee7b7">${avail}</b></p>
-    <p style="margin:4px 0;font-size:12.5px">• งบประมาณอะไหล่ที่ใช้: <b>${budget} THB</b></p>
-    <div class="status ok" style="margin-top:8px">💡 แผนการซ่อมนี้มีความคุ้มค่าสูง ลดความเสี่ยงการเกิดเหตุฉุกเฉินได้ดีเยี่ยม</div>
+    <p style="margin:4px 0;font-size:12.5px">• อัตราความพร้อมของระบบ: <b style="color:#6ee7b7">${avail}</b></p>
+    <p style="margin:4px 0;font-size:12.5px">• งบประมาณอะไหล่: <b>${budget} THB</b></p>
+    <div class="status ok" style="margin-top:8px">💡 แผนการซ่อมนี้มีความคุ้มค่าสูง</div>
   `;
-}
-
-/* ================== SAP PARTS SEARCH ================== */
-function searchSapParts() {
-  const kw = document.getElementById('sapSearchInput').value.toLowerCase().trim();
-  const rows = document.querySelectorAll('#sapTable tr');
-  for(let i=1; i<rows.length; i++) {
-    const text = rows[i].innerText.toLowerCase();
-    rows[i].style.display = (!kw || text.includes(kw)) ? '' : 'none';
-  }
 }
 
 /* ================== ASSET GRAPH ================== */
@@ -559,8 +621,8 @@ function runImpactAnalysis() {
   const box = document.getElementById('graphResult');
   box.innerHTML = `
     <h3 style="margin:0 0 8px 0;color:var(--gold2)">🌐 Knowledge Graph & Downstream Impact Simulation (${target})</h3>
-    <p style="margin:4px 0"><b>Asset Hierarchy:</b> SAT-1 ➔ Conveyor Line A ➔ CV-001 ➔ Motor / Gearbox / VFD / Belt / Sensor</p>
-    <div class="status err" style="margin-top:8px">⚠️ <b>Downstream Impact Propagation Alert:</b> หากสายพานหลักเส้นนี้ขัดข้อง จะส่งผลกระทบต่อเนื่องไปยังจุดรวมกระเป๋า แนะนำให้เปิดเส้นทาง Bypass ทันที</div>
+    <p style="margin:4px 0"><b>Asset Hierarchy:</b> SAT-1 ➔ Conveyor Line A ➔ CV-001 ➔ Motor / Gearbox / VFD / Belt</p>
+    <div class="status err" style="margin-top:8px">⚠️ <b>Downstream Impact Propagation Alert:</b> หากสายพานหลักขัดข้อง จะส่งผลกระทบต่อเนื่องไปยังจุดรวมกระเป๋า</div>
   `;
 }
 
@@ -568,7 +630,7 @@ function runImpactAnalysis() {
 function calcAdvancedHealthMatrix() {
   const box = document.getElementById('healthMatrixBox');
   if(!DB || !DB.recs || !DB.recs.length) {
-    box.innerHTML = `<div class="dt-card"><p style="color:#fca5a5;margin:0">ยังไม่มีข้อมูลในฐานข้อมูลกลาง กรุณารอซิงค์ที่แท็บที่ 14 ก่อน</p></div>`;
+    box.innerHTML = `<div class="dt-card"><p style="color:#fca5a5;margin:0">ยังไม่มีข้อมูลในฐานข้อมูลกลาง กรุณารอซิงค์ที่แท็บที่ 15 ก่อน</p></div>`;
     return;
   }
   let html = `<table><tr><th>Equipment ID</th><th>Machine Type</th><th>Mechanical Health</th><th>Electrical Health</th><th>Sensor Health</th><th>Overall Health Score</th></tr>`;
@@ -593,7 +655,7 @@ function sendCopilotQuery() {
   box.innerHTML += `<div class="chat-msg user">${esc(txt)}</div>`;
   input.value = '';
   setTimeout(() => {
-    let reply = `จากฐานข้อมูลกลาง (${DB ? DB.recs.length : 0} รายการ):\n• ระบบวิเคราะห์สถิติและประวัติการซ่อมบำรุงแล้ว\n• แนะนำให้ตรวจสอบพารามิเตอร์ของมอเตอร์และค่าความตึงสายพานในจุดที่มีความเสี่ยงสูง`;
+    let reply = `จากฐานข้อมูลกลางและคลังอะไหล่ (Spare Part.xlsx):\n• ระบบวิเคราะห์ข้อมูลสำเร็จ\n• แนะนำให้ตรวจสอบสถานะคลัง AMF และพารามิเตอร์มอเตอร์ตามรอบปกติ`;
     box.innerHTML += `<div class="chat-msg ai">${esc(reply).replace(/\n/g, '<br>')}</div>`;
     box.scrollTop = box.scrollHeight;
   }, 800);
@@ -609,7 +671,7 @@ function calcEnergyBagOptimization() {
   const carbonPerBag = (kwhPerBag * 0.4998).toFixed(4);
 
   document.getElementById('energyBagStats').innerHTML = `
-    <div><b>${kwhPerBag} kWh/Bag</b>พลังงานเฉลี่ยต่อกระเป๋า 1 ใบ</div>
+    <div><b>${kwhPerBag} kWh/Bag</b>พลังงานเฉลี่ยต่อกระเป๋า</div>
     <div><b>${costPerBag} THB</b>ต้นทุนพลังงาน / กระเป๋า</div>
     <div><b>${carbonPerBag} kgCO₂e</b>คาร์บอนต่อกระเป๋า</div>
     <div><b>Optimized</b>Green Airport Status</div>
@@ -620,7 +682,7 @@ function calcEnergyBagOptimization() {
 function runRulPrediction() {
   const resultsBox = document.getElementById('rulResults');
   if(!DB || !DB.recs || !DB.recs.length) {
-    resultsBox.innerHTML = `<div class="predict-card danger"><p style="color:#fca5a5;margin:0">⚠️ ยังไม่มีข้อมูลในฐานข้อมูลกลาง กรุณารอซิงค์ที่แท็บที่ 14 ก่อน</p></div>`;
+    resultsBox.innerHTML = `<div class="predict-card danger"><p style="color:#fca5a5;margin:0">⚠️ ยังไม่มีข้อมูลในฐานข้อมูลกลาง กรุณารอซิงค์ที่แท็บที่ 15 ก่อน</p></div>`;
     return;
   }
   const counts = {};
@@ -671,7 +733,7 @@ function runRulPrediction() {
 /* ================== ฐานข้อมูลกลาง (Unified Sync) ================== */
 const SHEET_ID='1X3yGiY54Agb3rywBF803bYhFgZEgLKUciy6ObwdbSlg';
 const CSV_URL='https://docs.google.com/spreadsheets/d/'+SHEET_ID+'/gviz/tq?tqx=out:csv';
-const KEY='cmms_dm_db_v26.0';let DB=null,RESULT=[],KEYS=[];
+const KEY='cmms_dm_db_v27.0';let DB=null,RESULT=[],KEYS=[];
 const norm=s=>String(s??'').toUpperCase().replace(/[^A-Z0-9]/g,'');
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const H={pos:'ตำแหน่ง',sym:'สาเหตุ/อาการ',dt:'วันที่เสีย',lvl:'ระดับความเสียหาย',plan:'แผนการแก้ไข',doc:'Doc DM',wp:'WORK PERMIT',done:'วันแล้วเสร็จ',mc:'Machine type',cause:'สาเหตุการชำรุด',part:'อะไหล่'};
@@ -948,6 +1010,7 @@ function exportWorkOrders(){
 try{DB=JSON.parse(localStorage.getItem(KEY))}catch(e){DB=null}
 if(DB){buildIndex();triggerUnifiedSync();}
 renderWorkOrders();
+loadCentralDB();
 </script>
 </body>
 </html>
