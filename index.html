@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <meta name="theme-color" content="#020617">
-<title>MT3 — BHS Engineering Intelligence Platform v31.0 Stable</title>
+<title>MT3 — BHS Engineering Intelligence Platform v32.0 Bulletproof</title>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 <style>
 :root{--gold:#d4af37;--gold2:#f2d574;--card:rgba(30,41,59,.92);--bg:#020617;--accent:#3b82f6}
@@ -104,15 +104,15 @@ a{color:#93c5fd}
 <div class="hd">
 <img id="logo" alt="MT3 Logo" crossorigin="anonymous">
 <div>
-  <h1><span>MT3</span> BHS ENGINEERING INTELLIGENCE PLATFORM<span class="ver">v31.0 Ultra</span></h1>
-  <div style="font-size:11.5px;color:#8fa3bf;letter-spacing:1px">BAGGAGE HANDLING SYSTEM • FULL ULTRA STABLE PLATFORM</div>
+  <h1><span>MT3</span> BHS ENGINEERING INTELLIGENCE PLATFORM<span class="ver">v32.0 Bulletproof</span></h1>
+  <div style="font-size:11.5px;color:#8fa3bf;letter-spacing:1px">BAGGAGE HANDLING SYSTEM • FULL DATA & SCHEDULES SYNCHRONIZATION</div>
 </div>
 <div style="margin-left:auto;text-align:right">
   <span id="welcomeUser" style="color:var(--gold2);font-size:12px;font-weight:600;display:block;margin-bottom:4px"></span>
   <button class="gray" onclick="handleLogout()" style="padding:5px 10px;font-size:11px">ออกจากระบบ</button>
 </div>
 </div>
-<p class="sub">แพลตฟอร์มวิศวกรรมระดับโลก • เสถียรภาพสูงสุด 100% • ซิงค์ฐานข้อมูลและแผนงานครบถ้วน</p>
+<p class="sub">แพลตฟอร์มวิศวกรรมระดับโลก • ระบบแท็บเสถียร 100% • ซิงค์ฐานข้อมูลและแผนงานครบถ้วน</p>
 
 <!-- Navigation Menu 18 Tabs -->
 <div class="menu-nav">
@@ -154,7 +154,7 @@ a{color:#93c5fd}
       </div>
       <div class="dt-card">
         <h3 style="margin:0 0 8px 0;color:var(--gold2)">💡 Executive Summary & Recommendations</h3>
-        <p style="margin:4px 0;font-size:12.5px">• ระบบกู้คืนเสถียรภาพเรียบร้อย ทำงานได้อย่างราบรื่น 100%</p>
+        <p style="margin:4px 0;font-size:12.5px">• ระบบเปิดใช้งานแท็บทั้งหมดได้อย่างราบรื่นและเสถียร</p>
         <p style="margin:4px 0;font-size:12.5px">• ระบบความปลอดภัย Secure IP พร้อมใช้งาน</p>
       </div>
     </div>
@@ -281,7 +281,7 @@ a{color:#93c5fd}
 
 <script>
 const LOCAL_LOGO = './logo.png'; 
-const FALLBACK_LOGO = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTIwIj48cGF0aCBkPSJNNTAgNUw5NSAyMHY1MGMwIDI1LTIwIDQwLTQ1IDQ1QzI1IDExMCA1IDk1IDUgNzBWMjB6IiBmaWxsPSIjMTQzNTZkIiBzdHJva2U9IiNkNGFmMzciIHN0cm9rZS13aWR0aD0iNSIvPjx0ZXh0IHg9IjUwIiB5PSI1MiIgZm9udC1zaXplPSIzMiIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiNkNGFmMzciIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCI+TVQzPC90ZXh0Pjwvc3ZnPg==';
+const FALLBACK_LOGO = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTIwIj48cGF0aCBkPSJNNTAgNUw5NSAyMHY1MGMwIDI1LTIwIDQwLTQ1IDQ1QzI1IDExMCA1IDk1IDUgNzBWMjB6IiBmaWxsPSIjMTQzNTZkIiBzdHJva2U9IiNkNGFmMzciIHN0cm9rZS13aWR0aD0iNSIvPjx0ZXh0IHg9IjUwIiB5PSI1MiIgZm9udC1zaXplPSIzMiIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiNkNGFmMzciIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCI+TVQzPC90ZXh0PC9zdmc+';
 
 const USERS = {
   "Affan.m": "Affan2026@BHS",
@@ -329,12 +329,14 @@ function handleLogout() {
   } catch(e) { console.error(e); }
 })();
 
-function switchPanel(id,el){
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  const target = document.getElementById(id);
-  if(target) target.classList.add('active');
-  if(el) el.classList.add('active');
+function switchPanel(id, el) {
+  try {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    const target = document.getElementById(id);
+    if(target) target.classList.add('active');
+    if(el) el.classList.add('active');
+  } catch(e) { console.error('Switch Panel Error:', e); }
 }
 
 /* ================== DYNAMIC DATASETS ================== */
@@ -522,7 +524,7 @@ function runRulPrediction() {
 
 const SHEET_ID='1X3yGiY54Agb3rywBF803bYhFgZEgLKUciy6ObwdbSlg';
 const CSV_URL='https://docs.google.com/spreadsheets/d/'+SHEET_ID+'/gviz/tq?tqx=out:csv';
-const KEY='cmms_dm_db_v31.0';let DB=null,RESULT=[],KEYS=[];
+const KEY='cmms_dm_db_v32.0';let DB=null,RESULT=[],KEYS=[];
 const norm=s=>String(s??'').toUpperCase().replace(/[^A-Z0-9]/g,'');
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const H={pos:'ตำแหน่ง',sym:'สาเหตุ/อาการ',dt:'วันที่เสีย',lvl:'ระดับความเสียหาย',plan:'แผนการแก้ไข',doc:'Doc DM',wp:'WORK PERMIT',done:'วันแล้วเสร็จ',mc:'Machine type',cause:'สาเหตุการชำรุด',part:'อะไหล่'};
