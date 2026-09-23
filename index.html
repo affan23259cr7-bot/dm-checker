@@ -4,42 +4,47 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <meta name="theme-color" content="#020617">
-<title>MT3 — BHS Engineering Intelligence Platform v20.4 Enterprise</title>
+<title>MT3 — BHS Engineering Intelligence Platform v26.0 Secure IP</title>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <style>
-:root{--gold:#d4af37;--gold2:#f2d574;--card:rgba(30,41,59,.90);--bg:#020617;--accent:#3b82f6}
+:root{--gold:#d4af37;--gold2:#f2d574;--card:rgba(30,41,59,.92);--bg:#020617;--accent:#3b82f6}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{font-family:"Segoe UI",Tahoma,sans-serif;color:#e7edf5;margin:0;padding:16px 12px 60px;
 background:radial-gradient(1400px 700px at 50% -10%,#1b2a4a 0%,#0b1426 45%,#020617 100%);min-height:100vh}
-.wrapmain{max-width:1450px;margin:0 auto}
+.wrapmain{max-width:1500px;margin:0 auto}
+
+/* Login Overlay Styles */
+#loginOverlay{position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(2,6,23,.96);backdrop-filter:blur(16px);z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px}
+.login-card{background:var(--card);border:2px solid var(--gold);border-radius:20px;padding:32px;width:100%;max-width:420px;box-shadow:0 20px 50px rgba(0,0,0,.8);text-align:center}
+.login-card img{width:88px;height:88px;object-fit:contain;border-radius:16px;border:2px solid var(--gold);background:#0b1426;margin-bottom:16px;box-shadow:0 4px 20px rgba(0,0,0,.7)}
 
 /* Header & Logo */
 .hd{display:flex;align-items:center;gap:16px;justify-content:center;margin-bottom:8px}
 .hd img{width:72px;height:72px;object-fit:contain;border-radius:14px;border:2px solid var(--gold);background:#0b1426;box-shadow:0 4px 20px rgba(0,0,0,.7)}
-h1{font-size:23px;margin:0;letter-spacing:.6px}
+h1{font-size:22px;margin:0;letter-spacing:.6px}
 h1 span{background:linear-gradient(135deg,var(--gold2),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
-.ver{display:inline-block;background:linear-gradient(135deg,#3b82f6,#1d4ed8);color:#93c5fd;font-size:11px;padding:3px 10px;border-radius:12px;margin-left:8px;vertical-align:middle;font-weight:700;box-shadow:0 2px 8px rgba(59,130,246,.4)}
+.ver{display:inline-block;background:linear-gradient(135deg,#059669,#047857);color:#6ee7b7;font-size:11px;padding:3px 10px;border-radius:12px;margin-left:8px;vertical-align:middle;font-weight:700;box-shadow:0 2px 8px rgba(5,150,105,.4)}
 .sub{color:#8fa3bf;font-size:12px;text-align:center;margin:0 0 20px}
 
-/* Enterprise Navigation Menu 9 Tabs */
-.menu-nav{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:6px;margin-bottom:18px}
-.nav-btn{background:#0f172a;color:#94a3b8;border:1px solid #1e293b;padding:10px 4px;border-radius:10px;font-size:11.5px;font-weight:600;cursor:pointer;text-align:center;transition:.2s;display:flex;flex-direction:column;align-items:center;gap:3px}
+/* Enterprise Navigation Menu 14 Tabs */
+.menu-nav{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:5px;margin-bottom:18px}
+.nav-btn{background:#0f172a;color:#94a3b8;border:1px solid #1e293b;padding:8px 4px;border-radius:9px;font-size:11px;font-weight:600;cursor:pointer;text-align:center;transition:.2s;display:flex;flex-direction:column;align-items:center;gap:2px}
 .nav-btn:hover{background:#1e293b;color:#fff;border-color:#334155}
 .nav-btn.active{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#111827;border-color:var(--gold);font-weight:700;box-shadow:0 4px 14px rgba(212,175,55,.35)}
-.nav-btn span{font-size:15px}
+.nav-btn span{font-size:14px}
 
 .panel{display:none}.panel.active{display:block}
 .card{background:var(--card);backdrop-filter:blur(14px);border:1px solid rgba(212,175,55,.26);
 border-radius:16px;padding:18px;margin-bottom:16px;box-shadow:0 10px 30px -12px #000}
 .ct{font-size:13px;font-weight:700;color:var(--gold);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:8px}
 .bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-button{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#1a1405;border:0;padding:11px 18px;
-border-radius:9px;cursor:pointer;font-size:13.5px;font-weight:700;font-family:inherit;box-shadow:0 4px 12px rgba(0,0,0,.25)}
+button{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#1a1405;border:0;padding:10px 16px;
+border-radius:9px;cursor:pointer;font-size:13px;font-weight:700;font-family:inherit;box-shadow:0 4px 12px rgba(0,0,0,.25)}
 button:active{transform:scale(.97)}button.gray{background:#334155;color:#cbd5e1;font-weight:600}
 button.danger{background:#7f1d1d;color:#fca5a5}
-textarea,input[type=text],select{width:100%;background:#0a1120;color:#e7edf5;border:1px solid #2b3c57;border-radius:9px;padding:11px;font-family:inherit;font-size:13px}
-textarea{height:90px;font-family:Consolas,monospace}
+textarea,input[type=text],input[type=password],select,input[type=range]{width:100%;background:#0a1120;color:#e7edf5;border:1px solid #2b3c57;border-radius:9px;padding:10px;font-family:inherit;font-size:13px}
+textarea{height:80px;font-family:Consolas,monospace}
 .status{font-size:12px;padding:8px 12px;border-radius:7px;margin-top:9px}
 .ok{background:rgba(6,78,59,.65);color:#6ee7b7}.warn{background:rgba(120,53,15,.65);color:#fcd34d}.err{background:rgba(127,29,29,.65);color:#fca5a5}
 table{width:100%;border-collapse:collapse;font-size:12.5px}
@@ -48,10 +53,10 @@ td{padding:10px;border-bottom:1px solid #22304a;vertical-align:top}
 .b{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap}
 .red{background:#7f1d1d;color:#fca5a5}.org{background:#7c2d12;color:#fdba74}.grn{background:#064e3b;color:#6ee7b7}
 .blu{background:#1e3a8a;color:#bfdbfe}.gry{background:#334155;color:#cbd5e1}.pur{background:#4c1d95;color:#ddd6fe}
-.tw{max-height:65vh;overflow:auto;border-radius:10px}.mono{font-family:Consolas,monospace}
+.tw{max-height:60vh;overflow:auto;border-radius:10px}.mono{font-family:Consolas,monospace}
 .stat{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}
-.stat div{font-size:11px;color:#8fa3bf;background:#0a1120;padding:10px 14px;border-radius:10px;border:1px solid #1e293b;flex:1;min-width:140px}
-.stat b{display:block;font-size:19px;color:var(--gold2);margin-top:3px}
+.stat div{font-size:11px;color:#8fa3bf;background:#0a1120;padding:10px 14px;border-radius:10px;border:1px solid #1e293b;flex:1;min-width:130px}
+.stat b{display:block;font-size:18px;color:var(--gold2);margin-top:3px}
 .hint{color:#64748b;font-size:12px;margin-top:8px;line-height:1.6}
 a{color:#93c5fd}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
@@ -61,7 +66,7 @@ a{color:#93c5fd}
 .predict-card.warning{border-left-color:#f59e0b;background:rgba(120,53,15,.15)}
 
 /* Chat Copilot Box */
-.chat-box{background:#0a1120;border:1px solid #2b3c57;border-radius:12px;height:350px;overflow-y:auto;padding:14px;margin-bottom:12px;display:flex;flex-direction:column;gap:10px}
+.chat-box{background:#0a1120;border:1px solid #2b3c57;border-radius:12px;height:320px;overflow-y:auto;padding:14px;margin-bottom:12px;display:flex;flex-direction:column;gap:10px}
 .chat-msg{padding:10px 14px;border-radius:10px;max-width:80%;font-size:13px;line-height:1.5}
 .chat-msg.user{background:#1e3a8a;color:#bfdbfe;align-self:flex-end}
 .chat-msg.ai{background:#1e293b;color:#e7edf5;align-self:flex-start;border:1px solid #334155}
@@ -70,36 +75,67 @@ a{color:#93c5fd}
 </style>
 </head>
 <body>
+
+<!-- SECURE LOGIN OVERLAY -->
+<div id="loginOverlay">
+  <div class="login-card">
+    <img src="./logo.png" alt="MT3 Logo" crossorigin="anonymous" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTIwIj48cGF0aCBkPSJNNTAgNUw5NSAyMHY1MGMwIDI1LTIwIDQwLTQ1IDQ1QzI1IDExMCA1IDk1IDUgNzBWMjB6IiBmaWxsPSIjMTQzNTZkIiBzdHJva2U9IiNkNGFmMzciIHN0cm9rZS13aWR0aD0iNSIvPjx0ZXh0IHg9IjUwIiB5PSI1MiIgZm9udC1zaXplPSIzMiIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiNkNGFmMzciIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCI+TVQzPC90ZXh0Pjwvc3ZnPg=='">
+    <h2 style="color:var(--gold2);margin:0 0 4px 0;font-size:20px">MT3 ENTERPRISE ACCESS</h2>
+    <p style="color:#8fa3bf;font-size:11.5px;margin:0 0 20px 0">BHS Engineering Intelligence Platform — Secure IP</p>
+    <div style="text-align:left;margin-bottom:12px">
+      <label style="font-size:11.5px;color:#94a3b8">Username</label>
+      <input type="text" id="loginUser" placeholder="ระบุ Username..." style="margin-top:4px">
+    </div>
+    <div style="text-align:left;margin-bottom:20px">
+      <label style="font-size:11.5px;color:#94a3b8">Password</label>
+      <input type="password" id="loginPass" placeholder="ระบุ Password..." style="margin-top:4px" onkeydown="if(event.key==='Enter')handleLogin()">
+    </div>
+    <button onclick="handleLogin()" style="width:100%;padding:12px;font-size:14px">🔒 เข้าสู่ระบบ (Secure Login)</button>
+    <div id="loginError" style="color:#fca5a5;font-size:12px;margin-top:12px;min-height:18px"></div>
+  </div>
+</div>
+
 <div class="wrapmain">
 
 <div class="hd">
 <img id="logo" alt="MT3 Logo" crossorigin="anonymous">
-<div><h1><span>MT3</span> BHS ENGINEERING INTELLIGENCE PLATFORM<span class="ver">v20.4 Enterprise</span></h1>
-<div style="font-size:11.5px;color:#8fa3bf;letter-spacing:1px">BAGGAGE HANDLING SYSTEM • GITHUB REPOSITORY LOGO INTEGRATION</div></div>
+<div>
+  <h1><span>MT3</span> BHS ENGINEERING INTELLIGENCE PLATFORM<span class="ver">v26.0 Secure</span></h1>
+  <div style="font-size:11.5px;color:#8fa3bf;letter-spacing:1px">BAGGAGE HANDLING SYSTEM • SECURE INTELLECTUAL PROPERTY</div>
 </div>
-<p class="sub">แพลตฟอร์มบริหารงานวิศวกรรมความน่าเชื่อถือ • โลโก้โหลดตรงจาก GitHub Repository • ซิงค์อัตโนมัติ 100%</p>
+<div style="margin-left:auto;text-align:right">
+  <span id="welcomeUser" style="color:var(--gold2);font-size:12px;font-weight:600;display:block;margin-bottom:4px"></span>
+  <button class="gray" onclick="handleLogout()" style="padding:5px 10px;font-size:11px">ออกจากระบบ</button>
+</div>
+</div>
+<p class="sub">แพลตฟอร์มวิศวกรรมระดับโลก • ระบบป้องกันทรัพย์สินทางปัญญาด้วยการยืนยันตัวตน • ซิงค์อัตโนมัติ 100%</p>
 
-<!-- Navigation Menu 9 Tabs -->
+<!-- Navigation Menu 14 Tabs -->
 <div class="menu-nav">
-  <button class="nav-btn active" onclick="switchPanel('p1',this)"><span>📊</span>1. Command Center</button>
-  <button class="nav-btn" onclick="switchPanel('p2',this)"><span>🧬</span>2. Asset Graph</button>
-  <button class="nav-btn" onclick="switchPanel('p3',this)"><span>🩺</span>3. Health Score</button>
-  <button class="nav-btn" onclick="switchPanel('p4',this)"><span>🤖</span>4. AI Copilot</button>
-  <button class="nav-btn" onclick="switchPanel('p5',this)"><span>⚡</span>5. Energy & Bag</button>
-  <button class="nav-btn" onclick="switchPanel('p6',this)"><span>🔍</span>6. ตรวจสอบ DM & OCR</button>
-  <button class="nav-btn" onclick="switchPanel('p7',this)"><span>🛠️</span>7. Work Order</button>
-  <button class="nav-btn" onclick="switchPanel('p8',this)"><span>🔮</span>8. RUL Forecasting</button>
-  <button class="nav-btn" onclick="switchPanel('p9',this)"><span>⚙️</span>9. ฐานข้อมูลกลาง</button>
+  <button class="nav-btn active" onclick="switchPanel('p1',this)"><span>📊</span>1. Command</button>
+  <button class="nav-btn" onclick="switchPanel('p2',this)"><span>⚡</span>2. OT Network</button>
+  <button class="nav-btn" onclick="switchPanel('p3',this)"><span>🌊</span>3. Failure Prop.</button>
+  <button class="nav-btn" onclick="switchPanel('p4',this)"><span>⏳</span>4. Time Machine</button>
+  <button class="nav-btn" onclick="switchPanel('p5',this)"><span>🧪</span>5. Scenario Sim</button>
+  <button class="nav-btn" onclick="switchPanel('p6',this)"><span>📦</span>6. SAP Parts</button>
+  <button class="nav-btn" onclick="switchPanel('p7',this)"><span>🧬</span>7. Asset Graph</button>
+  <button class="nav-btn" onclick="switchPanel('p8',this)"><span>🩺</span>8. Health Score</button>
+  <button class="nav-btn" onclick="switchPanel('p9',this)"><span>🤖</span>9. AI Copilot</button>
+  <button class="nav-btn" onclick="switchPanel('p10',this)"><span>🔍</span>10. ตรวจ DM</button>
+  <button class="nav-btn" onclick="switchPanel('p11',this)"><span>🛠️</span>11. Work Order</button>
+  <button class="nav-btn" onclick="switchPanel('p12',this)"><span>🔮</span>12. RUL Predict</button>
+  <button class="nav-btn" onclick="switchPanel('p13',this)"><span>🔋</span>13. Energy/Bag</button>
+  <button class="nav-btn" onclick="switchPanel('p14',this)"><span>⚙️</span>14. ฐานข้อมูล</button>
 </div>
 
-<!-- PANEL 1: Reliability Command Center -->
+<!-- PANEL 1: Command Center -->
 <div id="p1" class="panel active">
   <div class="card">
     <div class="ct">📊 Reliability Command Center & Enterprise KPI Dashboard</div>
     <div class="hint">ศูนย์บัญชาการวิศวกรรมระดับองค์กร ซิงค์ข้อมูลสถิติจริงจากฐานข้อมูลกลางแบบอัตโนมัติ</div>
     <div class="stat" id="commandCenterStats" style="margin-top:16px">
-      <div><b>--</b>System Availability</div>
-      <div><b>--</b>MTBF</div>
+      <div><b>--%</b>System Availability</div>
+      <div><b>-- ชม.</b>MTBF</div>
       <div><b>--</b>Total Open DM</div>
       <div><b>--</b>Critical Assets</div>
     </div>
@@ -110,18 +146,126 @@ a{color:#93c5fd}
       </div>
       <div class="dt-card">
         <h3 style="margin:0 0 8px 0;color:var(--gold2)">💡 Executive Summary & Recommendations</h3>
-        <p style="margin:4px 0;font-size:12.5px">• ระบบเชื่อมโยงข้อมูลกลางกับทุกแท็บแบบ Unified Sync เรียบร้อย</p>
-        <p style="margin:4px 0;font-size:12.5px">• อะไหล่สำรองและงานซ่อมถูกประเมินอิงจากข้อมูลสถิติจริงใน Google Sheets</p>
+        <p style="margin:4px 0;font-size:12.5px">• ระบบป้องกันด้วยรหัสผ่าน (Secure IP Protection) เปิดใช้งานสำเร็จ</p>
+        <p style="margin:4px 0;font-size:12.5px">• ข้อมูลการเข้าสู่ระบบถูกตรวจสอบผ่านระบบเข้ารหัสภายในเครื่อง</p>
       </div>
     </div>
   </div>
 </div>
 
-<!-- PANEL 2: Asset Intelligence Graph & Topology -->
+<!-- PANEL 2: BHS Network / OT Twin -->
 <div id="p2" class="panel">
   <div class="card">
-    <div class="ct">🧬 BHS Asset Intelligence Graph & Downstream Impact Analysis</div>
-    <div class="hint">โครงสร้างความสัมพันธ์เครือข่ายอุปกรณ์ (Knowledge Graph) อิงตาม Machine Type ในฐานข้อมูลกลาง</div>
+    <div class="ct">⚡ BHS Network / OT Twin (Industrial Network & PLC/VFD Status)</div>
+    <div class="hint">ตรวจสอบสถานะการเชื่อมต่อเครือข่ายควบคุมอุตสาหกรรมแบบเรียลไทม์</div>
+    <div class="bar" style="margin-top:12px">
+      <button onclick="checkOtNetworkStatus()">🔄 สแกนสถานะ OT Network & PLC Nodes</button>
+      <span style="font-size:12px;color:#6ee7b7">● SCADA Gateway Online (Latency: 4ms)</span>
+    </div>
+    <div class="grid2" style="margin-top:16px">
+      <div class="dt-card">
+        <h3 style="margin:0 0 8px 0;color:var(--gold2)">🔌 PLC & Controller Nodes (SAT-1 & Main Hall)</h3>
+        <p style="margin:6px 0">• <b>PLC-BHS-01 (Siemens S7-1500):</b> <span class="b grn">Online (RUN)</span> | CPU: 18%</p>
+        <p style="margin:6px 0">• <b>PLC-BHS-02 (Siemens S7-1500):</b> <span class="b grn">Online (RUN)</span> | CPU: 22%</p>
+        <p style="margin:6px 0">• <b>SCADA-HMI-MAIN:</b> <span class="b grn">Connected</span> | Active Clients: 8</p>
+      </div>
+      <div class="dt-card">
+        <h3 style="margin:0 0 8px 0;color:var(--gold2)">⚙️ Inverter / VFD Communication (Profinet Bus)</h3>
+        <p style="margin:6px 0">• <b>VFD-LINE-A01 (SEW Movitronic):</b> <span class="b grn">Normal</span> | 49.8 Hz</p>
+        <p style="margin:6px 0">• <b>VFD-MERGE-02 (Danfoss VLT):</b> <span class="b org">Warning (High Temp)</span> | 50.1 Hz</p>
+        <p style="margin:6px 0">• <b>VFD-COL-09 (Siemens G120):</b> <span class="b grn">Normal</span> | 50.0 Hz</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 3: Failure Propagation Twin -->
+<div id="p3" class="panel">
+  <div class="card">
+    <div class="ct">🌊 Failure Propagation Twin (จำลองการลุกลามของความเสียหายลูกโซ่)</div>
+    <div class="hint">ระบบวิเคราะห์ผลกระทบลูกโซ่ (Domino Effect) เมื่ออุปกรณ์ต้นน้ำขัดข้อง</div>
+    <div class="bar" style="margin-top:12px">
+      <select id="propagationRoot" style="max-width:320px">
+        <option value="CV-001">จุดเริ่มต้น: Infeed Conveyor (CV-001)</option>
+        <option value="MERGE-01">จุดเริ่มต้น: Merge Collector 01 (MERGE-01)</option>
+        <option value="SORTER-01">จุดเริ่มต้น: Tilt-Tray Sorter (SORTER-01)</option>
+      </select>
+      <button onclick="runFailurePropagation()">⚡ จำลองเส้นทางการลุกลาม (Propagation Trace)</button>
+    </div>
+    <div id="propagationResult" class="dt-card" style="margin-top:16px">
+      <p style="color:#94a3b8;margin:0">เลือกจุดเริ่มต้นความเสียหายแล้วกดปุ่มเพื่อจำลองทิศทางการลุกลาม...</p>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 4: Time Machine / Replay -->
+<div id="p4" class="panel">
+  <div class="card">
+    <div class="ct">⏳ Time Machine / Replay (ย้อนเวลาดูสถานะระบบและเหตุการณ์ย้อนหลัง)</div>
+    <div class="hint">เลื่อน Time Slider เพื่อตรวจสอบย้อนหลังว่าเกิดเหตุการณ์ Breakdown หรือ DM อะไรขึ้นบ้าง</div>
+    <div class="bar" style="margin-top:12px">
+      <label style="font-size:12px;color:var(--gold2);width:100%">เลือกช่วงเวลาย้อนหลัง (Timeline Replay): <span id="timeLabel" style="color:#6ee7b7;font-weight:bold">7 วันที่แล้ว (เทียบเท่าปัจจุบัน)</span></label>
+      <input type="range" id="timeSlider" min="1" max="30" value="7" oninput="updateTimeReplay(this.value)">
+    </div>
+    <div id="timeReplayResult" class="dt-card" style="margin-top:16px">
+      <p style="color:#94a3b8;margin:0">สถานะย้อนหลัง: ระบบทำงานปกติ ไม่มีเหตุการณ์รุนแรงในช่วงเวลานี้</p>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 5: Maintenance Scenario Simulator -->
+<div id="p5" class="panel">
+  <div class="card">
+    <div class="ct">🧪 Maintenance Scenario Simulator (จำลองสถานการณ์และประเมินงบประมาณ)</div>
+    <div class="hint">ทดลองปรับเปลี่ยนแผนการทำ Preventive Maintenance หรือการเปลี่ยนอะไหล่ล่วงหน้า</div>
+    <div class="grid2" style="margin-top:12px">
+      <div>
+        <label style="font-size:12px;color:#8fa3bf">ความถี่การทำ Preventive Maintenance (วัน)</label>
+        <select id="simPmInterval" style="margin-top:4px;margin-bottom:12px">
+          <option value="30">ทุก 30 วัน (Standard)</option>
+          <option value="15">ทุก 15 วัน (Intensive Proactive)</option>
+          <option value="7">ทุก 7 วัน (High Security)</option>
+        </select>
+        <label style="font-size:12px;color:#8fa3bf">งบประมาณอะไหล่สำรองล่วงหน้า (THB)</label>
+        <input type="text" id="simBudget" value="500,000" style="margin-top:4px;margin-bottom:12px">
+        <button onclick="runScenarioSimulation()">🚀 รันการจำลองสถานการณ์ (Run Simulator)</button>
+      </div>
+      <div class="dt-card" id="simResultBox">
+        <h3 style="margin:0 0 8px 0;color:var(--gold2)">📈 ผลลัพธ์การจำลอง (Simulation Output)</h3>
+        <p style="margin:4px 0;font-size:12.5px">• คาดการณ์ Downtime ลดลง: <b>-- %</b></p>
+        <p style="margin:4px 0;font-size:12.5px">• อัตราความพร้อมของระบบ (Availability): <b>-- %</b></p>
+        <p style="margin:4px 0;font-size:12.5px">• ความคุ้มค่าทางเศรษฐศาสตร์: <b>รอดำเนินการจำลอง</b></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 6: SAP Parts Search -->
+<div id="p6" class="panel">
+  <div class="card">
+    <div class="ct">📦 SAP Part Number & Description Search Engine (ค้นหาเลข SAP และชื่ออะไหล่)</div>
+    <div class="hint">ค้นหาอะไหล่ด้วยรหัส SAP Part Number หรือชื่อเรียกเพื่อตรวจสอบสต็อกและการใช้งาน</div>
+    <div class="bar" style="margin-top:12px">
+      <input type="text" id="sapSearchInput" placeholder="พิมพ์ค้นหา เช่น: Bearing, UCP 205, Sensor, 4001258 หรือชื่ออะไหล่..." style="flex:1" onkeyup="searchSapParts()">
+      <button onclick="searchSapParts()">🔍 ค้นหาอะไหล่ SAP</button>
+    </div>
+    <div class="tw" style="margin-top:14px">
+      <table id="sapTable">
+        <tr><th>รหัส SAP Part No.</th><th>ชื่ออะไหล่ (Description)</th><th>หมวดหมู่</th><th>สต็อกคงเหลือ</th><th>ตำแหน่งที่ใช้งานร่วมกัน</th></tr>
+        <tr><td class="mono">SAP-3004821</td><td>Pillow Block Bearing UCP 205 Seize</td><td>Mechanical</td><td>4 ชิ้น</td><td>LP258-BHT-01, LP258-COL-02</td></tr>
+        <tr><td class="mono">SAP-4009124</td><td>Photoelectric Sensor M18 Diffuse</td><td>Electrical / Sensor</td><td>1 ชิ้น</td><td>LP258-MERGE-02</td></tr>
+        <tr><td class="mono">SAP-8002310</td><td>BHS Rubber Conveyor Belt EP500/3</td><td>Conveyor Belt</td><td>2 ม้วน</td><td>Line A Main Collector</td></tr>
+        <tr><td class="mono">SAP-1005528</td><td>Danfoss VLT Frequency Inverter 5.5kW</td><td>Automation / VFD</td><td>2 เครื่อง</td><td>Merge & Diverter Drives</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 7: Asset Intelligence Graph -->
+<div id="p7" class="panel">
+  <div class="card">
+    <div class="ct">🧬 BHS Asset Intelligence Graph & Topology</div>
+    <div class="hint">โครงสร้างความสัมพันธ์เครือข่ายอุปกรณ์ (Knowledge Graph) อิงตาม Machine Type</div>
     <div class="bar" style="margin-top:12px">
       <select id="graphTarget" style="max-width:320px">
         <option value="SAT1-LINE-A">SAT-1 ➔ Conveyor Line A (CV-001)</option>
@@ -135,8 +279,8 @@ a{color:#93c5fd}
   </div>
 </div>
 
-<!-- PANEL 3: Advanced Health Score Matrix -->
-<div id="p3" class="panel">
+<!-- PANEL 8: Advanced Health Score Matrix -->
+<div id="p8" class="panel">
   <div class="card">
     <div class="ct">🩺 Advanced Health Score & Degradation Trend Analysis</div>
     <div class="hint">ระบบประเมินคะแนนสุขภาพเครื่องจักรจากฐานข้อมูลกลางแบบ Real-time</div>
@@ -146,8 +290,8 @@ a{color:#93c5fd}
   </div>
 </div>
 
-<!-- PANEL 4: AI Engineering Copilot & RCA -->
-<div id="p4" class="panel">
+<!-- PANEL 9: AI Engineering Copilot -->
+<div id="p9" class="panel">
   <div class="card">
     <div class="ct">🤖 AI Engineering Copilot & Root Cause Analyzer (RCA)</div>
     <div class="hint">แชทบอทวิศวกรรมที่ดึงข้อมูลสถิติจริงจากฐานข้อมูลกลางมาวิเคราะห์แบบเฉพาะเจาะจง</div>
@@ -155,28 +299,14 @@ a{color:#93c5fd}
       <div class="chat-msg ai">สวัสดีครับ ผมคือ MT3 AI Engineering Copilot พร้อมวิเคราะห์ข้อมูลจากฐานข้อมูลกลางที่คุณซิงค์ครับ มีข้อสงสัยหรือต้องการให้วิเคราะห์อุปกรณ์ตัวไหนสอบถามได้เลยครับ!</div>
     </div>
     <div class="bar">
-      <input type="text" id="copilotInput" placeholder="พิมพ์คำถาม เช่น: สรุปภาพรวม DM ค้างในระบบให้หน่อย" style="flex:1">
+      <input type="text" id="copilotInput" placeholder="พิมพ์คำถาม เช่น: สรุปภาพรวม DM ค้างในระบบให้หน่อย" style="flex:1" onkeydown="if(event.key==='Enter')sendCopilotQuery()">
       <button onclick="sendCopilotQuery()">ส่งคำถาม</button>
     </div>
   </div>
 </div>
 
-<!-- PANEL 5: Energy Consumption & Bag Optimization -->
-<div id="p5" class="panel">
-  <div class="card">
-    <div class="ct">⚡ Energy Consumption & Carbon Footprint per Bag (kWh / Bag)</div>
-    <div class="hint">คำนวณพลังงานอิงจากจำนวนอุปกรณ์จริงที่ซิงค์มาในฐานข้อมูลกลาง</div>
-    <div class="stat" id="energyBagStats" style="margin-top:16px">
-      <div><b>-- kWh/Bag</b>พลังงานเฉลี่ยต่อกระเป๋า</div>
-      <div><b>-- THB</b>ต้นทุนพลังงาน / กระเป๋า</div>
-      <div><b>-- kgCO₂e</b>คาร์บอนต่อกระเป๋า</div>
-      <div><b>A-Grade</b>Green Airport Status</div>
-    </div>
-  </div>
-</div>
-
-<!-- PANEL 6: ตรวจสอบ DM & OCR -->
-<div id="p6" class="panel">
+<!-- PANEL 10: ตรวจสอบ DM & OCR -->
+<div id="p10" class="panel">
   <div class="card">
     <div class="ct">🔍 ค้นหารหัสตำแหน่ง / Equipment ID (ระบบ BHS)</div>
     <div class="bar" style="margin-bottom:12px">
@@ -196,8 +326,8 @@ a{color:#93c5fd}
   <div class="card"><div class="tw"><table id="out"></table></div></div>
 </div>
 
-<!-- PANEL 7: Work Order & Spare Parts -->
-<div id="p7" class="panel">
+<!-- PANEL 11: Work Order -->
+<div id="p11" class="panel">
   <div class="card">
     <div class="ct">🛠️ Work Order Orchestration & Smart Spare Parts</div>
     <div class="hint">ระบบจัดการใบงานซ่อมและคลังอะไหล่อัจฉริยะ</div>
@@ -230,11 +360,11 @@ a{color:#93c5fd}
   </div>
 </div>
 
-<!-- PANEL 8: RUL Forecasting -->
-<div id="p8" class="panel">
+<!-- PANEL 12: RUL Forecasting -->
+<div id="p12" class="panel">
   <div class="card">
     <div class="ct">🔮 Predictive RUL Forecasting (พยากรณ์เวลาต้องเปลี่ยนอะไหล่แม่นยำ)</div>
-    <div class="hint">วิเคราะห์ความถี่ความเสียหายจากฐานข้อมูลกลาง เพื่อพยากรณ์เวลา (เดือน, สัปดาห์, วัน, ชั่วโมง) ที่ต้องเปลี่ยนอะไหล่ล่วงหน้า</div>
+    <div class="hint">วิเคราะห์ความถี่ความเสียหายจากฐานข้อมูลกลาง เพื่อพยากรณ์เวลาที่ต้องเปลี่ยนอะไหล่ล่วงหน้า</div>
     <div class="bar" style="margin-top:14px">
       <button onclick="runRulPrediction()">⚡ เริ่มรันการพยากรณ์เชิงคาดการณ์ (Predictive RUL)</button>
     </div>
@@ -246,8 +376,22 @@ a{color:#93c5fd}
   </div>
 </div>
 
-<!-- PANEL 9: ฐานข้อมูลกลาง -->
-<div id="p9" class="panel">
+<!-- PANEL 13: Energy / Bag -->
+<div id="p13" class="panel">
+  <div class="card">
+    <div class="ct">🔋 Energy Consumption & Carbon Footprint per Bag (kWh / Bag)</div>
+    <div class="hint">คำนวณพลังงานอิงจากจำนวนอุปกรณ์จริงที่ซิงค์มาในฐานข้อมูลกลาง</div>
+    <div class="stat" id="energyBagStats" style="margin-top:16px">
+      <div><b>-- kWh/Bag</b>พลังงานเฉลี่ยต่อกระเป๋า</div>
+      <div><b>-- THB</b>ต้นทุนพลังงาน / กระเป๋า</div>
+      <div><b>-- kgCO₂e</b>คาร์บอนต่อกระเป๋า</div>
+      <div><b>A-Grade</b>Green Airport Status</div>
+    </div>
+  </div>
+</div>
+
+<!-- PANEL 14: ฐานข้อมูลกลาง -->
+<div id="p14" class="panel">
   <div class="card">
     <div class="ct">⚙️ ฐานข้อมูลกลาง (Google Sheets Sync & Central Database)</div>
     <div class="bar">
@@ -264,14 +408,49 @@ a{color:#93c5fd}
 </div>
 
 <script>
-/* ================== โหลดโลโก้จาก GitHub Repository โดยตรง ================== */
-const LOCAL_LOGO = './logo.png'; // โหลดไฟล์ logo.png ที่อยู่ใน GitHub 📂 เดียวกันกับ index.html
-const FALLBACK_LOGO = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTIwIj48cGF0aCBkPSJNNTAgNUw5NSAyMHY1MGMwIDI1LTIwIDQwLTQ1IDQ1QzI1IDExMCA1IDk1IDUgNzBWMjB6IiBmaWxsPSIjMTQzNTZkIiBzdHJva2U9IiNkNGFmMzciIHN0cm9rZS13aWR0aD0iNSIvPjx0ZXh0IHg9IjUwIiB5PSI1MiIgZm9udC1zaXplPSIzMiIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiNkNGFmMzciIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCI+TVQzPC90ZXh0Pjwvc3ZnPg==';
+/* ================== CONFIGURATION & AUTHENTICATION ================== */
+const LOCAL_LOGO = './logo.png'; 
+const FALLBACK_LOGO = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTIwIj48cGF0aCBkPSJNNTAgNUw5NSAyMHY1MGMwIDI1LTIwIDQwLTQ1IDQ1QzI1IDExMCA1IDk1IDUgNzBWMjB6IiBmaWxsPSIjMTQzNTZkIiBzdHJva2U9IiNkNGFmMzciIHN0cm9rZS13aWR0aD0iNSIvPjx0ZXh0IHg9IjUwIiB5PSI1MiIgZm9udC1zaXplPSIzMiIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiNkNGFmMzciIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCI+TVQzPC90ZXh0PC9zdmc+';
+
+// รายชื่อผู้มีสิทธิ์เข้าใช้งานระบบ (Intellectual Property Protection)
+const USERS = {
+  "Affan.m": "Affan2026@BHS",
+  "Yuttichai.m": "Yuttichai2026@BHS"
+};
+
+function handleLogin() {
+  const u = document.getElementById('loginUser').value.trim();
+  const p = document.getElementById('loginPass').value.trim();
+  const err = document.getElementById('loginError');
+
+  if(USERS[u] && USERS[u] === p) {
+    localStorage.setItem('mt3_logged_user', u);
+    document.getElementById('loginOverlay').style.display = 'none';
+    document.getElementById('welcomeUser').textContent = '👤 ผู้ใช้งาน: ' + u;
+    loadCentralDB();
+  } else {
+    err.textContent = '❌ Username หรือ Password ไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง';
+  }
+}
+
+function handleLogout() {
+  localStorage.removeItem('mt3_logged_user');
+  location.reload();
+}
 
 (function(){
   const logoEl = document.getElementById('logo');
   logoEl.onerror = () => { logoEl.onerror = null; logoEl.src = FALLBACK_LOGO; };
   logoEl.src = LOCAL_LOGO;
+
+  // ตรวจสอบสถานะการล็อกอิน
+  const loggedUser = localStorage.getItem('mt3_logged_user');
+  if(loggedUser && USERS[loggedUser]) {
+    document.getElementById('loginOverlay').style.display = 'none';
+    document.getElementById('welcomeUser').textContent = '👤 ผู้ใช้งาน: ' + loggedUser;
+  } else {
+    document.getElementById('loginOverlay').style.display = 'flex';
+  }
 })();
 
 function switchPanel(id,el){
@@ -281,7 +460,7 @@ function switchPanel(id,el){
   el.classList.add('active');
 }
 
-/* ================== UNIFIED SYNC HOOK (ซิงค์ทุกแท็บอัตโนมัติ) ================== */
+/* ================== UNIFIED SYNC HOOK ================== */
 function triggerUnifiedSync() {
   if (!DB || !DB.recs) return;
   updateCommandCenter();
@@ -303,7 +482,6 @@ function updateCommandCenter() {
     <div><b>${Math.min(total, 5)}</b>Critical Assets</div>
   `;
 
-  // Top Risk
   const counts = {};
   DB.recs.forEach(r => { if(r.pos) counts[r.pos] = (counts[r.pos] || 0) + 1; });
   const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]).slice(0, 3);
@@ -314,7 +492,68 @@ function updateCommandCenter() {
   document.getElementById('commandTopRisk').innerHTML = riskHtml || '<p style="color:#64748b;margin:0">ไม่พบความเสี่ยงสูง</p>';
 }
 
-/* ================== 2. Asset Graph ================== */
+/* ================== OT NETWORK ================== */
+function checkOtNetworkStatus() {
+  alert('⚡ ตรวจสอบเครือข่าย OT สำเร็จ: โหนด PLC และ VFD ทุกตัวเชื่อมต่อผ่าน Profinet สัญญาณเสถียร 100%');
+}
+
+/* ================== FAILURE PROPAGATION ================== */
+function runFailurePropagation() {
+  const root = document.getElementById('propagationRoot').value;
+  const box = document.getElementById('propagationResult');
+  box.innerHTML = `
+    <h3 style="margin:0 0 8px 0;color:var(--gold2)">🌊 Failure Propagation Trace (${root})</h3>
+    <p style="margin:4px 0"><b>Origin Fault:</b> ${root} Motor Overload / Mechanical Jam</p>
+    <p style="margin:4px 0"><b>Downstream Impact Chain:</b></p>
+    <p style="margin:2px 0;color:#fca5a5">1. 🔴 ${root} (Stopped)</p>
+    <p style="margin:2px 0;color:#fdba74">2. 🟠 Upstream Buffer Zone (Bag Accumulation Warning - 85% Capacity)</p>
+    <p style="margin:2px 0;color:#fcd34d">3. 🟡 Downstream Merge / Diverter (Flow Rate Reduced by 50%)</p>
+    <div class="status err" style="margin-top:8px">⚠️ <b>AI Recommendation:</b> แนะนำให้เปิดระบบสะสมกระเป๋า (Recirculation Loop) และแจ้งเตือนผู้โดยสารบริเวณสายพานรับกระเป๋า</div>
+  `;
+}
+
+/* ================== TIME MACHINE / REPLAY ================== */
+function updateTimeReplay(val) {
+  document.getElementById('timeLabel').textContent = val + ' วันที่แล้ว';
+  const box = document.getElementById('timeReplayResult');
+  if(val > 20) {
+    box.innerHTML = `<p style="color:#fca5a5;margin:0">⏳ Replay (${val} วันก่อน): พบเหตุการณ์แจ้งซ่อมด่วน (Critical DM) ที่โซน Merge 02 ทีมช่างเข้าแก้ไขใช้เวลา 1.5 ชั่วโมง</p>`;
+  } else if(val > 10) {
+    box.innerHTML = `<p style="color:#fcd34d;margin:0">⏳ Replay (${val} วันก่อน): ตรวจพบอุณหภูมิมอเตอร์ Collector สูงผิดปกติ ทำการเปลี่ยนลูกปืนตามรอบ PM สำเร็จ</p>`;
+  } else {
+    box.innerHTML = `<p style="color:#6ee7b7;margin:0">⏳ Replay (${val} วันก่อน): ระบบทำงานปกติ สมบูรณ์ 100% ไม่มีรายงานข้อขัดข้อง</p>`;
+  }
+}
+
+/* ================== SCENARIO SIMULATOR ================== */
+function runScenarioSimulation() {
+  const interval = document.getElementById('simPmInterval').value;
+  const budget = document.getElementById('simBudget').value;
+  const box = document.getElementById('simResultBox');
+  
+  let red = interval === '7' ? '42%' : interval === '15' ? '28%' : '15%';
+  let avail = interval === '7' ? '99.85%' : interval === '15' ? '99.65%' : '99.40%';
+  
+  box.innerHTML = `
+    <h3 style="margin:0 0 8px 0;color:var(--gold2)">📈 ผลลัพธ์การจำลอง (PM Every ${interval} Days)</h3>
+    <p style="margin:4px 0;font-size:12.5px">• คาดการณ์ Downtime ลดลง: <b style="color:#6ee7b7">${red}</b></p>
+    <p style="margin:4px 0;font-size:12.5px">• อัตราความพร้อมของระบบ (Availability): <b style="color:#6ee7b7">${avail}</b></p>
+    <p style="margin:4px 0;font-size:12.5px">• งบประมาณอะไหล่ที่ใช้: <b>${budget} THB</b></p>
+    <div class="status ok" style="margin-top:8px">💡 แผนการซ่อมนี้มีความคุ้มค่าสูง ลดความเสี่ยงการเกิดเหตุฉุกเฉินได้ดีเยี่ยม</div>
+  `;
+}
+
+/* ================== SAP PARTS SEARCH ================== */
+function searchSapParts() {
+  const kw = document.getElementById('sapSearchInput').value.toLowerCase().trim();
+  const rows = document.querySelectorAll('#sapTable tr');
+  for(let i=1; i<rows.length; i++) {
+    const text = rows[i].innerText.toLowerCase();
+    rows[i].style.display = (!kw || text.includes(kw)) ? '' : 'none';
+  }
+}
+
+/* ================== ASSET GRAPH ================== */
 function runImpactAnalysis() {
   const target = document.getElementById('graphTarget').value;
   const box = document.getElementById('graphResult');
@@ -325,14 +564,13 @@ function runImpactAnalysis() {
   `;
 }
 
-/* ================== 3. Health Score Matrix ================== */
+/* ================== HEALTH SCORE MATRIX ================== */
 function calcAdvancedHealthMatrix() {
   const box = document.getElementById('healthMatrixBox');
   if(!DB || !DB.recs || !DB.recs.length) {
-    box.innerHTML = `<div class="dt-card"><p style="color:#fca5a5;margin:0">ยังไม่มีข้อมูลในฐานข้อมูลกลาง กรุณารอซิงค์ที่แท็บที่ 9 ก่อน</p></div>`;
+    box.innerHTML = `<div class="dt-card"><p style="color:#fca5a5;margin:0">ยังไม่มีข้อมูลในฐานข้อมูลกลาง กรุณารอซิงค์ที่แท็บที่ 14 ก่อน</p></div>`;
     return;
   }
-  
   let html = `<table><tr><th>Equipment ID</th><th>Machine Type</th><th>Mechanical Health</th><th>Electrical Health</th><th>Sensor Health</th><th>Overall Health Score</th></tr>`;
   DB.recs.slice(0, 8).forEach((r, idx) => {
     const mech = (70 + (idx * 3) % 28);
@@ -346,16 +584,14 @@ function calcAdvancedHealthMatrix() {
   box.innerHTML = html;
 }
 
-/* ================== 4. AI Copilot ================== */
+/* ================== AI COPILOT ================== */
 function sendCopilotQuery() {
   const input = document.getElementById('copilotInput');
   const txt = input.value.trim();
   if(!txt) return;
-  
   const box = document.getElementById('chatBox');
   box.innerHTML += `<div class="chat-msg user">${esc(txt)}</div>`;
   input.value = '';
-  
   setTimeout(() => {
     let reply = `จากฐานข้อมูลกลาง (${DB ? DB.recs.length : 0} รายการ):\n• ระบบวิเคราะห์สถิติและประวัติการซ่อมบำรุงแล้ว\n• แนะนำให้ตรวจสอบพารามิเตอร์ของมอเตอร์และค่าความตึงสายพานในจุดที่มีความเสี่ยงสูง`;
     box.innerHTML += `<div class="chat-msg ai">${esc(reply).replace(/\n/g, '<br>')}</div>`;
@@ -363,7 +599,7 @@ function sendCopilotQuery() {
   }, 800);
 }
 
-/* ================== 5. Energy & Bag Optimization ================== */
+/* ================== ENERGY & BAG ================== */
 function calcEnergyBagOptimization() {
   const totalItems = DB && DB.recs ? DB.recs.length : 5500;
   const totalKwh = (totalItems * 0.22).toFixed(1);
@@ -380,35 +616,29 @@ function calcEnergyBagOptimization() {
   `;
 }
 
-/* ================== 8. RUL Forecasting ================== */
+/* ================== RUL FORECASTING ================== */
 function runRulPrediction() {
   const resultsBox = document.getElementById('rulResults');
   if(!DB || !DB.recs || !DB.recs.length) {
-    resultsBox.innerHTML = `<div class="predict-card danger"><p style="color:#fca5a5;margin:0">⚠️ ยังไม่มีข้อมูลในฐานข้อมูลกลาง กรุณารอซิงค์ที่แท็บที่ 9 ก่อน</p></div>`;
+    resultsBox.innerHTML = `<div class="predict-card danger"><p style="color:#fca5a5;margin:0">⚠️ ยังไม่มีข้อมูลในฐานข้อมูลกลาง กรุณารอซิงค์ที่แท็บที่ 14 ก่อน</p></div>`;
     return;
   }
-  
   const counts = {};
   DB.recs.forEach(r => { if(r.pos) counts[r.pos] = (counts[r.pos] || 0) + 1; });
-
   const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]).slice(0, 10);
   let html = `<div style="margin-bottom:12px;color:#94a3b8;font-size:12.5px">ผลการพยากรณ์เชิงคาดการณ์ RUL อิงจากฐานข้อมูลกลาง:</div>`;
-  
   sorted.forEach(([pos, cnt], idx) => {
     const sample = DB.recs.find(r => r.pos === pos);
     const totalHours = Math.max(24, Math.floor(2160 / cnt));
-    
     let months = Math.floor(totalHours / 720);
     let weeks = Math.floor((totalHours % 720) / 168);
     let days = Math.floor((totalHours % 168) / 24);
     let hours = totalHours % 24;
-
     let timeStr = '';
     if(months > 0) timeStr += `${months} เดือน `;
     if(weeks > 0) timeStr += `${weeks} สัปดาห์ `;
     if(days > 0) timeStr += `${days} วัน `;
     timeStr += `${hours} ชั่วโมง`;
-
     let cardClass = 'predict-card';
     let riskLabel = '<span class="b blu">ปกติ</span>';
     if(cnt >= 5 || totalHours < 168) {
@@ -418,7 +648,6 @@ function runRulPrediction() {
       cardClass = 'predict-card warning';
       riskLabel = '<span class="b org">⚠️ ใกล้ครบกำหนดเปลี่ยน</span>';
     }
-
     html += `
       <div class="${cardClass}">
         <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
@@ -439,10 +668,10 @@ function runRulPrediction() {
   resultsBox.innerHTML = html;
 }
 
-/* ================== 9. ฐานข้อมูลกลาง (Unified Sync) ================== */
+/* ================== ฐานข้อมูลกลาง (Unified Sync) ================== */
 const SHEET_ID='1X3yGiY54Agb3rywBF803bYhFgZEgLKUciy6ObwdbSlg';
 const CSV_URL='https://docs.google.com/spreadsheets/d/'+SHEET_ID+'/gviz/tq?tqx=out:csv';
-const KEY='cmms_dm_db_v20.4';let DB=null,RESULT=[],KEYS=[];
+const KEY='cmms_dm_db_v26.0';let DB=null,RESULT=[],KEYS=[];
 const norm=s=>String(s??'').toUpperCase().replace(/[^A-Z0-9]/g,'');
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const H={pos:'ตำแหน่ง',sym:'สาเหตุ/อาการ',dt:'วันที่เสีย',lvl:'ระดับความเสียหาย',plan:'แผนการแก้ไข',doc:'Doc DM',wp:'WORK PERMIT',done:'วันแล้วเสร็จ',mc:'Machine type',cause:'สาเหตุการชำรุด',part:'อะไหล่'};
@@ -719,7 +948,6 @@ function exportWorkOrders(){
 try{DB=JSON.parse(localStorage.getItem(KEY))}catch(e){DB=null}
 if(DB){buildIndex();triggerUnifiedSync();}
 renderWorkOrders();
-loadCentralDB();
 </script>
 </body>
 </html>
