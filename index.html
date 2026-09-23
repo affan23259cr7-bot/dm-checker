@@ -1611,3 +1611,79 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 })();
 
 </script>
+
+
+<!-- ================================================================
+     MT3 BHS v37 TRUE ENGINEERING INTELLIGENCE ARCHITECTURE
+     APPEND-ONLY INTEGRATION LAYER
+     Original v36.1 + Modules 10-31 remain untouched.
+     This layer reads existing DB/localStorage and creates relationships
+     through Asset ID / Position without rewriting previous modules.
+     ================================================================ -->
+<style id="mt3v37Style">
+.v37-wrap{padding:16px}.v37-head{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}.v37-title{font-size:20px;font-weight:800;color:var(--gold2)}
+.v37-sub{color:#8fa3bf;font-size:11px}.v37-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:9px}.v37-kpi{background:#07101f;border:1px solid #263956;border-radius:12px;padding:11px}.v37-kpi b{display:block;font-size:20px;color:#e5edf7}.v37-kpi span{font-size:10px;color:#8fa3bf}
+.v37-toolbar{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:8px;margin:12px 0}.v37-toolbar input,.v37-toolbar select{width:100%;box-sizing:border-box}
+.v37-grid2{display:grid;grid-template-columns:1.15fr .85fr;gap:12px;margin-top:12px}.v37-card{background:#07101f;border:1px solid #263956;border-radius:12px;padding:13px}.v37-card h3{margin:0 0 9px;color:var(--gold2);font-size:13px}.v37-flow{display:grid;grid-template-columns:repeat(5,1fr);gap:7px}.v37-node{border:1px solid #304766;border-radius:9px;padding:9px;text-align:center;background:#0a1526;cursor:pointer}.v37-node b{display:block;font-size:16px}.v37-node span{font-size:9px;color:#8fa3bf}.v37-node:hover{border-color:var(--gold2)}
+.v37-table{width:100%;border-collapse:collapse;font-size:10px}.v37-table th,.v37-table td{border-bottom:1px solid #20324b;padding:7px;text-align:left}.v37-table th{color:#8fa3bf}.v37-link{color:#9cc7ff;cursor:pointer;text-decoration:underline}.v37-ok{color:#6ee7b7}.v37-warn{color:#fbbf24}.v37-bad{color:#fb7185}.v37-muted{color:#64748b}.v37-note{font-size:10px;color:#8fa3bf;margin-top:7px;line-height:1.5}.v37-actions{display:flex;gap:7px;flex-wrap:wrap}.v37-actions button{font-size:10px;padding:6px 9px}.v37-risk{border-left:3px solid #fb7185;padding-left:9px;margin:6px 0}.v37-small{font-size:10px}
+@media(max-width:1000px){.v37-grid{grid-template-columns:repeat(3,1fr)}.v37-grid2{grid-template-columns:1fr}.v37-toolbar{grid-template-columns:1fr 1fr}.v37-flow{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:650px){.v37-grid{grid-template-columns:repeat(2,1fr)}.v37-toolbar{grid-template-columns:1fr}.v37-flow{grid-template-columns:1fr 1fr}}
+</style>
+
+<div id="v37" class="panel">
+<div class="v37-wrap">
+  <div class="v37-head">
+    <div><div class="v37-title">🧠 v37 TRUE ENGINEERING INTELLIGENCE ARCHITECTURE</div><div class="v37-sub">Asset-Centric Digital Thread • Modules 1–31 Unified • Append-Only Integration Layer</div></div>
+    <div style="margin-left:auto" class="v37-actions"><button onclick="v37Refresh()">↻ Refresh</button><button onclick="v37ExportAsset()">⬇ Export Asset 360</button></div>
+  </div>
+  <div id="v37Kpi" class="v37-grid"></div>
+  <div class="v37-toolbar">
+    <input id="v37Search" placeholder="🔎 ค้นหา Asset ID / Position / อาการ / Part / Knowledge..." oninput="v37Render()">
+    <select id="v37Asset" onchange="v37Render()"><option value="">เลือก Asset เพื่อดู Asset 360</option></select>
+    <select id="v37Risk" onchange="v37Render()"><option value="">ทุก Risk</option><option>Critical</option><option>High</option><option>Medium</option><option>Low</option></select>
+    <select id="v37Domain" onchange="v37Render()"><option value="">ทุก Domain</option><option>Reliability</option><option>Maintenance</option><option>Spare</option><option>Inspection</option><option>Safety</option><option>Knowledge</option></select>
+  </div>
+  <div class="v37-card"><h3>🔗 ENGINEERING DIGITAL THREAD</h3><div class="v37-flow">
+    <div class="v37-node" onclick="v37Focus('Asset')"><b>1–2</b><span>Asset / Graph</span></div><div class="v37-node" onclick="v37Focus('Health')"><b>3–4</b><span>Health / AI</span></div><div class="v37-node" onclick="v37Focus('Twin')"><b>10–18</b><span>Twin / Reliability</span></div><div class="v37-node" onclick="v37Focus('Maintenance')"><b>19–22</b><span>PM / Inspection / Spare</span></div><div class="v37-node" onclick="v37Focus('Engineering')"><b>23–31</b><span>RCA / FMEA / Cost / KB</span></div>
+  </div><div class="v37-note">ทุก Domain ใช้ Asset ID / Position เป็นความสัมพันธ์หลัก โดยข้อมูลจริงยังคงอยู่ในฐานข้อมูลเดิมของแต่ละโมดูล</div></div>
+  <div id="v37Body" class="v37-grid2"></div>
+</div></div>
+
+<script>
+(function(){'use strict';
+const V37={
+ keys:{parts:'mt3_bhs_spare_parts_v1',pm:'mt3_bhs_pm_plan_v1',normal:'mt3_bhs_daily_normal_v1',special:'mt3_bhs_daily_special_v1',rca:'mt3_bhs_rca_v1',fmea:'mt3_bhs_fmea_v1',backlog:'mt3_bhs_backlog_v1',skills:'mt3_bhs_skills_v1',costs:'mt3_bhs_costs_v1',kaizen:'mt3_bhs_kaizen_v1',kb:'mt3_bhs_knowledge_v1'},last:null
+};
+function load(k){try{const v=JSON.parse(localStorage.getItem(k));return Array.isArray(v)?v:[]}catch(e){return[]}}
+function esc(s){return String(s??'').replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c]))}
+function rows(){return window.DB&&Array.isArray(DB.recs)?DB.recs:[]}
+function uniqueAssets(){const m=new Map();rows().forEach(r=>{if(r.pos&&!m.has(r.pos))m.set(r.pos,r)});return [...m.keys()].sort()}
+function allData(){return {parts:load(V37.keys.parts),pm:load(V37.keys.pm),normal:load(V37.keys.normal),special:load(V37.keys.special),rca:load(V37.keys.rca),fmea:load(V37.keys.fmea),backlog:load(V37.keys.backlog),skills:load(V37.keys.skills),costs:load(V37.keys.costs),kaizen:load(V37.keys.kaizen),kb:load(V37.keys.kb),wo:(Array.isArray(window.WORK_ORDERS)?window.WORK_ORDERS:load('mt3_wo_bhs_logs'))}}
+function matchAsset(o,a){if(!a)return true;return Object.keys(o||{}).some(k=>/asset|pos|position|equipment|machine|location/i.test(k)&&String(o[k]??'').toLowerCase()===a.toLowerCase())}
+function contains(o,q){if(!q)return true;return JSON.stringify(o||{}).toLowerCase().includes(q.toLowerCase())}
+function assetCount(d,a){return Object.values(d).reduce((n,arr)=>n+(Array.isArray(arr)?arr.filter(x=>matchAsset(x,a)).length:0),0)}
+function renderKpi(d){
+ const a=uniqueAssets().length, failures=rows().length, open=rows().filter(r=>r.open).length, overdue=d.pm.filter(x=>{const n=new Date(x.next);return n instanceof Date&&!isNaN(n)&&n<new Date()}).length, low=d.parts.filter(x=>Number(x.stock||0)<=Number(x.min||0)).length, critical=d.fmea.filter(x=>Number(x.rpn||0)>=100).length, backlog=d.backlog.filter(x=>String(x.status||'').toLowerCase()!=='closed').length, kb=d.kb.length;
+ document.getElementById('v37Kpi').innerHTML=[['Assets',a,'Asset Master'],['Event / DB',failures,'Central DB'],['Open Event',open,open?'Review':'Normal'],['PM Overdue',overdue,overdue?'Action':'OK'],['Low Spare',low,low?'Reorder':'OK'],['FMEA RPN ≥100',critical,critical?'Risk':'OK'],['Backlog Open',backlog,backlog?'Workload':'OK'],['Knowledge',kb,'Engineering KB']].map(x=>`<div class="v37-kpi"><b>${esc(x[1])}</b><span>${esc(x[0])} • ${esc(x[2])}</span></div>`).join('')
+}
+function renderAsset360(d,a){
+ const arrs=[['19 Spare Parts',d.parts],['20 PM Plan',d.pm],['21 Normal Inspection',d.normal],['22 Special Inspection',d.special],['24 RCA',d.rca],['25 FMEA',d.fmea],['26 Backlog',d.backlog],['28 Cost',d.costs],['29 Kaizen',d.kaizen],['30 Knowledge',d.kb],['WO',d.wo]];
+ const found=arrs.map(([n,arr])=>[n,arr.filter(x=>matchAsset(x,a))]).filter(x=>x[1].length);
+ const event=rows().filter(r=>matchAsset(r,a));
+ const h=found.map(([n,ar])=>`<tr><td>${esc(n)}</td><td>${ar.length}</td><td><span class="v37-link" onclick="v37OpenDomain('${esc(n)}')">Open / inspect</span></td></tr>`).join('');
+ document.getElementById('v37Body').innerHTML=`<div class="v37-card"><h3>🎯 ASSET 360 — ${esc(a||'All Assets')}</h3><table class="v37-table"><thead><tr><th>Data Layer</th><th>Records</th><th>Link</th></tr></thead><tbody>${h||'<tr><td colspan="3" class="v37-muted">ยังไม่มีข้อมูลที่ผูกกับ Asset นี้</td></tr>'}</tbody></table><div class="v37-note">Central DB events for this asset: ${event.length} • Asset ID/Position is the integration key.</div></div><div class="v37-card"><h3>🧭 ENGINEERING DECISION CHAIN</h3><div class="v37-risk">1. Detect → Health / Sensor / Event</div><div class="v37-risk">2. Diagnose → Failure / RCA / FMEA</div><div>3. Plan → PM / Backlog / Technician / Spare</div><div>4. Execute → Work Order / Cost</div><div>5. Verify → Inspection / Result</div><div>6. Learn → Kaizen / Knowledge</div><div class="v37-note">AI/Simulation remains decision support. Final maintenance authorization stays with qualified personnel.</div></div>`
+}
+function renderGlobal(d,q){
+ const domains=[['Reliability',rows().length],['Maintenance',d.pm.length+d.normal.length+d.special.length+d.backlog.length+d.wo.length],['Spare',d.parts.length],['Inspection',d.normal.length+d.special.length],['Safety',d.fmea.length],['Knowledge',d.kb.length+d.kaizen.length]];
+ const list=domains.map(x=>`<tr><td>${x[0]}</td><td>${x[1]}</td><td>${q? (String(x[0]).toLowerCase().includes(q.toLowerCase())?'MATCH':'—'):'Connected'}</td></tr>`).join('');
+ document.getElementById('v37Body').innerHTML=`<div class="v37-card"><h3>📡 SYSTEM INTEGRATION STATUS</h3><table class="v37-table"><thead><tr><th>Domain</th><th>Records</th><th>Status</th></tr></thead><tbody>${list}</tbody></table><div class="v37-note">v37 reads existing module stores; no migration or overwrite is performed.</div></div><div class="v37-card"><h3>⚠️ ENGINEERING RISKS REQUIRING REVIEW</h3>${d.fmea.filter(x=>Number(x.rpn||0)>=100).slice(0,8).map(x=>`<div class="v37-risk"><b>${esc(x.asset||'Unassigned')}</b> — ${esc(x.mode||x.failureMode||'FMEA risk')} • RPN ${esc(x.rpn||'—')}</div>`).join('')||'<span class="v37-muted">ไม่พบ FMEA RPN ≥ 100 ในข้อมูลปัจจุบัน</span>'}</div>`
+}
+function render(){const d=allData();renderKpi(d);const a=document.getElementById('v37Asset').value,q=document.getElementById('v37Search').value; if(a)renderAsset360(d,a);else renderGlobal(d,q);}
+function buildAssets(){const el=document.getElementById('v37Asset');if(!el)return;const cur=el.value;el.innerHTML='<option value="">เลือก Asset เพื่อดู Asset 360</option>'+uniqueAssets().map(a=>`<option value="${esc(a)}">${esc(a)}</option>`).join('');el.value=cur}
+window.v37Render=render;window.v37Refresh=function(){buildAssets();render()};window.v37Focus=function(){document.getElementById('v37').scrollIntoView({behavior:'smooth'});};window.v37OpenDomain=function(n){alert('Integration Layer: '+n+'\n\nAsset relationship is active in v37. Use the corresponding module for detailed editing.')};
+window.v37ExportAsset=function(){const a=document.getElementById('v37Asset').value;if(!a){alert('กรุณาเลือก Asset ก่อน Export');return}const d=allData();const out=[];Object.entries(d).forEach(([domain,arr])=>{if(Array.isArray(arr))arr.filter(x=>matchAsset(x,a)).forEach(x=>out.push({Asset:a,Domain:domain,...x}))});if(window.XLSX){const ws=XLSX.utils.json_to_sheet(out);const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Asset 360');XLSX.writeFile(wb,'MT3_Asset360_'+a.replace(/[^A-Za-z0-9_-]/g,'_')+'.xlsx')}else alert('ไม่พบ XLSX library')};
+function injectNav(){const nav=document.querySelector('.menu-nav');if(!nav||document.getElementById('v37Nav'))return;const b=document.createElement('button');b.id='v37Nav';b.className='nav-btn';b.innerHTML='<span>🧠</span>32. True Architecture';b.onclick=function(){switchPanel('v37',b);v37Refresh()};nav.appendChild(b)}
+function init(){injectNav();buildAssets();render();setInterval(()=>{const sig=(window.DB&&DB.at)||'';if(sig!==V37.last){V37.last=sig;buildAssets();render()}},4000)}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
