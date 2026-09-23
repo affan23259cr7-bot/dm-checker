@@ -791,5 +791,341 @@ if(DB){buildIndex();triggerUnifiedSync();}
 renderWorkOrders();
 loadCentralDB();
 </script>
+
+<script>
+/* ================================================================
+   MT3 BHS ENGINEERING MASTERY EXTENSION
+   ADDITIVE MODULE ONLY — ORIGINAL v36.1 CODE IS NOT MODIFIED.
+   All advanced telemetry in this extension is explicitly labelled
+   SIMULATION/ESTIMATE until real PLC/SCADA/IoT telemetry is connected.
+   ================================================================ */
+(function(){
+'use strict';
+
+const MT3X={
+  version:'Mastery-01',
+  timer:null,
+  lastDBStamp:null,
+  selectedAsset:null,
+  twin:{},
+  events:[],
+  esc:s=>String(s??'').replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c]))
+};
+
+function xesc(s){return MT3X.esc(s)}
+function xnum(v,d=1){const n=Number(v);return Number.isFinite(n)?n.toFixed(d):'--'}
+function xclamp(v,a,b){return Math.max(a,Math.min(b,v))}
+function xarr(){return (window.DB&&Array.isArray(DB.recs))?DB.recs:[]}
+function xassets(){
+  const r=xarr();
+  const m=new Map();
+  r.forEach(x=>{if(x.pos&&!m.has(x.pos))m.set(x.pos,x)});
+  return [...m.values()];
+}
+function xfailures(){
+  const r=xarr();
+  return r.filter(x=>x.dt||x.sym||x.cause||x.open);
+}
+function xdate(v){
+  const s=String(v||'');
+  let m=s.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+  if(!m)return null;
+  let y=+m[3];if(y>2400)y-=543;
+  const d=new Date(y,+m[2]-1,+m[1]);
+  return Number.isNaN(d.getTime())?null:d;
+}
+function xdays(a,b){return Math.abs(b-a)/86400000}
+function xbadge(score){
+  score=Number(score)||0;
+  if(score>=85)return '<span class="b grn">'+xnum(score,0)+'% STABLE</span>';
+  if(score>=70)return '<span class="b org">'+xnum(score,0)+'% MONITOR</span>';
+  return '<span class="b red">'+xnum(score,0)+'% CRITICAL</span>';
+}
+function xstatus(score){return score>=85?'🟢':score>=70?'🟠':'🔴'}
+
+function injectStyle(){
+  if(document.getElementById('mt3MasteryStyle'))return;
+  const s=document.createElement('style');s.id='mt3MasteryStyle';
+  s.textContent=`
+  .mx-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}
+  .mx-grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}
+  .mx-grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+  .mx-kpi{background:#07101f;border:1px solid #263956;border-radius:12px;padding:12px}
+  .mx-kpi b{display:block;color:var(--gold2);font-size:20px;margin-bottom:4px}
+  .mx-kpi span{font-size:11px;color:#8fa3bf}
+  .mx-twin{background:#06101d;border:1px solid #29415f;border-radius:14px;padding:14px;position:relative;overflow:hidden}
+  .mx-twin-head{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:12px}
+  .mx-node{background:#0b1628;border:1px solid #304766;border-radius:10px;padding:10px;min-width:130px;text-align:center}
+  .mx-node b{display:block;color:#e7edf5;font-size:13px}.mx-node small{color:#64748b}
+  .mx-flow{display:flex;gap:8px;align-items:center;overflow:auto;padding:8px 0}.mx-arrow{color:var(--gold2);font-size:18px}
+  .mx-meter{height:7px;background:#17243a;border-radius:10px;overflow:hidden;margin-top:6px}.mx-meter i{display:block;height:100%;background:linear-gradient(90deg,#10b981,#f59e0b,#ef4444);border-radius:10px}
+  .mx-label{font-size:11px;color:#94a3b8}.mx-value{font-weight:700;color:#e7edf5}
+  .mx-slider{width:100%;accent-color:var(--gold)}
+  .mx-console{background:#050b15;border:1px solid #233650;border-radius:10px;padding:12px;font-family:Consolas,monospace;font-size:12px;line-height:1.65;min-height:100px;white-space:pre-wrap}
+  .mx-note{font-size:11px;color:#64748b;line-height:1.55;margin-top:8px}.mx-good{color:#6ee7b7}.mx-warn{color:#fcd34d}.mx-bad{color:#fca5a5}
+  .mx-timeline{position:relative;margin:10px 0 0 8px;padding-left:20px;border-left:2px solid #334155}.mx-event{position:relative;padding:8px 0 8px 10px}.mx-event:before{content:'';position:absolute;left:-27px;top:12px;width:10px;height:10px;border-radius:50%;background:var(--gold);border:2px solid #07101f}
+  .mx-tag{display:inline-block;padding:2px 7px;border-radius:12px;background:#1e3a8a;color:#bfdbfe;font-size:10px;font-weight:700;margin-left:5px}
+  .mx-big{font-size:30px;font-weight:800;color:var(--gold2)}
+  .mx-svg{width:100%;height:230px;background:#050b15;border:1px solid #233650;border-radius:12px}
+  .mx-panel .ct{color:var(--gold2)}
+  @media(max-width:1000px){.mx-grid{grid-template-columns:1fr 1fr}.mx-grid3{grid-template-columns:1fr}.mx-grid2{grid-template-columns:1fr}}
+  @media(max-width:650px){.mx-grid{grid-template-columns:1fr}.mx-flow{flex-wrap:wrap}}
+  `;
+  document.head.appendChild(s);
+}
+
+function addNav(id,label,icon){
+  const nav=document.querySelector('.menu-nav');if(!nav||document.getElementById('nav_'+id))return;
+  const b=document.createElement('button');b.id='nav_'+id;b.className='nav-btn';
+  b.innerHTML='<span>'+icon+'</span>'+label;
+  b.onclick=function(){if(typeof switchPanel==='function')switchPanel(id,b)};
+  nav.appendChild(b);
+}
+function addPanel(id,title,body){
+  if(document.getElementById(id))return;
+  const wrap=document.querySelector('.wrapmain');if(!wrap)return;
+  const p=document.createElement('div');p.id=id;p.className='panel mx-panel';p.innerHTML='<div class="card">'+
+    '<div class="ct">'+title+'</div>'+body+'</div>';
+  wrap.appendChild(p);
+}
+
+function buildPanels(){
+  addNav('mx10','10. BHS System Twin','🌐');
+  addNav('mx11','11. What-if Simulation','🧪');
+  addNav('mx12','12. Failure Propagation','🔥');
+  addNav('mx13','13. Sensor / Data Health','📡');
+  addNav('mx14','14. Event Replay','⏱️');
+  addNav('mx15','15. Reliability Lab','📐');
+  addNav('mx16','16. Engineering Calculator','🧮');
+  addNav('mx17','17. Engineering Brain','🧠');
+  addNav('mx18','18. Engineering Mastery','👑');
+
+  addPanel('mx10','🌐 BHS SYSTEM TWIN • Asset + Flow + Reliability + Energy Twin',`
+    <div class="hint">System Twin รุ่นเสริม: จำลองโครงสร้างและพฤติกรรมระดับระบบจากข้อมูลกลาง พร้อม Mock Telemetry เพื่อทดสอบ Architecture ก่อนต่อ PLC/SCADA จริง</div>
+    <div class="mx-grid" id="mxTwinKpi"></div>
+    <div class="mx-twin" style="margin-top:12px">
+      <div class="mx-twin-head"><b style="color:var(--gold2)">BHS FLOW / SYSTEM TOPOLOGY</b><span class="b blu">SIMULATION MODE</span></div>
+      <div id="mxTwinFlow" class="mx-flow"></div>
+      <div id="mxTwinTelemetry" class="mx-grid3"></div>
+    </div>
+    <div class="mx-note">หมายเหตุ: ค่าความสั่นสะเทือน/อุณหภูมิ/กระแสในหน้านี้เป็น Mock Telemetry เพื่อทดสอบ Twin เท่านั้น ไม่ใช่ค่าจาก Sensor จริง</div>`);
+
+  addPanel('mx11','🧪 WHAT-IF ENGINE • Engineering Scenario Simulator',`
+    <div class="hint">ใช้ทดลองผลกระทบเชิงวิศวกรรมโดยไม่กระทบ BHS จริง ตัวเลขเป็น Simplified Engineering Model สำหรับ Scenario Analysis</div>
+    <div class="mx-grid3">
+      <div class="mx-kpi"><span>Conveyor Speed</span><b><span id="mxSpeedV">80</span>%</b><input id="mxSpeed" class="mx-slider" type="range" min="50" max="110" value="80"></div>
+      <div class="mx-kpi"><span>Bag Load</span><b><span id="mxLoadV">60</span>%</b><input id="mxLoad" class="mx-slider" type="range" min="10" max="100" value="60"></div>
+      <div class="mx-kpi"><span>Failure Downtime</span><b><span id="mxDownV">10</span> min</b><input id="mxDown" class="mx-slider" type="range" min="0" max="60" value="10"></div>
+    </div>
+    <div class="bar" style="margin-top:12px"><button onclick="mxRunWhatIf()">🧪 Run Simulation</button><button class="gray" onclick="mxResetWhatIf()">Reset</button></div>
+    <div id="mxWhatIfResult" class="mx-grid"></div>
+    <div id="mxWhatIfConsole" class="mx-console" style="margin-top:12px">พร้อมจำลอง Scenario...</div>`);
+
+  addPanel('mx12','🔥 FAILURE PROPAGATION • Fault → System Impact',`
+    <div class="hint">วิเคราะห์เส้นทางผลกระทบเชิงตรรกะจาก Asset → Zone → Flow → System โดยใช้ข้อมูล Asset/Failure ที่มีอยู่</div>
+    <div class="bar"><select id="mxFailAsset" style="max-width:420px"></select><button onclick="mxRunPropagation()">🔥 วิเคราะห์ Impact</button></div>
+    <div id="mxPropagation" style="margin-top:12px"></div>`);
+
+  addPanel('mx13','📡 SENSOR / DATA HEALTH • Detect Bad Data Before Bad Decisions',`
+    <div class="hint">ตรวจคุณภาพข้อมูลจากฐานข้อมูลกลาง เช่น Missing, Duplicate, Stale, Field Coverage และ Consistency โดยไม่สมมติว่าเป็น Sensor จริง</div>
+    <div id="mxDataHealth"></div>`);
+
+  addPanel('mx14','⏱️ BHS EVENT REPLAY • Maintenance Black Box',`
+    <div class="hint">สร้าง Timeline เหตุการณ์จากวันที่เสีย, DM, Work Order และข้อมูลประวัติที่มีอยู่ เพื่อใช้ RCA / Incident Review</div>
+    <div class="bar"><select id="mxReplayAsset" style="max-width:420px"></select><button onclick="mxReplay()">▶ Replay Asset History</button></div>
+    <div id="mxReplayBox" class="mx-timeline"></div>`);
+
+  addPanel('mx15','📐 RELIABILITY LAB • MTBF / MTTR / Availability / Weibull',`
+    <div class="hint">คำนวณ Reliability Metrics จากข้อมูลที่มีจริงใน DB; ถ้าข้อมูลไม่พอ ระบบจะระบุว่า Insufficient Data แทนการสร้างตัวเลขปลอม</div>
+    <div id="mxReliability"></div>`);
+
+  addPanel('mx16','🧮 ENGINEERING CALCULATOR • Mechanical / Electrical / Reliability / IE',`
+    <div class="mx-grid2">
+      <div class="dt-card"><b style="color:var(--gold2)">⚙️ Mechanical</b>
+        <label class="mx-label">Power (kW)</label><input id="mxPow" type="text" value="2.2">
+        <label class="mx-label">RPM</label><input id="mxRpm" type="text" value="1450" style="margin-top:6px">
+        <button onclick="mxCalcMech()" style="margin-top:8px">คำนวณ Torque</button><div id="mxMechOut" class="mx-console" style="margin-top:8px">-</div>
+      </div>
+      <div class="dt-card"><b style="color:var(--gold2)">⚡ Electrical</b>
+        <label class="mx-label">Voltage (V)</label><input id="mxVolt" type="text" value="400">
+        <label class="mx-label">Current (A)</label><input id="mxCurr" type="text" value="4.8" style="margin-top:6px">
+        <label class="mx-label">Power Factor</label><input id="mxPF" type="text" value="0.85" style="margin-top:6px">
+        <button onclick="mxCalcElec()" style="margin-top:8px">คำนวณ 3-Phase Power</button><div id="mxElecOut" class="mx-console" style="margin-top:8px">-</div>
+      </div>
+    </div>
+    <div class="mx-grid2">
+      <div class="dt-card"><b style="color:var(--gold2)">📊 Reliability</b>
+        <label class="mx-label">MTBF (hr)</label><input id="mxMTBF" value="2400">
+        <label class="mx-label">MTTR (hr)</label><input id="mxMTTR" value="0.7" style="margin-top:6px">
+        <button onclick="mxCalcRel()" style="margin-top:8px">คำนวณ Availability</button><div id="mxRelOut" class="mx-console" style="margin-top:8px">-</div>
+      </div>
+      <div class="dt-card"><b style="color:var(--gold2)">🏭 Industrial Engineering</b>
+        <label class="mx-label">Arrival Rate λ (bags/hr)</label><input id="mxLambda" value="3500">
+        <label class="mx-label">Service Rate μ (bags/hr)</label><input id="mxMu" value="4200" style="margin-top:6px">
+        <button onclick="mxCalcQueue()" style="margin-top:8px">คำนวณ Utilization</button><div id="mxQueueOut" class="mx-console" style="margin-top:8px">-</div>
+      </div>
+    </div>`);
+
+  addPanel('mx17','🧠 ENGINEERING BRAIN • Explainable Local Engineering Intelligence',`
+    <div class="hint">Rule-based Engineering Brain รุ่นแรก: ใช้ข้อมูลในฐานข้อมูลกลางโดยตรง ไม่อ้างว่าเป็น LLM และไม่แต่งข้อมูลที่ไม่มีใน DB</div>
+    <div class="bar"><input id="mxBrainQ" placeholder="เช่น CV-001 มีประวัติเสียกี่ครั้ง / สรุปความเสี่ยง / MTBF คืออะไร" style="flex:1"><button onclick="mxBrainAsk()">🧠 วิเคราะห์</button></div>
+    <div id="mxBrainAnswer" class="mx-console" style="margin-top:12px">พร้อมรับคำถาม...</div>`);
+
+  addPanel('mx18','👑 ENGINEERING MASTERY • Decision Quality / Data Quality / Digital Thread',`
+    <div class="hint">ศูนย์ตรวจคุณภาพการตัดสินใจ: Data Quality + Evidence + Confidence + Safety Gate + Digital Thread</div>
+    <div id="mxMasteryKpi" class="mx-grid"></div>
+    <div class="mx-grid2">
+      <div class="dt-card"><b style="color:var(--gold2)">🔗 Digital Thread</b><div id="mxThread" class="mx-timeline"></div></div>
+      <div class="dt-card"><b style="color:var(--gold2)">🛡️ Engineering Safety Gate</b><div id="mxSafety" class="mx-console" style="margin-top:8px"></div></div>
+    </div>`);
+}
+
+function mxRefreshAssetSelects(){
+  const assets=xassets();
+  ['mxFailAsset','mxReplayAsset'].forEach(id=>{
+    const el=document.getElementById(id);if(!el)return;
+    const old=el.value;
+    el.innerHTML=assets.slice(0,200).map(r=>'<option value="'+xesc(r.pos)+'">'+xesc(r.pos)+' • '+xesc(r.mc||'Unknown')+'</option>').join('');
+    if(old&&assets.some(r=>r.pos===old))el.value=old;
+  });
+}
+
+function mxBuildTwin(){
+  const assets=xassets();
+  const total=assets.length;
+  const open=xarr().filter(r=>r.open).length;
+  const failures=xfailures().length;
+  const risk=xclamp(100-(open/Math.max(1,total))*100,0,100);
+  const throughput=Math.max(0,4200-(open*8));
+  const energy=xnum(0.22*(1+open/Math.max(1,total)),3);
+  const health=xclamp(94-(open/Math.max(1,total))*45,45,99);
+  const k=document.getElementById('mxTwinKpi');if(!k)return;
+  k.innerHTML=`<div class="mx-kpi"><b>${xnum(health,0)}%</b><span>System Twin Health</span></div>
+  <div class="mx-kpi"><b>${throughput.toLocaleString()}</b><span>Estimated Flow / hr</span></div>
+  <div class="mx-kpi"><b>${xnum(energy,3)}</b><span>Model kWh / Bag</span></div>
+  <div class="mx-kpi"><b>${failures.toLocaleString()}</b><span>Failure / DM Evidence Rows</span></div>`;
+  const flow=document.getElementById('mxTwinFlow');
+  const names=['INFEED','MERGE','SCANNER','DIVERT','SORTER','DESTINATION'];
+  flow.innerHTML=names.map((n,i)=>'<div class="mx-node"><b>'+n+'</b><small>'+xstatus(health-i*2)+' '+(i===0?'SOURCE':i===5?'OUTBOUND':'PROCESS')+'</small></div>'+(i<names.length-1?'<div class="mx-arrow">→</div>':'')).join('');
+  const tele=document.getElementById('mxTwinTelemetry');
+  const seed=Date.now()/1000;
+  const temp=42+Math.sin(seed/11)*3+open*.15;
+  const curr=4.2+Math.sin(seed/9)*.35+open*.03;
+  const vib=1.7+Math.abs(Math.sin(seed/13))*.5+open*.01;
+  tele.innerHTML=`<div class="mx-kpi"><span>Temperature • MOCK</span><b>${xnum(temp,1)} °C</b><div class="mx-meter"><i style="width:${xclamp(temp/80*100,0,100)}%"></i></div></div>
+  <div class="mx-kpi"><span>Motor Current • MOCK</span><b>${xnum(curr,2)} A</b><div class="mx-meter"><i style="width:${xclamp(curr/10*100,0,100)}%"></i></div></div>
+  <div class="mx-kpi"><span>Vibration • MOCK</span><b>${xnum(vib,2)} mm/s</b><div class="mx-meter"><i style="width:${xclamp(vib/8*100,0,100)}%"></i></div></div>`;
+}
+
+function mxRunWhatIf(){
+  const s=Number(document.getElementById('mxSpeed').value),l=Number(document.getElementById('mxLoad').value),d=Number(document.getElementById('mxDown').value);
+  document.getElementById('mxSpeedV').textContent=s;document.getElementById('mxLoadV').textContent=l;document.getElementById('mxDownV').textContent=d;
+  const throughput=4200*(s/80)*xclamp(1-(l-60)*.002,0.75,1.08);
+  const energy=.22*(s/80)*(1+.004*(l-60));
+  const wear=xclamp(100*((s/80)**1.8)*(1+.008*(l-60)),45,180);
+  const congestion=xclamp((l*.65)+(d*1.2)+(s<70?15:0),0,100);
+  const risk=xclamp(12+(wear-100)*.45+congestion*.22,0,100);
+  const availability=xclamp(100-d/60*100,0,100);
+  document.getElementById('mxWhatIfResult').innerHTML=`<div class="mx-kpi"><b>${xnum(throughput,0)}</b><span>Estimated Throughput bags/hr</span></div>
+  <div class="mx-kpi"><b>${xnum(energy,3)}</b><span>Model Energy kWh/Bag</span></div>
+  <div class="mx-kpi"><b>${xnum(wear,0)}%</b><span>Relative Wear Index</span></div>
+  <div class="mx-kpi"><b>${xnum(risk,0)}%</b><span>Scenario Risk Index</span></div>`;
+  document.getElementById('mxWhatIfConsole').textContent=`SCENARIO\nSpeed=${s}% | Load=${l}% | Downtime=${d} min\n\nEstimated throughput : ${xnum(throughput,0)} bags/hr\nEstimated energy     : ${xnum(energy,3)} kWh/bag\nRelative wear index  : ${xnum(wear,0)}%\nCongestion index     : ${xnum(congestion,0)}%\nRisk index            : ${xnum(risk,0)}%\n\nDecision gate: simulation only → engineer review required.`;
+}
+function mxResetWhatIf(){['mxSpeed','mxLoad','mxDown'].forEach((id,i)=>document.getElementById(id).value=[80,60,10][i]);mxRunWhatIf()}
+
+function mxRunPropagation(){
+  const pos=document.getElementById('mxFailAsset').value;const rows=xarr().filter(r=>r.pos===pos);const count=rows.length;const open=rows.filter(r=>r.open).length;
+  const severity=xclamp(25+count*7+open*15,0,100);
+  const zones=['Asset','Upstream Conveyor','Merge / Buffer','Downstream Conveyor','BHS Flow','Operational Impact'];
+  const levels=[severity,severity*.85,severity*.72,severity*.62,severity*.52,severity*.42];
+  document.getElementById('mxPropagation').innerHTML=`<div class="mx-grid">${levels.map((v,i)=>'<div class="mx-kpi"><b>'+xstatus(100-v)+' '+xnum(v,0)+'%</b><span>'+zones[i]+' Impact Index</span></div>').join('')}</div>
+  <div class="mx-console" style="margin-top:12px">ROOT ASSET: ${xesc(pos)}\nEvidence rows: ${count}\nOpen rows: ${open}\n\nPropagation model:\nAsset → Upstream → Merge/Buffer → Downstream → BHS Flow → Operational Impact\n\n⚠️ This is a logical impact model. Confirm actual topology/PLC interlocks before operational use.</div>`;
+}
+
+function mxDataQuality(){
+  const rows=xarr();const n=rows.length;
+  const pos=new Set(rows.map(r=>r.pos).filter(Boolean)).size;
+  const missingCause=rows.filter(r=>!r.cause).length;
+  const missingDate=rows.filter(r=>!r.dt).length;
+  const dup=n-new Set(rows.map(r=>(r.pos||'')+'|'+(r.dt||'')+'|'+(r.doc||'')+'|'+(r.sym||''))).size;
+  const stale=window.DB?Math.floor((Date.now()-DB.at)/86400000):999;
+  const completeness=n?100-((missingCause+missingDate)/(n*2))*100:0;
+  document.getElementById('mxDataHealth').innerHTML=`<div class="mx-grid">${[
+    ['Rows',n.toLocaleString(),''],['Unique Assets',pos.toLocaleString(),'%'],['Field Completeness',xnum(completeness,1),'%'],['Duplicate Candidates',dup.toLocaleString(), 'rows'],['Missing Cause',missingCause.toLocaleString(),'rows'],['Missing Date',missingDate.toLocaleString(),'rows'],['DB Age',stale,'days']
+  ].map(a=>'<div class="mx-kpi"><b>'+a[1]+' '+a[2]+'</b><span>'+a[0]+'</span></div>').join('')}</div>
+  <div class="mx-note">Data quality score นี้เป็นการตรวจโครงสร้างข้อมูล ไม่ใช่คะแนนความน่าเชื่อถือของเครื่องจักร</div>`;
+}
+
+function mxReplay(){
+  const pos=document.getElementById('mxReplayAsset').value;const rows=xarr().filter(r=>r.pos===pos).sort((a,b)=>(xdate(a.dt)||new Date(0))-(xdate(b.dt)||new Date(0)));
+  const box=document.getElementById('mxReplayBox');
+  if(!rows.length){box.innerHTML='<div class="mx-event">ไม่พบ Event History</div>';return;}
+  box.innerHTML=rows.slice(-20).map((r,i)=>`<div class="mx-event"><b>${xesc(r.dt||'Unknown date')}</b> <span class="mx-tag">${xesc(r.lvl||'EVENT')}</span><br><span>${xesc(r.sym||'ไม่มีอาการระบุ')}</span><br><span class="mx-label">Cause: ${xesc(r.cause||'-')} • Plan: ${xesc(r.plan||'-')} • Part: ${xesc(r.part||'-')}</span></div>`).join('');
+}
+
+function mxReliability(){
+  const rows=xarr();const groups={};
+  rows.forEach(r=>{if(!r.pos)return;(groups[r.pos]??=[]).push(r)});
+  let totalIntervals=0,totalDays=0,totalDowntime=0,woCount=0;
+  Object.values(groups).forEach(arr=>{const ds=arr.map(r=>xdate(r.dt)).filter(Boolean).sort((a,b)=>a-b);for(let i=1;i<ds.length;i++){totalIntervals++;totalDays+=xdays(ds[i-1],ds[i])} });
+  if(typeof WORK_ORDERS!=='undefined'&&Array.isArray(WORK_ORDERS)){woCount=WORK_ORDERS.length;totalDowntime=WORK_ORDERS.reduce((s,w)=>s+(Number(w.hours)||0),0)/60}
+  const mtbf=totalIntervals?totalDays*24/totalIntervals:null;
+  const mttr=woCount?totalDowntime/woCount:null;
+  const av=(mtbf!==null&&mttr!==null)?mtbf/(mtbf+mttr)*100:null;
+  const beta=totalIntervals>=3?1+(totalIntervals-2)*.08:null;
+  document.getElementById('mxReliability').innerHTML=`<div class="mx-grid">${[
+    ['MTBF',mtbf===null?'Insufficient Data':xnum(mtbf,1)+' hr'],['MTTR',mttr===null?'Insufficient Data':xnum(mttr,2)+' hr'],['Availability',av===null?'Insufficient Data':xnum(av,2)+'%'],['Failure Intervals',totalIntervals],['Weibull β',beta===null?'Insufficient Data':xnum(beta,2)],['Work Orders',woCount]
+  ].map(a=>'<div class="mx-kpi"><b>'+a[1]+'</b><span>'+a[0]+'</span></div>').join('')}</div>
+  <div class="mx-console" style="margin-top:12px">RELIABILITY NOTE\nMTBF/Weibull ต้องใช้ Failure History ที่มี timestamp ถูกต้องและจำนวนตัวอย่างเพียงพอ\nค่าที่ขึ้นว่า Insufficient Data = ระบบปฏิเสธการสร้างตัวเลขจากข้อมูลไม่พอ\nWeibull β ในรุ่นนี้เป็น preliminary screening estimate เท่านั้น ไม่ใช่ statistical fit สำหรับการรับรองทางวิศวกรรม</div>`;
+}
+
+function mxCalcMech(){const P=Number(document.getElementById('mxPow').value),n=Number(document.getElementById('mxRpm').value);if(!(P>0&&n>0))return;const T=9550*P/n;document.getElementById('mxMechOut').textContent=`Torque ≈ ${T.toFixed(2)} N·m\nFormula: T = 9550 × P(kW) / RPM`}
+function mxCalcElec(){const V=Number(document.getElementById('mxVolt').value),I=Number(document.getElementById('mxCurr').value),pf=Number(document.getElementById('mxPF').value);if(!(V>0&&I>0&&pf>0))return;const P=Math.sqrt(3)*V*I*pf/1000;document.getElementById('mxElecOut').textContent=`3-Phase Power ≈ ${P.toFixed(2)} kW\nFormula: √3 × V × I × PF / 1000`}
+function mxCalcRel(){const m=Number(document.getElementById('mxMTBF').value),t=Number(document.getElementById('mxMTTR').value);if(!(m>0&&t>=0))return;const a=m/(m+t)*100;document.getElementById('mxRelOut').textContent=`Availability ≈ ${a.toFixed(3)}%\nFormula: MTBF / (MTBF + MTTR)`}
+function mxCalcQueue(){const l=Number(document.getElementById('mxLambda').value),m=Number(document.getElementById('mxMu').value);if(!(l>0&&m>0))return;const rho=l/m;document.getElementById('mxQueueOut').textContent=`Utilization ρ = ${(rho*100).toFixed(2)}%\n${rho>=1?'⚠️ λ ≥ μ → queue is unstable in this simplified model.':'Condition: λ < μ → service capacity exceeds arrival rate.'}`}
+
+function mxBrainAsk(){
+  const q=document.getElementById('mxBrainQ').value.trim().toLowerCase();const rows=xarr();let ans='';
+  if(!rows.length){ans='ยังไม่มีฐานข้อมูลกลาง จึงไม่สามารถวิเคราะห์จากข้อมูลจริงได้';}
+  else if(/mtbf/.test(q)){ans='MTBF = Mean Time Between Failures\nใช้ประเมินเวลาการทำงานเฉลี่ยระหว่าง Failure Events; ระบบของคุณควรคำนวณจาก Timestamp ที่เชื่อถือได้และแยก Asset/Failure Mode ให้ชัดเจน';}
+  else if(/risk|เสี่ยง|ความเสี่ยง/.test(q)){
+    const g={};rows.forEach(r=>{if(r.pos)g[r.pos]=(g[r.pos]||0)+1});const top=Object.entries(g).sort((a,b)=>b[1]-a[1]).slice(0,5);ans='TOP EVIDENCE-BASED RISK CANDIDATES\n'+top.map((x,i)=>`${i+1}. ${x[0]} → ${x[1]} evidence rows`).join('\n')+'\n\nหมายเหตุ: จำนวนประวัติสูง ≠ ความน่าจะเป็น Failure โดยตรง ต้อง normalize ด้วย operating hours / exposure';
+  } else {
+    const hit=rows.filter(r=>(r.pos||'').toLowerCase().includes(q)||(r.mc||'').toLowerCase().includes(q));
+    if(hit.length){const u=[...new Set(hit.map(r=>r.pos))].slice(0,10);ans=`พบ ${hit.length} evidence rows\nAssets: ${u.join(', ')}\n\nTop symptoms:\n${hit.slice(0,8).map(r=>'• '+(r.sym||'-')+' | Cause: '+(r.cause||'-')).join('\n')}`;}
+    else ans='ยังไม่พบข้อมูลตรงกับคำถามในฐานข้อมูลกลาง\nลองใช้ Equipment ID, Machine Type, MTBF, risk หรือคำว่า failure / สาเหตุ';
+  }
+  document.getElementById('mxBrainAnswer').textContent=ans;
+}
+
+function mxMastery(){
+  const rows=xarr();const n=rows.length;const assets=new Set(rows.map(r=>r.pos).filter(Boolean)).size;
+  const withDate=rows.filter(r=>r.dt).length;const withCause=rows.filter(r=>r.cause).length;const completeness=n?((withDate+withCause)/(2*n))*100:0;
+  const evidence=n?xclamp(60+Math.min(35,assets/10),0,100):0;const confidence=xclamp((completeness*.7)+(evidence*.3),0,100);
+  document.getElementById('mxMasteryKpi').innerHTML=`<div class="mx-kpi"><b>${xnum(completeness,0)}%</b><span>Evidence Completeness</span></div><div class="mx-kpi"><b>${xnum(confidence,0)}%</b><span>Decision Confidence*</span></div><div class="mx-kpi"><b>${assets}</b><span>Unique Assets</span></div><div class="mx-kpi"><b>${n}</b><span>Evidence Rows</span></div>`;
+  const thread=document.getElementById('mxThread');
+  thread.innerHTML=['Sensor / DB','Anomaly / Event','Diagnosis','Work Order','Spare / Action','Verification','Knowledge'].map((x,i)=>'<div class="mx-event"><b>'+x+'</b><br><span class="mx-label">'+(i<2?'Current data layer':i<5?'Decision layer':'Learning layer')+'</span></div>').join('');
+  document.getElementById('mxSafety').textContent=`SAFETY GATE\n\n1. Is this real telemetry?  ${'NO — simulation / historical DB'}\n2. Is topology verified?      REVIEW REQUIRED\n3. Is interlock/LOTO involved? ENGINEER CHECK\n4. Can AI directly command BHS? NO\n5. Final action authority:     HUMAN ENGINEER\n\n*Confidence is a data-quality indicator, not probability of failure.`;
+}
+
+function mxRefreshAll(){
+  if(!document.getElementById('mx10'))return;
+  mxRefreshAssetSelects();mxBuildTwin();mxDataQuality();mxReliability();mxMastery();
+  if(!document.getElementById('mxWhatIfResult').innerHTML)mxRunWhatIf();
+  const stamp=window.DB&&DB.at?DB.at:null;
+  if(stamp!==MT3X.lastDBStamp){MT3X.lastDBStamp=stamp;mxBuildTwin();mxDataQuality();mxReliability();mxMastery();}
+}
+
+function init(){
+  injectStyle();buildPanels();
+  mxRefreshAll();mxRunWhatIf();
+  if(MT3X.timer)clearInterval(MT3X.timer);
+  MT3X.timer=setInterval(mxRefreshAll,3000);
+  window.addEventListener('beforeunload',()=>{if(MT3X.timer)clearInterval(MT3X.timer)});
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
 </body>
 </html>
