@@ -1409,3 +1409,205 @@ function m19init(){
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',m19init);else m19init();
 })();
 </script>
+
+<script>
+/* ================================================================
+   MT3 BHS ENGINEERING INTEGRATION / MASTERY MODULES 23-31
+   ADDITIVE EXTENSION ONLY — ALL PREVIOUS CODE IS PRESERVED.
+   Modules:
+   23 Reliability KPI & Engineering Analytics
+   24 RCA / Failure Analysis
+   25 FMEA / FMECA / RCM
+   26 Maintenance Backlog & Resource Planning
+   27 Technician Skill Matrix
+   28 Maintenance Cost Intelligence
+   29 Continuous Improvement / Kaizen
+   30 Engineering Knowledge Base
+   31 BHS Engineering Command Center
+
+   Design rule:
+   - Do not overwrite DB, existing functions, or existing panels.
+   - Use Asset ID as the integration key wherever available.
+   - LocalStorage is used for new records; existing central DB remains untouched.
+   - No live PLC/SCADA commands are issued by this extension.
+   ================================================================ */
+(function(){
+'use strict';
+
+const M23X={
+  timer:null,
+  keys:{
+    rca:'mt3_bhs_rca_v1', fmea:'mt3_bhs_fmea_v1', backlog:'mt3_bhs_backlog_v1',
+    skills:'mt3_bhs_skills_v1', costs:'mt3_bhs_costs_v1', kaizen:'mt3_bhs_kaizen_v1',
+    kb:'mt3_bhs_knowledge_v1'
+  }
+};
+
+function m23esc(s){return String(s??'').replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c]))}
+function m23load(k,f=[]){try{const v=JSON.parse(localStorage.getItem(k));return Array.isArray(v)?v:f}catch(e){return f}}
+function m23save(k,v){localStorage.setItem(k,JSON.stringify(v))}
+function m23today(){return new Date().toISOString().slice(0,10)}
+function m23num(v,d=0){const n=Number(v);return Number.isFinite(n)?n.toFixed(d):'0'}
+function m23days(a,b){const x=new Date(a),y=new Date(b);return Number.isFinite(x.getTime())&&Number.isFinite(y.getTime())?Math.max(0,Math.round((y-x)/86400000)):0}
+function m23arr(){return window.DB&&Array.isArray(DB.recs)?DB.recs:[]}
+function m23assets(){
+  const map=new Map();
+  m23arr().forEach(r=>{if(r.pos&&!map.has(r.pos))map.set(r.pos,r)});
+  return [...map.values()];
+}
+function m23assetOptions(sel=''){
+  const a=m23assets();
+  return '<option value="">เลือก Asset</option>'+a.slice(0,800).map(r=>`<option value="${m23esc(r.pos)}" ${r.pos===sel?'selected':''}>${m23esc(r.pos)}</option>`).join('');
+}
+function m23badge(v,kind='neutral'){
+  const cls=kind==='ok'?'grn':kind==='warn'?'org':kind==='bad'?'red':kind==='info'?'blu':'gry';
+  return `<span class="b ${cls}">${m23esc(v)}</span>`;
+}
+function m23statusPriority(p){return ({Critical:4,High:3,Medium:2,Low:1}[p]||0)}
+function m23seed(){
+  const k=M23X.keys;
+  if(!localStorage.getItem(k.fmea))m23save(k.fmea,[
+    {id:1,asset:'',mode:'Conveyor belt tracking deviation',cause:'Belt tension / alignment',effect:'Bag flow disturbance',sev:8,occ:5,det:4,control:'Visual inspection / tracking check',task:'Check belt tracking & tension',owner:'MT3'}
+  ]);
+  if(!localStorage.getItem(k.skills))m23save(k.skills,[
+    {id:1,name:'Technician 01',team:'MT3',PLC:3,VFD:4,Motor:4,Conveyor:5,Safety:4,SCADA:3},
+    {id:2,name:'Technician 02',team:'MT3',PLC:4,VFD:3,Motor:4,Conveyor:4,Safety:5,SCADA:4}
+  ]);
+  if(!localStorage.getItem(k.kb))m23save(k.kb,[
+    {id:1,title:'BHS Troubleshooting Master Record',type:'Troubleshooting',asset:'',tag:'BHS, troubleshooting, fault',owner:'MT3',updated:m23today(),summary:'Engineering knowledge placeholder — link WI/SOP/manual/drawing in the production deployment.'}
+  ]);
+}
+
+function m23style(){
+ if(document.getElementById('mt3IntegrationStyle'))return;
+ const s=document.createElement('style');s.id='mt3IntegrationStyle';s.textContent=`
+ .m23-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}
+ .m23-grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+ .m23-grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+ .m23-kpi{background:#07101f;border:1px solid #263956;border-radius:12px;padding:13px}
+ .m23-kpi b{display:block;color:var(--gold2);font-size:24px;margin-top:5px}
+ .m23-card{background:#07101f;border:1px solid #263956;border-radius:12px;padding:14px;margin-top:12px}
+ .m23-card h3{margin:0 0 10px;color:var(--gold2);font-size:14px}
+ .m23-table{overflow:auto;max-height:55vh;margin-top:12px;border:1px solid #22304a;border-radius:10px}
+ .m23-table table{min-width:900px}
+ .m23-flow{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;align-items:center;margin-top:10px}
+ .m23-node{background:#0a1120;border:1px solid #334155;border-radius:10px;padding:10px;text-align:center;font-size:11px}
+ .m23-node b{display:block;color:var(--gold2);font-size:15px;margin-bottom:4px}
+ .m23-risk{font-size:28px;font-weight:800;color:var(--gold2)}
+ .m23-small{font-size:11px;color:#8fa3bf;line-height:1.55}
+ @media(max-width:900px){.m23-grid,.m23-grid3,.m23-grid2{grid-template-columns:1fr 1fr}.m23-flow{grid-template-columns:1fr 1fr}}
+ @media(max-width:600px){.m23-grid,.m23-grid3,.m23-grid2{grid-template-columns:1fr}}
+ `;document.head.appendChild(s);
+}
+function m23nav(id,label,icon){
+ const nav=document.querySelector('.menu-nav');if(!nav||document.getElementById('nav_'+id))return;
+ const b=document.createElement('button');b.id='nav_'+id;b.className='nav-btn';b.innerHTML='<span>'+icon+'</span>'+label;
+ b.onclick=function(){if(typeof switchPanel==='function')switchPanel(id,b)};nav.appendChild(b);
+}
+function m23panel(id,title,body){
+ if(document.getElementById(id))return;const wrap=document.querySelector('.wrapmain');if(!wrap)return;
+ const p=document.createElement('div');p.id=id;p.className='panel mx-panel';p.innerHTML='<div class="card"><div class="ct">'+title+'</div>'+body+'</div>';wrap.appendChild(p);
+}
+function m23render(){
+ if(!document.getElementById('mx31'))return;
+ m23renderKPI();m23renderRCA();m23renderFMEA();m23renderBacklog();m23renderSkills();m23renderCosts();m23renderKaizen();m23renderKB();m23renderCommand();
+}
+
+function m23renderKPI(){
+ const rows=m23arr(), wo=window.WORK_ORDERS||[], parts=m23load('mt3_bhs_spare_parts_v1',[]), pm=m23load('mt3_bhs_pm_plan_v1',[]);
+ const failures=rows.filter(r=>r.dt||r.sym||r.cause||r.open);
+ const downtime=wo.reduce((s,w)=>s+(Number(w.hours)||0),0);
+ const mttr=failures.length?downtime/failures.length:0;
+ const dates=failures.map(r=>{const m=String(r.dt||'').match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);if(!m)return null;let y=+m[3];if(y>2400)y-=543;return new Date(y,+m[2]-1,+m[1])}).filter(Boolean).sort((a,b)=>a-b);
+ const span=dates.length>1?Math.max(1,(dates.at(-1)-dates[0])/86400000):30;
+ const mtbf=failures.length?span/failures.length:0;
+ const avail=mtbf+mttr?Math.max(0,Math.min(100,mtbf/(mtbf+mttr)*100)):100;
+ const due=pm.filter(x=>m23days(m23today(),x.next)<=0).length;
+ document.getElementById('m23Kpi').innerHTML=[
+  ['MTBF',m23num(mtbf,1),'days','info'],['MTTR',m23num(mttr,1),'min','warn'],['Availability',m23num(avail,1),'%','ok'],['PM Due',due,'items','bad']
+ ].map(x=>`<div class="m23-kpi"><span>${x[0]}</span><b>${x[1]}</b><small>${x[2]} ${m23badge(x[3]==='ok'?'calculated':x[3],x[3])}</small></div>`).join('');
+ document.getElementById('m23KpiNote').textContent=`Evidence rows: ${rows.length} • Work Orders: ${wo.length} • Failure records: ${failures.length} • Low-stock parts: ${parts.filter(p=>Number(p.stock)<=Number(p.min)).length}. Metrics are calculated from currently available browser data.`;
+}
+
+function m23renderRCA(){
+ const a=m23load(M23X.keys.rca,[]), el=document.getElementById('m24Table');if(!el)return;
+ el.innerHTML=a.map(r=>`<tr><td>${m23esc(r.date)}</td><td>${m23esc(r.asset||'-')}</td><td>${m23esc(r.problem)}</td><td>${m23esc(r.root)}</td><td>${m23esc(r.action)}</td><td>${m23badge(r.status,r.status==='Verified'?'ok':r.status==='Open'?'warn':'info')}</td><td><button class="danger" onclick="m23Del('rca',${r.id})">ลบ</button></td></tr>`).join('')||'<tr><td colspan="7">ยังไม่มี RCA</td></tr>';
+}
+function m23addRCA(){
+ const k=M23X.keys.rca,a=m23load(k,[]);a.unshift({id:Date.now(),date:m23today(),asset:document.getElementById('m24Asset').value,problem:document.getElementById('m24Problem').value,why1:document.getElementById('m24Why1').value,why2:document.getElementById('m24Why2').value,root:document.getElementById('m24Root').value,action:document.getElementById('m24Action').value,status:document.getElementById('m24Status').value});m23save(k,a);m23renderRCA();
+}
+
+function m23renderFMEA(){
+ const a=m23load(M23X.keys.fmea,[]),el=document.getElementById('m25Table');if(!el)return;
+ el.innerHTML=a.map(r=>{const rpn=(+r.sev||0)*(+r.occ||0)*(+r.det||0);const kind=rpn>=150?'bad':rpn>=80?'warn':'ok';return `<tr><td>${m23esc(r.asset||'-')}</td><td>${m23esc(r.mode)}</td><td>${m23esc(r.cause)}</td><td>${r.sev}</td><td>${r.occ}</td><td>${r.det}</td><td><b>${rpn}</b> ${m23badge(rpn>=150?'HIGH':rpn>=80?'MEDIUM':'CONTROLLED',kind)}</td><td>${m23esc(r.task)}</td><td><button class="danger" onclick="m23Del('fmea',${r.id})">ลบ</button></td></tr>`}).join('')||'<tr><td colspan="9">ยังไม่มี FMEA</td></tr>';
+ const high=a.filter(r=>(+r.sev||0)*(+r.occ||0)*(+r.det||0)>=150).length;document.getElementById('m25High').textContent=high;
+}
+function m23addFMEA(){const k=M23X.keys.fmea,a=m23load(k,[]);a.push({id:Date.now(),asset:document.getElementById('m25Asset').value,mode:document.getElementById('m25Mode').value,cause:document.getElementById('m25Cause').value,effect:document.getElementById('m25Effect').value,sev:+document.getElementById('m25S').value,occ:+document.getElementById('m25O').value,det:+document.getElementById('m25D').value,task:document.getElementById('m25Task').value});m23save(k,a);m23renderFMEA()}
+
+function m23renderBacklog(){
+ const a=m23load(M23X.keys.backlog,[]),el=document.getElementById('m26Table');if(!el)return;
+ const hours=a.reduce((s,x)=>s+(+x.hours||0),0),critical=a.filter(x=>x.priority==='Critical').length;
+ document.getElementById('m26Hours').textContent=m23num(hours,1);document.getElementById('m26Critical').textContent=critical;document.getElementById('m26Count').textContent=a.length;
+ el.innerHTML=a.map(r=>`<tr><td>${m23esc(r.date)}</td><td>${m23esc(r.asset)}</td><td>${m23esc(r.task)}</td><td>${m23badge(r.priority,r.priority==='Critical'?'bad':r.priority==='High'?'warn':'info')}</td><td>${r.hours}</td><td>${m23esc(r.skill)}</td><td>${m23esc(r.owner)}</td><td>${m23esc(r.due)}</td><td>${m23esc(r.status)}</td><td><button class="danger" onclick="m23Del('backlog',${r.id})">ลบ</button></td></tr>`).join('')||'<tr><td colspan="10">ยังไม่มี Backlog</td></tr>';
+}
+function m23addBacklog(){const k=M23X.keys.backlog,a=m23load(k,[]);a.push({id:Date.now(),date:m23today(),asset:document.getElementById('m26Asset').value,task:document.getElementById('m26Task').value,priority:document.getElementById('m26Priority').value,hours:+document.getElementById('m26HoursIn').value||0,skill:document.getElementById('m26Skill').value,owner:document.getElementById('m26Owner').value,due:document.getElementById('m26Due').value,status:document.getElementById('m26Status').value});m23save(k,a);m23renderBacklog()}
+
+function m23renderSkills(){
+ const a=m23load(M23X.keys.skills,[]),el=document.getElementById('m27Table');if(!el)return;
+ el.innerHTML=a.map(r=>`<tr><td>${m23esc(r.name)}</td><td>${m23esc(r.team)}</td>${['PLC','VFD','Motor','Conveyor','Safety','SCADA'].map(k=>`<td>${r[k]}/5</td>`).join('')}<td><button class="danger" onclick="m23Del('skills',${r.id})">ลบ</button></td></tr>`).join('')||'<tr><td colspan="9">ยังไม่มี Skill Matrix</td></tr>';
+ const avg=a.length? a.reduce((s,r)=>s+['PLC','VFD','Motor','Conveyor','Safety','SCADA'].reduce((q,k)=>q+(+r[k]||0),0)/6,0)/a.length:0;document.getElementById('m27Avg').textContent=m23num(avg,2);
+}
+function m23addSkill(){const k=M23X.keys.skills,a=m23load(k,[]);a.push({id:Date.now(),name:document.getElementById('m27Name').value,team:document.getElementById('m27Team').value,PLC:+document.getElementById('m27PLC').value,VFD:+document.getElementById('m27VFD').value,Motor:+document.getElementById('m27Motor').value,Conveyor:+document.getElementById('m27Conv').value,Safety:+document.getElementById('m27Safety').value,SCADA:+document.getElementById('m27SCADA').value});m23save(k,a);m23renderSkills()}
+
+function m23renderCosts(){
+ const a=m23load(M23X.keys.costs,[]),el=document.getElementById('m28Table');if(!el)return;
+ const total=a.reduce((s,r)=>s+(+r.parts||0)+(+r.labor||0)+(+r.downtime||0)+(+r.energy||0),0);
+ document.getElementById('m28Total').textContent=m23num(total,2);
+ el.innerHTML=a.map(r=>{const t=(+r.parts||0)+(+r.labor||0)+(+r.downtime||0)+(+r.energy||0);return `<tr><td>${m23esc(r.date)}</td><td>${m23esc(r.asset)}</td><td>${r.parts}</td><td>${r.labor}</td><td>${r.downtime}</td><td>${r.energy}</td><td><b>${m23num(t,2)}</b></td><td>${m23esc(r.reason)}</td><td><button class="danger" onclick="m23Del('costs',${r.id})">ลบ</button></td></tr>`}).join('')||'<tr><td colspan="9">ยังไม่มี Cost Record</td></tr>';
+}
+function m23addCost(){const k=M23X.keys.costs,a=m23load(k,[]);a.push({id:Date.now(),date:m23today(),asset:document.getElementById('m28Asset').value,parts:+document.getElementById('m28Parts').value||0,labor:+document.getElementById('m28Labor').value||0,downtime:+document.getElementById('m28Down').value||0,energy:+document.getElementById('m28Energy').value||0,reason:document.getElementById('m28Reason').value});m23save(k,a);m23renderCosts()}
+
+function m23renderKaizen(){
+ const a=m23load(M23X.keys.kaizen,[]),el=document.getElementById('m29Table');if(!el)return;
+ el.innerHTML=a.map(r=>`<tr><td>${m23esc(r.date)}</td><td>${m23esc(r.title)}</td><td>${m23esc(r.asset)}</td><td>${m23esc(r.problem)}</td><td>${m23esc(r.counter)}</td><td>${m23esc(r.result)}</td><td>${m23num(r.saving,2)}</td><td>${m23badge(r.status,r.status==='Standardized'?'ok':'info')}</td><td><button class="danger" onclick="m23Del('kaizen',${r.id})">ลบ</button></td></tr>`).join('')||'<tr><td colspan="9">ยังไม่มี Kaizen</td></tr>';
+}
+function m23addKaizen(){const k=M23X.keys.kaizen,a=m23load(k,[]);a.push({id:Date.now(),date:m23today(),title:document.getElementById('m29Title').value,asset:document.getElementById('m29Asset').value,problem:document.getElementById('m29Problem').value,counter:document.getElementById('m29Counter').value,result:document.getElementById('m29Result').value,saving:+document.getElementById('m29Saving').value||0,status:document.getElementById('m29Status').value});m23save(k,a);m23renderKaizen()}
+
+function m23renderKB(){
+ const a=m23load(M23X.keys.kb,[]),el=document.getElementById('m30Table');if(!el)return;
+ const q=(document.getElementById('m30Search')?.value||'').toLowerCase();const b=a.filter(r=>(r.title+' '+r.type+' '+r.asset+' '+r.tag+' '+r.summary).toLowerCase().includes(q));
+ el.innerHTML=b.map(r=>`<tr><td>${m23esc(r.title)}</td><td>${m23esc(r.type)}</td><td>${m23esc(r.asset||'-')}</td><td>${m23esc(r.tag||'-')}</td><td>${m23esc(r.updated)}</td><td>${m23esc(r.owner)}</td><td>${m23esc(r.summary)}</td><td><button class="danger" onclick="m23Del('kb',${r.id})">ลบ</button></td></tr>`).join('')||'<tr><td colspan="8">ไม่พบ Knowledge Record</td></tr>';
+}
+function m23addKB(){const k=M23X.keys.kb,a=m23load(k,[]);a.unshift({id:Date.now(),title:document.getElementById('m30Title').value,type:document.getElementById('m30Type').value,asset:document.getElementById('m30Asset').value,tag:document.getElementById('m30Tag').value,updated:m23today(),owner:document.getElementById('m30Owner').value,summary:document.getElementById('m30Summary').value});m23save(k,a);m23renderKB()}
+
+function m23renderCommand(){
+ const rows=m23arr(), parts=m23load('mt3_bhs_spare_parts_v1',[]), pm=m23load('mt3_bhs_pm_plan_v1',[]), rca=m23load(M23X.keys.rca,[]), fmea=m23load(M23X.keys.fmea,[]), backlog=m23load(M23X.keys.backlog,[]), costs=m23load(M23X.keys.costs,[]);
+ const low=parts.filter(p=>Number(p.stock)<=Number(p.min)).length, overdue=pm.filter(p=>m23days(p.next,m23today())>=0).length, high=fmea.filter(r=>(+r.sev||0)*(+r.occ||0)*(+r.det||0)>=150).length, openRCA=rca.filter(r=>r.status==='Open').length, critical=backlog.filter(r=>r.priority==='Critical'&&r.status!=='Closed').length;
+ document.getElementById('m31Kpi').innerHTML=[['Assets',new Set(rows.map(r=>r.pos).filter(Boolean)).size,'info'],['Low Stock',low,low?'bad':'ok'],['PM Due/Overdue',overdue,overdue?'warn':'ok'],['High FMEA RPN',high,high?'bad':'ok'],['Open RCA',openRCA,openRCA?'warn':'ok'],['Critical Backlog',critical,critical?'bad':'ok'],['Cost Records',costs.length,'info'],['Knowledge Records',m23load(M23X.keys.kb,[]).length,'info']].map(x=>`<div class="m23-kpi"><span>${x[0]}</span><b>${x[1]}</b>${m23badge(x[2]==='ok'?'CONTROLLED':x[2]==='bad'?'ACTION REQUIRED':x[2]==='warn'?'REVIEW':'CONNECTED',x[2])}</div>`).join('');
+ document.getElementById('m31Flow').innerHTML=['Asset ID','Inspection / Sensor','Anomaly / Failure','RCA / FMEA','Work Order / Backlog','Spare / Cost','Knowledge / Kaizen'].map((x,i)=>`<div class="m23-node"><b>${i+1}</b>${x}</div>`).join('');
+ document.getElementById('m31Audit').textContent=`Integration key: Asset ID / Position. Current browser records: ${rows.length}. This Command Center is a decision-support layer; it does not automatically command PLC/VFD or close a safety interlock.`;
+}
+
+function m23Del(type,id){const k=M23X.keys[type];if(!k)return;if(!confirm('ลบรายการนี้ใช่หรือไม่?'))return;const a=m23load(k,[]).filter(x=>x.id!==id);m23save(k,a);m23render()}
+window.m23AddRCA=m23addRCA;window.m23AddFMEA=m23addFMEA;window.m23AddBacklog=m23addBacklog;window.m23AddSkill=m23addSkill;window.m23AddCost=m23addCost;window.m23AddKaizen=m23addKaizen;window.m23AddKB=m23addKB;window.m23Del=m23Del;window.m23renderKB=m23renderKB;
+
+function m23build(){
+ [
+  ['mx23','23. Reliability KPI','📐'],['mx24','24. RCA / Failure Analysis','🔎'],['mx25','25. FMEA / RCM','🛡️'],['mx26','26. Backlog / Resource','🧰'],['mx27','27. Skill Matrix','👷'],['mx28','28. Maintenance Cost','💰'],['mx29','29. Kaizen / CI','♻️'],['mx30','30. Knowledge Base','📚'],['mx31','31. Engineering Command','🛰️']
+ ].forEach(x=>m23nav(...x));
+ m23panel('mx23','📐 RELIABILITY KPI & ENGINEERING ANALYTICS',`<div class="hint">คำนวณ KPI จากข้อมูลที่มีใน Browser เช่น Failure, Work Order และ PM. ค่าเป็น Engineering Analytics จากข้อมูลปัจจุบัน ไม่ใช่การรับรอง KPI อย่างเป็นทางการจนกว่าจะตรวจสอบ Data Scope</div><div id="m23Kpi" class="m23-grid"></div><div id="m23KpiNote" class="m23-card m23-small"></div>`);
+ m23panel('mx24','🔎 RCA / FAILURE ANALYSIS',`<div class="hint">โครงสร้าง Failure → 5 Why → Root Cause → Corrective Action → Verification เพื่อเก็บบทเรียนและเชื่อม Asset ID</div><div class="m23-grid3"><select id="m24Asset">${m23assetOptions()}</select><input id="m24Problem" placeholder="Problem / Failure Statement"><select id="m24Status"><option>Open</option><option>Action in Progress</option><option>Verified</option><option>Closed</option></select><input id="m24Why1" placeholder="Why #1"><input id="m24Why2" placeholder="Why #2"><input id="m24Root" placeholder="Root Cause"><input id="m24Action" placeholder="Corrective / Preventive Action"><button onclick="m23AddRCA()">➕ บันทึก RCA</button></div><div class="m23-table"><table><thead><tr><th>Date</th><th>Asset</th><th>Problem</th><th>Root Cause</th><th>Action</th><th>Status</th><th>Action</th></tr></thead><tbody id="m24Table"></tbody></table></div>`);
+ m23panel('mx25','🛡️ FMEA / FMECA / RCM',`<div class="hint">RPN = Severity × Occurrence × Detection. ใช้เพื่อจัดลำดับความเสี่ยงเชิงวิศวกรรมและตรวจว่ามี Task/Control รองรับหรือไม่</div><div class="m23-card">High RPN Records: <span id="m25High" class="m23-risk">0</span></div><div class="m23-grid3"><select id="m25Asset">${m23assetOptions()}</select><input id="m25Mode" placeholder="Failure Mode"><input id="m25Cause" placeholder="Cause"><input id="m25Effect" placeholder="Effect"><input id="m25S" type="number" min="1" max="10" value="5" placeholder="Severity"><input id="m25O" type="number" min="1" max="10" value="5" placeholder="Occurrence"><input id="m25D" type="number" min="1" max="10" value="5" placeholder="Detection"><input id="m25Task" placeholder="Existing / Recommended Maintenance Task"><button onclick="m23AddFMEA()">➕ บันทึก FMEA</button></div><div class="m23-table"><table><thead><tr><th>Asset</th><th>Failure Mode</th><th>Cause</th><th>S</th><th>O</th><th>D</th><th>RPN</th><th>Task</th><th>Action</th></tr></thead><tbody id="m25Table"></tbody></table></div>`);
+ m23panel('mx26','🧰 MAINTENANCE BACKLOG & RESOURCE PLANNING',`<div class="m23-grid3"><div class="m23-kpi"><span>Backlog</span><b id="m26Count">0</b></div><div class="m23-kpi"><span>Total MH</span><b id="m26Hours">0</b></div><div class="m23-kpi"><span>Critical</span><b id="m26Critical">0</b></div></div><div class="m23-grid3"><select id="m26Asset">${m23assetOptions()}</select><input id="m26Task" placeholder="Backlog Task"><select id="m26Priority"><option>Critical</option><option>High</option><option>Medium</option><option>Low</option></select><input id="m26HoursIn" type="number" min="0" placeholder="Estimated MH"><input id="m26Skill" placeholder="Required Skill"><input id="m26Owner" placeholder="Assigned Technician / Team"><input id="m26Due" type="date"><select id="m26Status"><option>Open</option><option>Planned</option><option>In Progress</option><option>Closed</option></select><button onclick="m23AddBacklog()">➕ เพิ่ม Backlog</button></div><div class="m23-table"><table><thead><tr><th>Date</th><th>Asset</th><th>Task</th><th>Priority</th><th>MH</th><th>Skill</th><th>Owner</th><th>Due</th><th>Status</th><th>Action</th></tr></thead><tbody id="m26Table"></tbody></table></div>`);
+ m23panel('mx27','👷 TECHNICIAN SKILL MATRIX',`<div class="m23-card">Average Skill Level: <span id="m27Avg" class="m23-risk">0</span> / 5</div><div class="m23-grid3"><input id="m27Name" placeholder="Technician Name"><input id="m27Team" value="MT3" placeholder="Team"><input id="m27PLC" type="number" min="0" max="5" value="3" placeholder="PLC"><input id="m27VFD" type="number" min="0" max="5" value="3" placeholder="VFD"><input id="m27Motor" type="number" min="0" max="5" value="3" placeholder="Motor"><input id="m27Conv" type="number" min="0" max="5" value="3" placeholder="Conveyor"><input id="m27Safety" type="number" min="0" max="5" value="3" placeholder="Safety"><input id="m27SCADA" type="number" min="0" max="5" value="3" placeholder="SCADA"><button onclick="m23AddSkill()">➕ เพิ่ม Technician</button></div><div class="m23-table"><table><thead><tr><th>Name</th><th>Team</th><th>PLC</th><th>VFD</th><th>Motor</th><th>Conveyor</th><th>Safety</th><th>SCADA</th><th>Action</th></tr></thead><tbody id="m27Table"></tbody></table></div>`);
+ m23panel('mx28','💰 MAINTENANCE COST INTELLIGENCE',`<div class="m23-card">Total Recorded Maintenance Cost: <span id="m28Total" class="m23-risk">0</span></div><div class="hint">กรอก Part + Labor + Downtime Impact + Energy Impact เพื่อมอง Total Cost of Maintenance ต่อ Asset / Failure</div><div class="m23-grid3"><select id="m28Asset">${m23assetOptions()}</select><input id="m28Parts" type="number" min="0" placeholder="Parts Cost"><input id="m28Labor" type="number" min="0" placeholder="Labor Cost"><input id="m28Down" type="number" min="0" placeholder="Downtime Impact Cost"><input id="m28Energy" type="number" min="0" placeholder="Energy Impact Cost"><input id="m28Reason" placeholder="Reason / Failure / WO"><button onclick="m23AddCost()">➕ บันทึก Cost</button></div><div class="m23-table"><table><thead><tr><th>Date</th><th>Asset</th><th>Parts</th><th>Labor</th><th>Downtime</th><th>Energy</th><th>Total</th><th>Reason</th><th>Action</th></tr></thead><tbody id="m28Table"></tbody></table></div>`);
+ m23panel('mx29','♻️ CONTINUOUS IMPROVEMENT / KAIZEN',`<div class="hint">Problem → Current Condition → Root Cause → Countermeasure → Result → Standardization</div><div class="m23-grid3"><input id="m29Title" placeholder="Kaizen Title"><select id="m29Asset">${m23assetOptions()}</select><input id="m29Problem" placeholder="Problem / Current Condition"><input id="m29Counter" placeholder="Countermeasure"><input id="m29Result" placeholder="Result / Before-After"><input id="m29Saving" type="number" min="0" placeholder="Saving / Benefit"><select id="m29Status"><option>Draft</option><option>Implemented</option><option>Verified</option><option>Standardized</option></select><button onclick="m23AddKaizen()">➕ บันทึก Kaizen</button></div><div class="m23-table"><table><thead><tr><th>Date</th><th>Title</th><th>Asset</th><th>Problem</th><th>Countermeasure</th><th>Result</th><th>Saving</th><th>Status</th><th>Action</th></tr></thead><tbody id="m29Table"></tbody></table></div>`);
+ m23panel('mx30','📚 ENGINEERING KNOWLEDGE BASE',`<div class="hint">เก็บ WI, SOP, Manual, Drawing, PLC/VFD parameter, Troubleshooting, RCA, FMEA, Kaizen และ Lessons Learned. รุ่นนี้เก็บ Metadata + Summary ใน Browser เพื่อวางโครงก่อนต่อ File Storage / Supabase.</div><input id="m30Search" placeholder="🔎 Search Engineering Knowledge..." oninput="m23RenderKB()"><div class="m23-grid3"><input id="m30Title" placeholder="Document / Knowledge Title"><select id="m30Type"><option>WI</option><option>SOP</option><option>Manual</option><option>Drawing</option><option>PLC</option><option>VFD</option><option>Troubleshooting</option><option>RCA</option><option>FMEA</option><option>Kaizen</option><option>Lesson Learned</option></select><select id="m30Asset">${m23assetOptions()}</select><input id="m30Tag" placeholder="Tags"><input id="m30Owner" value="MT3" placeholder="Owner"><textarea id="m30Summary" placeholder="Summary / Key Engineering Note"></textarea><button onclick="m23AddKB()">➕ บันทึก Knowledge</button></div><div class="m23-table"><table><thead><tr><th>Title</th><th>Type</th><th>Asset</th><th>Tags</th><th>Updated</th><th>Owner</th><th>Summary</th><th>Action</th></tr></thead><tbody id="m30Table"></tbody></table></div>`);
+ m23panel('mx31','🛰️ BHS ENGINEERING COMMAND CENTER • DIGITAL THREAD',`<div class="hint">ศูนย์รวมสถานะเชิงวิศวกรรม โดยใช้ Asset ID เป็น Integration Key เชื่อม Inspection → Anomaly → Failure → RCA/FMEA → WO/Backlog → Spare/Cost → Knowledge/Kaizen</div><div id="m31Kpi" class="m23-grid"></div><div class="m23-card"><b style="color:var(--gold2)">ENGINEERING DIGITAL THREAD</b><div id="m31Flow" class="m23-flow"></div></div><div id="m31Audit" class="m23-card m23-small"></div><div class="m23-card"><b style="color:var(--gold2)">SAFETY / GOVERNANCE GATE</b><ul class="m23-small"><li>AI output = decision support, not automatic authorization.</li><li>Real PLC/VFD command requires human approval and existing site safety procedures.</li><li>Simulation / browser data must remain distinguishable from real telemetry.</li><li>Asset ID, timestamp and evidence should be mandatory for production deployment.</li></ul></div>`);
+}
+
+function init(){m23style();m23seed();m23build();m23render();if(M23X.timer)clearInterval(M23X.timer);M23X.timer=setInterval(m23render,5000);window.addEventListener('beforeunload',()=>M23X.timer&&clearInterval(M23X.timer));}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+
+</script>
