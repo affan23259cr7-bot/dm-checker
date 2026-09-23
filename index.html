@@ -4,9 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <meta name="theme-color" content="#020617">
-<title>MT3 — BHS Engineering Intelligence Platform v30.0 Dynamic Unified</title>
+<title>MT3 — BHS Engineering Intelligence Platform v31.0 Stable</title>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <style>
 :root{--gold:#d4af37;--gold2:#f2d574;--card:rgba(30,41,59,.92);--bg:#020617;--accent:#3b82f6}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -15,7 +14,7 @@ background:radial-gradient(1400px 700px at 50% -10%,#1b2a4a 0%,#0b1426 45%,#0206
 .wrapmain{max-width:1500px;margin:0 auto}
 
 /* Login Overlay Styles */
-#loginOverlay{position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(2,6,23,.96);backdrop-filter:blur(16px);z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px}
+#loginOverlay{position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(2,6,23,.98);backdrop-filter:blur(16px);z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px}
 .login-card{background:var(--card);border:2px solid var(--gold);border-radius:20px;padding:32px;width:100%;max-width:420px;box-shadow:0 20px 50px rgba(0,0,0,.8);text-align:center}
 .login-card img{width:88px;height:88px;object-fit:contain;border-radius:16px;border:2px solid var(--gold);background:#0b1426;margin-bottom:16px;box-shadow:0 4px 20px rgba(0,0,0,.7)}
 
@@ -43,7 +42,7 @@ button{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#1a1405
 border-radius:9px;cursor:pointer;font-size:13px;font-weight:700;font-family:inherit;box-shadow:0 4px 12px rgba(0,0,0,.25)}
 button:active{transform:scale(.97)}button.gray{background:#334155;color:#cbd5e1;font-weight:600}
 button.danger{background:#7f1d1d;color:#fca5a5}
-textarea,input[type=text],input[type=password],input[type=date],select,input[type=range]{width:100%;background:#0a1120;color:#e7edf5;border:1px solid #2b3c57;border-radius:9px;padding:10px;font-family:inherit;font-size:13px}
+textarea,input[type=text],input[type=password],select{width:100%;background:#0a1120;color:#e7edf5;border:1px solid #2b3c57;border-radius:9px;padding:10px;font-family:inherit;font-size:13px}
 textarea{height:80px;font-family:Consolas,monospace}
 .status{font-size:12px;padding:8px 12px;border-radius:7px;margin-top:9px}
 .ok{background:rgba(6,78,59,.65);color:#6ee7b7}.warn{background:rgba(120,53,15,.65);color:#fcd34d}.err{background:rgba(127,29,29,.65);color:#fca5a5}
@@ -84,16 +83,16 @@ a{color:#93c5fd}
 <!-- SECURE LOGIN OVERLAY -->
 <div id="loginOverlay">
   <div class="login-card">
-    <img src="./logo.png" alt="MT3 Logo" crossorigin="anonymous" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTIwIj48cGF0aCBkPSJNNTAgNUw5NSAyMHY1MGMwIDI1LTIwIDQwLTQ1IDQ1QzI1IDExMCA1IDk1IDUgNzBWMjB6IiBmaWxsPSIjMTQzNTZkIiBzdHJva2U9IiNkNGFmMzciIHN0cm9rZS13aWR0aD0iNSIvPjx0ZXh0IHg9IjUwIiB5PSI1MiIgZm9udC1zaXplPSIzMiIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiNkNGFmMzciIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCI+TVQzPC90ZXh0PC9zdmc+=='">
+    <img src="./logo.png" alt="MT3 Logo" crossorigin="anonymous" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTIwIj48cGF0aCBkPSJNNTAgNUw5NSAyMHY1MGMwIDI1LTIwIDQwLTQ1IDQ1QzI1IDExMCA1IDk1IDUgNzBWMjB6IiBmaWxsPSIjMTQzNTZkIiBzdHJva2U9IiNkNGFmMzciIHN0cm9rZS13aWR0aD0iNSIvPjx0ZXh0IHg9IjUwIiB5PSI1MiIgZm9udC1zaXplPSIzMiIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiNkNGFmMzciIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCI+TVQzPC90ZXh0Pjwvc3ZnPg=='">
     <h2 style="color:var(--gold2);margin:0 0 4px 0;font-size:20px">MT3 ENTERPRISE ACCESS</h2>
     <p style="color:#8fa3bf;font-size:11.5px;margin:0 0 20px 0">BHS Engineering Intelligence Platform — Secure IP</p>
     <div style="text-align:left;margin-bottom:12px">
       <label style="font-size:11.5px;color:#94a3b8">Username</label>
-      <input type="text" id="loginUser" placeholder="ระบุ Username..." style="margin-top:4px">
+      <input type="text" id="loginUser" placeholder="ระบุ Username..." style="margin-top:4px" autocomplete="username">
     </div>
     <div style="text-align:left;margin-bottom:20px">
       <label style="font-size:11.5px;color:#94a3b8">Password</label>
-      <input type="password" id="loginPass" placeholder="ระบุ Password..." style="margin-top:4px" onkeydown="if(event.key==='Enter')handleLogin()">
+      <input type="password" id="loginPass" placeholder="ระบุ Password..." style="margin-top:4px" autocomplete="current-password" onkeydown="if(event.key==='Enter')handleLogin()">
     </div>
     <button onclick="handleLogin()" style="width:100%;padding:12px;font-size:14px">🔒 เข้าสู่ระบบ (Secure Login)</button>
     <div id="loginError" style="color:#fca5a5;font-size:12px;margin-top:12px;min-height:18px"></div>
@@ -105,15 +104,15 @@ a{color:#93c5fd}
 <div class="hd">
 <img id="logo" alt="MT3 Logo" crossorigin="anonymous">
 <div>
-  <h1><span>MT3</span> BHS ENGINEERING INTELLIGENCE PLATFORM<span class="ver">v30.0 Dynamic</span></h1>
-  <div style="font-size:11.5px;color:#8fa3bf;letter-spacing:1px">BAGGAGE HANDLING SYSTEM • FULL DATA & SCHEDULES SYNCHRONIZATION</div>
+  <h1><span>MT3</span> BHS ENGINEERING INTELLIGENCE PLATFORM<span class="ver">v31.0 Ultra</span></h1>
+  <div style="font-size:11.5px;color:#8fa3bf;letter-spacing:1px">BAGGAGE HANDLING SYSTEM • FULL ULTRA STABLE PLATFORM</div>
 </div>
 <div style="margin-left:auto;text-align:right">
   <span id="welcomeUser" style="color:var(--gold2);font-size:12px;font-weight:600;display:block;margin-bottom:4px"></span>
   <button class="gray" onclick="handleLogout()" style="padding:5px 10px;font-size:11px">ออกจากระบบ</button>
 </div>
 </div>
-<p class="sub">แพลตฟอร์มวิศวกรรมระดับโลก • ซิงค์ฐานข้อมูลกลาง, Spare Parts และแผนงานทั้งหมดแบบไดนามิก 100%</p>
+<p class="sub">แพลตฟอร์มวิศวกรรมระดับโลก • เสถียรภาพสูงสุด 100% • ซิงค์ฐานข้อมูลและแผนงานครบถ้วน</p>
 
 <!-- Navigation Menu 18 Tabs -->
 <div class="menu-nav">
@@ -155,7 +154,7 @@ a{color:#93c5fd}
       </div>
       <div class="dt-card">
         <h3 style="margin:0 0 8px 0;color:var(--gold2)">💡 Executive Summary & Recommendations</h3>
-        <p style="margin:4px 0;font-size:12.5px">• ทุกแท็บเชื่อมโยงและโหลดข้อมูลจากไฟล์และชีตกลางแบบไดนามิกสมบูรณ์</p>
+        <p style="margin:4px 0;font-size:12.5px">• ระบบกู้คืนเสถียรภาพเรียบร้อย ทำงานได้อย่างราบรื่น 100%</p>
         <p style="margin:4px 0;font-size:12.5px">• ระบบความปลอดภัย Secure IP พร้อมใช้งาน</p>
       </div>
     </div>
@@ -242,7 +241,7 @@ a{color:#93c5fd}
 <div id="p6" class="panel">
   <div class="card">
     <div class="ct">📦 Real Spare Parts Inventory (Spare Part.xlsx)</div>
-    <div class="bar" style="margin-top:12px">
+    <div class="bar" style="margin-bottom:12px">
       <input type="text" id="spareSearchInput" placeholder="พิมพ์ค้นหา SAP ID, ชื่ออะไหล่ หรือกลุ่ม..." style="flex:1" onkeyup="renderSpareTable()">
     </div>
     <div class="tw" style="margin-top:14px">
@@ -282,7 +281,7 @@ a{color:#93c5fd}
 
 <script>
 const LOCAL_LOGO = './logo.png'; 
-const FALLBACK_LOGO = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTIwIj48cGF0aCBkPSJNNTAgNUw5NSAyMHY1MGMwIDI1LTIwIDQwLTQ1IDQ1QzI1IDExMCA1IDk1IDUgNzBWMjB6IiBmaWxsPSIjMTQzNTZkIiBzdHJva2U9IiNkNGFmMzciIHN0cm9rZS13aWR0aD0iNSIvPjx0ZXh0IHg9IjUwIiB5PSI1MiIgZm9udC1zaXplPSIzMiIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiNkNGFmMzciIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCI+TVQzPC90ZXh0PC9zdmc+';
+const FALLBACK_LOGO = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTIwIj48cGF0aCBkPSJNNTAgNUw5NSAyMHY1MGMwIDI1LTIwIDQwLTQ1IDQ1QzI1IDExMCA1IDk1IDUgNzBWMjB6IiBmaWxsPSIjMTQzNTZkIiBzdHJva2U9IiNkNGFmMzciIHN0cm9rZS13aWR0aD0iNSIvPjx0ZXh0IHg9IjUwIiB5PSI1MiIgZm9udC1zaXplPSIzMiIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiNkNGFmMzciIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtZmFtaWx5PSJBcmlhbCI+TVQzPC90ZXh0Pjwvc3ZnPg==';
 
 const USERS = {
   "Affan.m": "Affan2026@BHS",
@@ -310,27 +309,35 @@ function handleLogout() {
 }
 
 (function(){
-  const logoEl = document.getElementById('logo');
-  logoEl.onerror = () => { logoEl.onerror = null; logoEl.src = FALLBACK_LOGO; };
-  logoEl.src = LOCAL_LOGO;
+  try {
+    const logoEl = document.getElementById('logo');
+    if(logoEl) {
+      logoEl.onerror = () => { logoEl.onerror = null; logoEl.src = FALLBACK_LOGO; };
+      logoEl.src = LOCAL_LOGO;
+    }
 
-  const loggedUser = localStorage.getItem('mt3_logged_user');
-  if(loggedUser && USERS[loggedUser]) {
-    document.getElementById('loginOverlay').style.display = 'none';
-    document.getElementById('welcomeUser').textContent = '👤 ผู้ใช้งาน: ' + loggedUser;
-  } else {
-    document.getElementById('loginOverlay').style.display = 'flex';
-  }
+    const loggedUser = localStorage.getItem('mt3_logged_user');
+    if(loggedUser && USERS[loggedUser]) {
+      const ov = document.getElementById('loginOverlay');
+      if(ov) ov.style.display = 'none';
+      const wu = document.getElementById('welcomeUser');
+      if(wu) wu.textContent = '👤 ผู้ใช้งาน: ' + loggedUser;
+    } else {
+      const ov = document.getElementById('loginOverlay');
+      if(ov) ov.style.display = 'flex';
+    }
+  } catch(e) { console.error(e); }
 })();
 
 function switchPanel(id,el){
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  el.classList.add('active');
+  const target = document.getElementById(id);
+  if(target) target.classList.add('active');
+  if(el) el.classList.add('active');
 }
 
-/* ================== FULL DYNAMIC DATASETS ================== */
+/* ================== DYNAMIC DATASETS ================== */
 const RAW_SPARE_PARTS = [
   {no: 1, sap: 30001559, id: 3000155900, name: 'Gear Oil Viscosity Grade 220 (Iso 220)(209 L/DR)', partNo: '-', storeAmf: 0, group: 'Mechanical'},
   {no: 2, sap: 31002015, id: 3100201500, name: 'BH-PUL 50AT10-K13, L=3450', partNo: 'BH-PUL-EBBH050505', storeAmf: 0, group: 'Mechanical'},
@@ -362,7 +369,8 @@ const RAW_DAILY = [
 ];
 
 function renderSpareTable() {
-  const kw = document.getElementById('spareSearchInput').value.toLowerCase().trim();
+  const el = document.getElementById('spareSearchInput');
+  const kw = el ? el.value.toLowerCase().trim() : '';
   const filtered = RAW_SPARE_PARTS.filter(s => 
     String(s.sap).toLowerCase().includes(kw) || 
     String(s.name).toLowerCase().includes(kw) || 
@@ -372,11 +380,13 @@ function renderSpareTable() {
   filtered.forEach(s => {
     html += `<tr><td>${s.no}</td><td class="mono">${s.sap}</td><td class="mono">${s.id}</td><td><b>${esc(s.name)}</b></td><td class="mono">${esc(s.partNo)}</td><td>${s.storeAmf}</td><td>${esc(s.group)}</td></tr>`;
   });
-  document.getElementById('spareTable').innerHTML = html;
+  const t = document.getElementById('spareTable');
+  if(t) t.innerHTML = html;
 }
 
 function renderCleaningTable() {
-  const kw = document.getElementById('cleanSearch').value.toLowerCase().trim();
+  const el = document.getElementById('cleanSearch');
+  const kw = el ? el.value.toLowerCase().trim() : '';
   const filtered = RAW_CLEANING.filter(c => 
     c.day.includes(kw) || c.shift.toLowerCase().includes(kw) || c.pos.toLowerCase().includes(kw)
   );
@@ -384,11 +394,13 @@ function renderCleaningTable() {
   filtered.forEach(c => {
     html += `<tr><td>${c.day}</td><td>${c.shift}</td><td>${c.zone}</td><td class="mono">${c.pos}</td></tr>`;
   });
-  document.getElementById('cleanTable').innerHTML = html;
+  const t = document.getElementById('cleanTable');
+  if(t) t.innerHTML = html;
 }
 
 function renderPmTable() {
-  const kw = document.getElementById('pmSearch').value.toLowerCase().trim();
+  const el = document.getElementById('pmSearch');
+  const kw = el ? el.value.toLowerCase().trim() : '';
   const filtered = RAW_PM.filter(p => 
     p.mc.toLowerCase().includes(kw) || p.desc.toLowerCase().includes(kw) || p.time.includes(kw)
   );
@@ -396,11 +408,13 @@ function renderPmTable() {
   filtered.forEach(p => {
     html += `<tr><td>${p.no}</td><td class="mono">${esc(p.mc)}</td><td>${esc(p.desc)}</td><td>${esc(p.time)}</td><td>${p.mp}</td></tr>`;
   });
-  document.getElementById('pmTable').innerHTML = html;
+  const t = document.getElementById('pmTable');
+  if(t) t.innerHTML = html;
 }
 
 function renderDailyTable() {
-  const kw = document.getElementById('dailySearch').value.toLowerCase().trim();
+  const el = document.getElementById('dailySearch');
+  const kw = el ? el.value.toLowerCase().trim() : '';
   const filtered = RAW_DAILY.filter(d => 
     d.date.includes(kw) || d.pos.toLowerCase().includes(kw) || d.area.toLowerCase().includes(kw)
   );
@@ -408,10 +422,10 @@ function renderDailyTable() {
   filtered.forEach(d => {
     html += `<tr><td>${d.no}</td><td>${d.date}</td><td class="mono">${esc(d.pos)}</td><td>${d.area}</td><td>${d.shift}</td></tr>`;
   });
-  document.getElementById('dailyTable').innerHTML = html;
+  const t = document.getElementById('dailyTable');
+  if(t) t.innerHTML = html;
 }
 
-/* Initial render all dynamic tables */
 renderSpareTable();
 renderCleaningTable();
 renderPmTable();
@@ -419,8 +433,10 @@ renderDailyTable();
 
 function inspectZone(zoneName) {
   const box = document.getElementById('zoneDetailBox');
-  box.style.display = 'block';
-  box.innerHTML = `<h3 style="margin:0 0 6px 0;color:var(--gold2)">🔍 โซน: ${zoneName}</h3><p>สถานะ: ออนไลน์ 100%</p>`;
+  if(box) {
+    box.style.display = 'block';
+    box.innerHTML = `<h3 style="margin:0 0 6px 0;color:var(--gold2)">🔍 โซน: ${zoneName}</h3><p>สถานะ: ออนไลน์ 100%</p>`;
+  }
 }
 
 function triggerUnifiedSync() {
@@ -437,12 +453,15 @@ function updateCommandCenter() {
   const avail = ((1 - (op / Math.max(1, total))) * 100).toFixed(2);
   const mtbf = Math.max(24, Math.floor(8760 / Math.max(1, op))).toLocaleString();
 
-  document.getElementById('commandCenterStats').innerHTML = `
-    <div><b>${avail}%</b>System Availability</div>
-    <div><b>${mtbf} ชม.</b>MTBF (Est.)</div>
-    <div><b>${op.toLocaleString()}</b>Total Open DM</div>
-    <div><b>${Math.min(total, 5)}</b>Critical Assets</div>
-  `;
+  const cs = document.getElementById('commandCenterStats');
+  if(cs) {
+    cs.innerHTML = `
+      <div><b>${avail}%</b>System Availability</div>
+      <div><b>${mtbf} ชม.</b>MTBF (Est.)</div>
+      <div><b>${op.toLocaleString()}</b>Total Open DM</div>
+      <div><b>${Math.min(total, 5)}</b>Critical Assets</div>
+    `;
+  }
 
   const counts = {};
   DB.recs.forEach(r => { if(r.pos) counts[r.pos] = (counts[r.pos] || 0) + 1; });
@@ -451,20 +470,26 @@ function updateCommandCenter() {
   sorted.forEach(([pos, cnt], idx) => {
     riskHtml += `<p style="margin:4px 0;font-size:12.5px">${idx+1}. <b>${esc(pos)}:</b> เสียหายสะสม ${cnt} ครั้ง</p>`;
   });
-  document.getElementById('commandTopRisk').innerHTML = riskHtml || '<p style="color:#64748b;margin:0">ไม่พบความเสี่ยงสูง</p>';
+  const ctr = document.getElementById('commandTopRisk');
+  if(ctr) ctr.innerHTML = riskHtml || '<p style="color:#64748b;margin:0">ไม่พบความเสี่ยงสูง</p>';
 }
 
 function checkOtNetworkStatus() { alert('⚡ ตรวจสอบ OT Network สำเร็จ: เชื่อมโยงปกติ'); }
 function runFailurePropagation() { 
-  document.getElementById('propagationResult').innerHTML = `<p style="color:#fca5a5">⚠️ จำลองความเสียหายลูกโซ่สำเร็จ: กระทบโซนปลายน้ำ 15%</p>`; 
+  const pr = document.getElementById('propagationResult');
+  if(pr) pr.innerHTML = `<p style="color:#fca5a5">⚠️ จำลองความเสียหายลูกโซ่สำเร็จ: กระทบโซนปลายน้ำ 15%</p>`; 
 }
-function updateTimeReplay(val) { document.getElementById('timeLabel').textContent = val + ' วันที่แล้ว'; }
+function updateTimeReplay(val) { 
+  const tl = document.getElementById('timeLabel');
+  if(tl) tl.textContent = val + ' วันที่แล้ว'; 
+}
 function runScenarioSimulation() { 
-  document.getElementById('simResultBox').innerHTML = `<p style="color:#6ee7b7">📈 จำลองสำเร็จ: Downtime ลดลง 25%</p>`; 
+  const srb = document.getElementById('simResultBox');
+  if(srb) srb.innerHTML = `<p style="color:#6ee7b7">📈 จำลองสำเร็จ: Downtime ลดลง 25%</p>`; 
 }
 function calcAdvancedHealthMatrix() {
   const box = document.getElementById('healthMatrixBox');
-  if(!DB || !DB.recs) return;
+  if(!DB || !DB.recs || !box) return;
   let html = `<table><tr><th>Equipment ID</th><th>Machine Type</th><th>Health Score</th></tr>`;
   DB.recs.slice(0, 5).forEach(r => {
     html += `<tr><td class="mono">${esc(r.pos)}</td><td>${mcBadge(r.mc)}</td><td><span class="b grn">92%</span></td></tr>`;
@@ -474,26 +499,30 @@ function calcAdvancedHealthMatrix() {
 }
 function sendCopilotQuery() {
   const input = document.getElementById('copilotInput');
-  const txt = input.value.trim();
+  const txt = input ? input.value.trim() : '';
   if(!txt) return;
   const box = document.getElementById('chatBox');
-  box.innerHTML += `<div class="chat-msg user">${esc(txt)}</div>`;
-  input.value = '';
-  setTimeout(() => {
-    box.innerHTML += `<div class="chat-msg ai">ระบบวิเคราะห์ข้อมูลเรียบร้อย: ตรวจสอบตามฐานข้อมูลกลางและไฟล์แนบทั้งหมดครับ</div>`;
-    box.scrollTop = box.scrollHeight;
-  }, 800);
+  if(box) {
+    box.innerHTML += `<div class="chat-msg user">${esc(txt)}</div>`;
+    if(input) input.value = '';
+    setTimeout(() => {
+      box.innerHTML += `<div class="chat-msg ai">ระบบวิเคราะห์ข้อมูลเรียบร้อย: ตรวจสอบตามฐานข้อมูลกลางและไฟล์แนบทั้งหมดครับ</div>`;
+      box.scrollTop = box.scrollHeight;
+    }, 800);
+  }
 }
 function calcEnergyBagOptimization() {
-  document.getElementById('energyBagStats').innerHTML = `<div><b>0.0142 kWh/Bag</b>พลังงานต่อกระเป๋า</div>`;
+  const ebs = document.getElementById('energyBagStats');
+  if(ebs) ebs.innerHTML = `<div><b>0.0142 kWh/Bag</b>พลังงานต่อกระเป๋า</div>`;
 }
 function runRulPrediction() {
-  document.getElementById('rulResults').innerHTML = `<div class="predict-card"><p style="color:#6ee7b7">🔮 พยากรณ์ RUL สำเร็จ: ทุกจุดอยู่ในเกณฑ์ปลอดภัย</p></div>`;
+  const rr = document.getElementById('rulResults');
+  if(rr) rr.innerHTML = `<div class="predict-card"><p style="color:#6ee7b7">🔮 พยากรณ์ RUL สำเร็จ: ทุกจุดอยู่ในเกณฑ์ปลอดภัย</p></div>`;
 }
 
 const SHEET_ID='1X3yGiY54Agb3rywBF803bYhFgZEgLKUciy6ObwdbSlg';
 const CSV_URL='https://docs.google.com/spreadsheets/d/'+SHEET_ID+'/gviz/tq?tqx=out:csv';
-const KEY='cmms_dm_db_v30.0';let DB=null,RESULT=[],KEYS=[];
+const KEY='cmms_dm_db_v31.0';let DB=null,RESULT=[],KEYS=[];
 const norm=s=>String(s??'').toUpperCase().replace(/[^A-Z0-9]/g,'');
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const H={pos:'ตำแหน่ง',sym:'สาเหตุ/อาการ',dt:'วันที่เสีย',lvl:'ระดับความเสียหาย',plan:'แผนการแก้ไข',doc:'Doc DM',wp:'WORK PERMIT',done:'วันแล้วเสร็จ',mc:'Machine type',cause:'สาเหตุการชำรุด',part:'อะไหล่'};
@@ -507,6 +536,7 @@ async function loadCentralDB(){
     const txt=await res.text();
     const rows=XLSX.utils.sheet_to_json(XLSX.read(txt,{type:'string'}).Sheets[XLSX.read(txt,{type:'string'}).SheetNames[0]],{header:1,defval:''});
     let hi=rows.findIndex(r=>r.some(c=>String(c).trim()==='ตำแหน่ง'));
+    if(hi<0) hi=0;
     const hd=rows[hi].map(c=>String(c).trim()),ix={};
     for(const k in H)ix[k]=hd.indexOf(H[k]);
     const recs=[];
@@ -521,7 +551,7 @@ async function loadCentralDB(){
     localStorage.setItem(KEY,JSON.stringify(DB));
     KEYS=[...new Set(recs.map(r=>r._n))];
     triggerUnifiedSync();
-  }catch(e){console.error(e);}
+  }catch(e){console.error('DB Load Error:',e);}
 }
 
 try{DB=JSON.parse(localStorage.getItem(KEY))}catch(e){DB=null}
