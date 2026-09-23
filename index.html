@@ -1128,4 +1128,284 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 })();
 </script>
 </body>
-</html>
+</html><script>
+/* ================================================================
+   MT3 BHS MAINTENANCE MODULES 19-22
+   ADDITIVE EXTENSION ONLY
+   ORIGINAL v36.1 + MASTERY CODE IS NOT MODIFIED.
+   Modules:
+   19. Spare Parts Intelligence
+   20. Preventive Maintenance Plan
+   21. Daily Inspection Normal
+   22. Daily Inspection Special
+   ================================================================ */
+(function(){
+'use strict';
+
+const M19X={
+  timer:null,
+  partsKey:'mt3_bhs_spare_parts_v1',
+  pmKey:'mt3_bhs_pm_plan_v1',
+  normalKey:'mt3_bhs_daily_normal_v1',
+  specialKey:'mt3_bhs_daily_special_v1'
+};
+
+function m19esc(s){return String(s??'').replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c]))}
+function m19num(v,d=0){const n=Number(v);return Number.isFinite(n)?n.toFixed(d):'0'}
+function m19today(){return new Date().toISOString().slice(0,10)}
+function m19load(key,fallback){try{const v=JSON.parse(localStorage.getItem(key));return Array.isArray(v)?v:fallback}catch(e){return fallback}}
+function m19save(key,data){localStorage.setItem(key,JSON.stringify(data))}
+function m19assetRows(){return window.DB&&Array.isArray(DB.recs)?DB.recs:[]}
+function m19assets(){
+  const map=new Map();
+  m19assetRows().forEach(r=>{if(r.pos&&!map.has(r.pos))map.set(r.pos,r)});
+  return [...map.values()];
+}
+function m19assetOptions(selected=''){
+  const rows=m19assets();
+  if(!rows.length)return '<option value="">ไม่มี Asset จากฐานข้อมูลกลาง</option>';
+  return '<option value="">เลือก Asset</option>'+rows.slice(0,500).map(r=>`<option value="${m19esc(r.pos)}" ${r.pos===selected?'selected':''}>${m19esc(r.pos)} • ${m19esc(r.mc||'Unknown')}</option>`).join('');
+}
+function m19statusBadge(status){
+  const s=String(status||'').toLowerCase();
+  if(/critical|overdue|fail|หมด|ขาด/.test(s))return '<span class="b red">'+m19esc(status)+'</span>';
+  if(/warning|due|ใกล้|ต่ำ/.test(s))return '<span class="b org">'+m19esc(status)+'</span>';
+  return '<span class="b grn">'+m19esc(status)+'</span>';
+}
+function m19dateAdd(date,days){const d=new Date(date||m19today());d.setDate(d.getDate()+Number(days||0));return d.toISOString().slice(0,10)}
+function m19daysFromToday(date){const d=new Date(date+'T00:00:00');const t=new Date(m19today()+'T00:00:00');return Math.round((d-t)/86400000)}
+
+function m19injectStyle(){
+  if(document.getElementById('mt3M19Style'))return;
+  const s=document.createElement('style');s.id='mt3M19Style';
+  s.textContent=`
+  .m19-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}
+  .m19-grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}
+  .m19-grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+  .m19-card{background:#07101f;border:1px solid #263956;border-radius:12px;padding:12px}
+  .m19-card b{color:var(--gold2)}
+  .m19-card small,.m19-help{color:#8fa3bf;font-size:11px;line-height:1.55}
+  .m19-kpi{background:#050b15;border:1px solid #233650;border-radius:12px;padding:12px}
+  .m19-kpi b{display:block;color:var(--gold2);font-size:21px;margin-bottom:4px}
+  .m19-kpi span{font-size:11px;color:#8fa3bf}
+  .m19-table-wrap{overflow:auto;margin-top:12px;border:1px solid #233650;border-radius:12px}
+  .m19-table{width:100%;border-collapse:collapse;min-width:900px}
+  .m19-table th,.m19-table td{padding:9px;border-bottom:1px solid #1e2d43;font-size:11px;text-align:left;vertical-align:top}
+  .m19-table th{background:#0b1628;color:var(--gold2);position:sticky;top:0;z-index:1}
+  .m19-table td{color:#dbe5f2}
+  .m19-input{width:100%;box-sizing:border-box}
+  .m19-check{display:grid;grid-template-columns:32px 1fr 170px 220px;gap:8px;align-items:center;padding:10px;border:1px solid #263956;background:#07101f;border-radius:10px;margin-top:8px}
+  .m19-check input[type=checkbox]{width:18px;height:18px;accent-color:var(--gold)}
+  .m19-check .label{font-weight:700;color:#e7edf5;font-size:12px}
+  .m19-check .sub{font-size:10px;color:#64748b;margin-top:3px}
+  .m19-score{display:flex;gap:6px;flex-wrap:wrap}
+  .m19-score button{padding:5px 8px;font-size:10px}
+  .m19-alert{border:1px solid #7f1d1d;background:#2a0e12;color:#fecaca;padding:10px;border-radius:10px;margin-top:10px;font-size:11px}
+  .m19-ok{border:1px solid #065f46;background:#06251d;color:#a7f3d0;padding:10px;border-radius:10px;margin-top:10px;font-size:11px}
+  .m19-note{font-size:11px;color:#64748b;line-height:1.55;margin-top:10px}
+  .m19-filter{display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr auto;gap:8px;align-items:end}
+  .m19-pill{display:inline-block;padding:3px 7px;border-radius:12px;font-size:10px;font-weight:700;background:#172554;color:#bfdbfe}
+  .m19-danger{color:#fca5a5}.m19-warn{color:#fcd34d}.m19-good{color:#6ee7b7}
+  @media(max-width:1000px){.m19-grid{grid-template-columns:1fr 1fr}.m19-grid3{grid-template-columns:1fr}.m19-grid2{grid-template-columns:1fr}.m19-filter{grid-template-columns:1fr 1fr}}
+  @media(max-width:650px){.m19-grid{grid-template-columns:1fr}.m19-filter{grid-template-columns:1fr}.m19-check{grid-template-columns:32px 1fr}}
+  `;
+  document.head.appendChild(s);
+}
+
+function m19addNav(id,label,icon){
+  const nav=document.querySelector('.menu-nav');if(!nav||document.getElementById('nav_'+id))return;
+  const b=document.createElement('button');b.id='nav_'+id;b.className='nav-btn';b.innerHTML='<span>'+icon+'</span>'+label;
+  b.onclick=function(){if(typeof switchPanel==='function')switchPanel(id,b)};
+  nav.appendChild(b);
+}
+function m19addPanel(id,title,body){
+  if(document.getElementById(id))return;
+  const wrap=document.querySelector('.wrapmain');if(!wrap)return;
+  const p=document.createElement('div');p.id=id;p.className='panel mx-panel';
+  p.innerHTML='<div class="card"><div class="ct">'+title+'</div>'+body+'</div>';
+  wrap.appendChild(p);
+}
+
+function m19seedData(){
+  if(!localStorage.getItem(M19X.partsKey))m19save(M19X.partsKey,[
+    {id:1,part:'BH-PUL 50ATK10-K13 L=3450',sap:'31002015',desc:'Belt / Pulley Component',stock:2,min:1,max:4,lead:30,unit:'EA',critical:'A',location:'AOT(B1)',alt:'ตรวจสอบ Compatibility',status:'Available'},
+    {id:2,part:'Drive Shaft High-Speed',sap:'31002360',desc:'Drive Shaft',stock:1,min:1,max:2,lead:45,unit:'EA',critical:'A',location:'AOT(B1)',alt:'- ',status:'Low Stock'},
+    {id:3,part:'BH-WLK 50AT10-K13 L=15930',sap:'31002149',desc:'Guide / Belt Component',stock:2,min:1,max:3,lead:30,unit:'EA',critical:'B',location:'AOT(B1)',alt:'- ',status:'Available'},
+    {id:4,part:'Guide Strip',sap:'-',desc:'Guide Strip',stock:0,min:1,max:2,lead:21,unit:'EA',critical:'A',location:'AOT(B1)',alt:'ต้องสร้าง Alternative Part',status:'Out of Stock'}
+  ]);
+  if(!localStorage.getItem(M19X.pmKey))m19save(M19X.pmKey,[
+    {id:1,asset:'',task:'ตรวจสภาพ Belt / Tracking / Tension',freq:7,last:m19today(),next:m19dateAdd(m19today(),7),type:'Weekly',owner:'MT3',status:'Planned'},
+    {id:2,asset:'',task:'ตรวจ Motor / VFD / Brake / Current',freq:30,last:m19today(),next:m19dateAdd(m19today(),30),type:'Monthly',owner:'MT3',status:'Planned'},
+    {id:3,asset:'',task:'ตรวจ Sensor / Scanner / Reflector',freq:30,last:m19today(),next:m19dateAdd(m19today(),30),type:'Monthly',owner:'MT3',status:'Planned'}
+  ]);
+  if(!localStorage.getItem(M19X.normalKey))m19save(M19X.normalKey,[]);
+  if(!localStorage.getItem(M19X.specialKey))m19save(M19X.specialKey,[]);
+}
+
+function m19buildPanels(){
+  m19addNav('mx19','19. ข้อมูลอะไหล่','📦');
+  m19addNav('mx20','20. แผน Preventive Maintenance','🗓️');
+  m19addNav('mx21','21. Daily Inspection Normal','✅');
+  m19addNav('mx22','22. Daily Inspection Special','🚨');
+
+  m19addPanel('mx19','📦 SPARE PARTS INTELLIGENCE • Asset ↔ Part ↔ Stock ↔ Lead Time',`
+    <div class="hint">ศูนย์ข้อมูลอะไหล่สำหรับงาน BHS: Part Master, SAP/Part No., Stock, Min/Max, Lead Time, Criticality, Location และ Alternative Part</div>
+    <div class="m19-grid" id="m19PartKpi"></div>
+    <div class="m19-card" style="margin-top:12px">
+      <b>เพิ่ม / แก้ไขข้อมูลอะไหล่</b>
+      <div class="m19-grid3">
+        <input id="m19PartName" placeholder="ชื่ออะไหล่ / Part Name">
+        <input id="m19Sap" placeholder="SAP / Part No.">
+        <input id="m19Desc" placeholder="รายละเอียด">
+        <input id="m19Stock" type="number" min="0" placeholder="Stock">
+        <input id="m19Min" type="number" min="0" placeholder="Min">
+        <input id="m19Max" type="number" min="0" placeholder="Max">
+        <input id="m19Lead" type="number" min="0" placeholder="Lead Time (days)">
+        <input id="m19Unit" placeholder="Unit เช่น EA">
+        <select id="m19Critical"><option>A</option><option>B</option><option>C</option></select>
+        <input id="m19Loc" placeholder="Location / Bin">
+        <input id="m19Alt" placeholder="Alternative / Compatible Part">
+        <button onclick="m19AddPart()">➕ บันทึกอะไหล่</button>
+      </div>
+    </div>
+    <div class="m19-table-wrap"><table class="m19-table"><thead><tr><th>Part</th><th>SAP/Part No.</th><th>Stock</th><th>Min/Max</th><th>Lead</th><th>Critical</th><th>Location</th><th>Status</th><th>Action</th></tr></thead><tbody id="m19PartTable"></tbody></table></div>
+    <div class="m19-note">สถานะ Stock เป็น Inventory Intelligence รุ่นเริ่มต้น ข้อมูลตัวอย่างจะถูกเก็บใน LocalStorage ของ Browser จนกว่าจะเชื่อม Supabase/ฐานข้อมูลจริง</div>`);
+
+  m19addPanel('mx20','🗓️ PREVENTIVE MAINTENANCE PLAN • PM Calendar & Compliance',`
+    <div class="hint">วางแผน PM ตาม Asset, Task, Frequency, Last/Next Due และ Owner พร้อมสถานะ Due/Overdue/Upcoming</div>
+    <div class="m19-grid" id="m20PmKpi"></div>
+    <div class="m19-card" style="margin-top:12px">
+      <b>สร้าง PM Task</b>
+      <div class="m19-grid3">
+        <select id="m20Asset">${m19assetOptions()}</select>
+        <input id="m20Task" placeholder="PM Task เช่น ตรวจ Belt / Motor / VFD">
+        <select id="m20Freq"><option value="1">Daily</option><option value="7" selected>Weekly</option><option value="14">Every 14 Days</option><option value="30">Monthly</option><option value="90">Quarterly</option><option value="180">6 Months</option><option value="365">Yearly</option></select>
+        <input id="m20Last" type="date" value="${m19today()}">
+        <input id="m20Owner" placeholder="Owner / Team" value="MT3">
+        <select id="m20Type"><option>Preventive</option><option>Predictive</option><option>Condition-Based</option><option>Calibration</option></select>
+        <button onclick="m20AddPM()">➕ เพิ่มแผน PM</button>
+      </div>
+    </div>
+    <div class="m19-table-wrap"><table class="m19-table"><thead><tr><th>Asset</th><th>Task</th><th>Frequency</th><th>Last</th><th>Next Due</th><th>Type</th><th>Owner</th><th>Status</th><th>Action</th></tr></thead><tbody id="m20PmTable"></tbody></table></div>
+    <div class="bar" style="margin-top:10px"><button onclick="m20GenerateNext()">🔄 Recalculate Next Due</button><button class="gray" onclick="m20Export()">📥 Export PM CSV</button></div>`);
+
+  m19addPanel('mx21','✅ DAILY INSPECTION NORMAL • Routine BHS Health Check',`
+    <div class="hint">แบบตรวจประจำวันสำหรับสภาพการทำงานปกติ เน้น Safety + Mechanical + Electrical + Sensor + Housekeeping</div>
+    <div class="m19-grid3">
+      <div class="m19-card"><b>Inspection Date</b><input id="m21Date" type="date" value="${m19today()}"></div>
+      <div class="m19-card"><b>Area / Asset</b><select id="m21Asset">${m19assetOptions()}</select></div>
+      <div class="m19-card"><b>Inspector</b><input id="m21Inspector" placeholder="ชื่อ-สกุลผู้ตรวจ"></div>
+    </div>
+    <div id="m21Checklist"></div>
+    <div class="bar" style="margin-top:12px"><button onclick="m21Save()">💾 บันทึก Daily Normal</button><button class="gray" onclick="m21Reset()">↩ Reset</button></div>
+    <div id="m21Result"></div>
+    <div class="m19-table-wrap"><table class="m19-table"><thead><tr><th>Date</th><th>Asset</th><th>Inspector</th><th>Result</th><th>Abnormal Items</th></tr></thead><tbody id="m21History"></tbody></table></div>`);
+
+  m19addPanel('mx22','🚨 DAILY INSPECTION SPECIAL • Trigger-Based Inspection',`
+    <div class="hint">ใช้เมื่อเกิดเงื่อนไขพิเศษ เช่น หลัง Breakdown, Alarm ซ้ำ, abnormal vibration/temperature, Long Shutdown/Startup, Maintenance Intervention หรือ Peak Load</div>
+    <div class="m19-grid3">
+      <div class="m19-card"><b>Inspection Date</b><input id="m22Date" type="date" value="${m19today()}"></div>
+      <div class="m19-card"><b>Area / Asset</b><select id="m22Asset">${m19assetOptions()}</select></div>
+      <div class="m19-card"><b>Inspector</b><input id="m22Inspector" placeholder="ชื่อ-สกุลผู้ตรวจ"></div>
+      <div class="m19-card"><b>Trigger</b><select id="m22Trigger"><option>หลัง Breakdown</option><option>Alarm เกิดซ้ำ</option><option>Abnormal Vibration</option><option>Abnormal Temperature</option><option>Long Shutdown / Startup</option><option>หลัง Maintenance Intervention</option><option>Peak Load / High Throughput</option><option>Other</option></select></div>
+      <div class="m19-card"><b>Reference WO / Alarm</b><input id="m22Ref" placeholder="WO / Fault / Alarm ID"></div>
+      <div class="m19-card"><b>Risk Level</b><select id="m22Risk"><option>Low</option><option>Medium</option><option>High</option><option>Critical</option></select></div>
+    </div>
+    <div id="m22Checklist"></div>
+    <div class="bar" style="margin-top:12px"><button onclick="m22Save()">🚨 บันทึก Special Inspection</button><button class="gray" onclick="m22Reset()">↩ Reset</button></div>
+    <div id="m22Result"></div>
+    <div class="m19-table-wrap"><table class="m19-table"><thead><tr><th>Date</th><th>Asset</th><th>Trigger</th><th>Risk</th><th>Result</th><th>Reference</th></tr></thead><tbody id="m22History"></tbody></table></div>`);
+}
+
+const M21_ITEMS=[
+  ['Guard / Cover','Guard, cover และจุดป้องกันอันตรายอยู่ครบและยึดแน่น'],
+  ['Belt / Roller','Belt tracking, tension, roller และเสียงผิดปกติ'],
+  ['Motor / Gearbox','ไม่มีเสียง/กลิ่น/ความร้อนผิดปกติ และไม่มี leakage'],
+  ['VFD / Electrical','Panel, VFD, cable และ indication อยู่ในสภาพปกติ'],
+  ['Sensor / Scanner','Sensor/Scanner/Reflector สะอาดและตอบสนองปกติ'],
+  ['Emergency Stop','E-Stop / safety device อยู่ในสภาพพร้อมใช้งานตามขั้นตอนที่ได้รับอนุญาต'],
+  ['Housekeeping','ไม่มีสิ่งกีดขวาง/เศษวัสดุ/น้ำมันบริเวณเครื่อง'],
+  ['Abnormal Noise','ไม่มีเสียงสั่น/กระแทก/เสียดสีผิดปกติ'],
+  ['Status / Alarm','ไม่มี Alarm/Fault ที่ยังไม่ได้รับการจัดการ']
+];
+const M22_ITEMS=[
+  ['Failure Evidence','เก็บหลักฐานอาการก่อน/หลังและ Fault/Alarm ที่เกี่ยวข้อง'],
+  ['Mechanical Cause','ตรวจ Belt, Roller, Bearing, Alignment, Jam/Load ตามความเหมาะสม'],
+  ['Electrical Cause','ตรวจ Power, VFD, Motor current, I/O และ communication ตามขั้นตอน'],
+  ['Sensor / Data Cause','ตรวจ Sensor condition, signal consistency และ communication'],
+  ['Safety Condition','ตรวจ Guard, E-Stop และเงื่อนไขความปลอดภัยก่อนคืนระบบ'],
+  ['Repeat Failure','ตรวจว่ามีอาการ/Failure Mode เดิมเกิดซ้ำหรือไม่'],
+  ['Corrective Action','ระบุ action ที่ทำและ evidence หลังดำเนินการ'],
+  ['Return-to-Service','ยืนยันผลทดสอบก่อนคืนเครื่องตามขั้นตอนที่หน่วยงานกำหนด']
+];
+
+function m19renderParts(){
+  const rows=m19load(M19X.partsKey,[]);let avail=0,low=0,out=0;
+  rows.forEach(p=>{if(Number(p.stock)<=0)out++;else if(Number(p.stock)<=Number(p.min))low++;else avail++});
+  document.getElementById('m19PartKpi').innerHTML=`<div class="m19-kpi"><b>${rows.length}</b><span>Total Part Records</span></div><div class="m19-kpi"><b>${avail}</b><span>Available</span></div><div class="m19-kpi"><b>${low}</b><span>Low Stock</span></div><div class="m19-kpi"><b>${out}</b><span>Out of Stock</span></div>`;
+  document.getElementById('m19PartTable').innerHTML=rows.map(p=>{
+    const stock=Number(p.stock)||0,min=Number(p.min)||0;
+    const status=stock<=0?'Out of Stock':stock<=min?'Low Stock':'Available';
+    return `<tr><td><b>${m19esc(p.part)}</b><br><span class="m19-help">${m19esc(p.desc||'')}</span></td><td>${m19esc(p.sap||'-')}</td><td><b>${stock}</b> ${m19esc(p.unit||'EA')}</td><td>${m19esc(p.min)} / ${m19esc(p.max)}</td><td>${m19esc(p.lead)} d</td><td>${m19esc(p.critical)}</td><td>${m19esc(p.location||'-')}</td><td>${m19statusBadge(status)}</td><td><button class="danger" style="padding:4px 7px;font-size:10px" onclick="m19DeletePart(${p.id})">ลบ</button></td></tr>`;
+  }).join('')||'<tr><td colspan="9" style="text-align:center">ยังไม่มีข้อมูลอะไหล่</td></tr>';
+}
+function m19AddPart(){
+  const part=document.getElementById('m19PartName').value.trim();if(!part){alert('กรุณาระบุชื่ออะไหล่');return}
+  const rows=m19load(M19X.partsKey,[]);rows.unshift({id:Date.now(),part,sap:document.getElementById('m19Sap').value.trim()||'-',desc:document.getElementById('m19Desc').value.trim(),stock:Number(document.getElementById('m19Stock').value)||0,min:Number(document.getElementById('m19Min').value)||0,max:Number(document.getElementById('m19Max').value)||0,lead:Number(document.getElementById('m19Lead').value)||0,unit:document.getElementById('m19Unit').value.trim()||'EA',critical:document.getElementById('m19Critical').value,location:document.getElementById('m19Loc').value.trim()||'-',alt:document.getElementById('m19Alt').value.trim()||'-'});m19save(M19X.partsKey,rows);['m19PartName','m19Sap','m19Desc','m19Stock','m19Min','m19Max','m19Lead','m19Unit','m19Loc','m19Alt'].forEach(id=>document.getElementById(id).value='');m19renderParts();
+}
+function m19DeletePart(id){if(!confirm('ลบข้อมูลอะไหล่นี้หรือไม่?'))return;m19save(M19X.partsKey,m19load(M19X.partsKey,[]).filter(x=>x.id!==id));m19renderParts()}
+
+function m20status(next){const d=m19daysFromToday(next);return d<0?'OVERDUE':d===0?'DUE TODAY':d<=7?'DUE SOON':'UPCOMING'}
+function m20render(){
+  const rows=m19load(M19X.pmKey,[]);let overdue=0,due=0,soon=0,up=0;
+  rows.forEach(r=>{const s=m20status(r.next);if(s==='OVERDUE')overdue++;else if(s==='DUE TODAY')due++;else if(s==='DUE SOON')soon++;else up++});
+  document.getElementById('m20PmKpi').innerHTML=`<div class="m19-kpi"><b>${rows.length}</b><span>PM Tasks</span></div><div class="m19-kpi"><b>${overdue}</b><span>Overdue</span></div><div class="m19-kpi"><b>${due}</b><span>Due Today</span></div><div class="m19-kpi"><b>${soon}</b><span>Due ≤ 7 Days</span></div>`;
+  document.getElementById('m20PmTable').innerHTML=rows.map(r=>{const s=m20status(r.next);return `<tr><td>${m19esc(r.asset||'All BHS')}</td><td><b>${m19esc(r.task)}</b></td><td>${m19esc(r.type||'Preventive')} / ${m19esc(r.freq)} d</td><td>${m19esc(r.last)}</td><td>${m19esc(r.next)}</td><td>${m19esc(r.type||'Preventive')}</td><td>${m19esc(r.owner||'-')}</td><td>${m19statusBadge(s)}</td><td><button class="danger" style="padding:4px 7px;font-size:10px" onclick="m20Delete(${r.id})">ลบ</button></td></tr>`}).join('')||'<tr><td colspan="9" style="text-align:center">ยังไม่มี PM Plan</td></tr>';
+}
+function m20AddPM(){
+  const task=document.getElementById('m20Task').value.trim();if(!task){alert('กรุณาระบุ PM Task');return}
+  const freq=Number(document.getElementById('m20Freq').value);const last=document.getElementById('m20Last').value||m19today();const rows=m19load(M19X.pmKey,[]);
+  rows.unshift({id:Date.now(),asset:document.getElementById('m20Asset').value,task,freq,last,next:m19dateAdd(last,freq),type:document.getElementById('m20Type').value,owner:document.getElementById('m20Owner').value.trim()||'MT3',status:'Planned'});
+  m19save(M19X.pmKey,rows);document.getElementById('m20Task').value='';m20render();
+}
+function m20Delete(id){if(!confirm('ลบ PM Task นี้หรือไม่?'))return;m19save(M19X.pmKey,m19load(M19X.pmKey,[]).filter(x=>x.id!==id));m20render()}
+function m20GenerateNext(){const rows=m19load(M19X.pmKey,[]);rows.forEach(r=>{if(r.last&&r.freq)r.next=m19dateAdd(r.last,r.freq)});m19save(M19X.pmKey,rows);m20render()}
+function m20Export(){const rows=m19load(M19X.pmKey,[]);if(!rows.length){alert('ไม่มี PM Plan');return}const head=['Asset','Task','Frequency Days','Last','Next Due','Type','Owner'];const csv=[head,...rows.map(r=>[r.asset,r.task,r.freq,r.last,r.next,r.type,r.owner])].map(a=>a.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\n');const blob=new Blob(["\ufeff"+csv],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='MT3_BHS_PM_PLAN_'+m19today()+'.csv';a.click();URL.revokeObjectURL(a.href)}
+
+function m19renderChecklist(containerId,items,prefix){
+  const el=document.getElementById(containerId);if(!el)return;
+  el.innerHTML='<div style="margin-top:12px">'+items.map((it,i)=>`<div class="m19-check"><input id="${prefix}_ok_${i}" type="checkbox"><div><div class="label">${m19esc(it[0])}</div><div class="sub">${m19esc(it[1])}</div></div><select id="${prefix}_res_${i}"><option value="OK">OK</option><option value="MONITOR">Monitor</option><option value="NG">NG</option><option value="N/A">N/A</option></select><input id="${prefix}_note_${i}" placeholder="หมายเหตุ / Evidence"></div>`).join('')+'</div>';
+}
+function m19collectChecklist(items,prefix){
+  return items.map((it,i)=>({item:it[0],checked:document.getElementById(prefix+'_ok_'+i).checked,result:document.getElementById(prefix+'_res_'+i).value,note:document.getElementById(prefix+'_note_'+i).value.trim()}));
+}
+function m19result(rows){const ng=rows.filter(x=>x.result==='NG');const mon=rows.filter(x=>x.result==='MONITOR');return {result:ng.length?'NG':mon.length?'MONITOR':'NORMAL',abnormal:[...ng,...mon].map(x=>x.item+(x.note?' — '+x.note:'')).join('; ')} }
+function m21Save(){
+  const rows=m19collectChecklist(M21_ITEMS,'m21');const res=m19result(rows);const rec={id:Date.now(),date:document.getElementById('m21Date').value||m19today(),asset:document.getElementById('m21Asset').value,inspector:document.getElementById('m21Inspector').value.trim(),result:res.result,abnormal:res.abnormal,checks:rows};
+  if(!rec.inspector){alert('กรุณาระบุชื่อผู้ตรวจ');return}m19save(M19X.normalKey,[rec,...m19load(M19X.normalKey,[])]);document.getElementById('m21Result').innerHTML=res.result==='NORMAL'?'<div class="m19-ok">✅ Daily Inspection Normal: NORMAL — ไม่พบรายการ NG/Monitor จากแบบตรวจที่กรอก</div>':'<div class="m19-alert">⚠️ Daily Inspection Result: '+m19esc(res.result)+'<br>'+m19esc(res.abnormal||'มีรายการต้องติดตาม')+'</div>';m21renderHistory();
+}
+function m21resetChecks(){M21_ITEMS.forEach((_,i)=>{document.getElementById('m21_ok_'+i).checked=false;document.getElementById('m21_res_'+i).value='OK';document.getElementById('m21_note_'+i).value=''})}
+function m21Reset(){m21resetChecks();document.getElementById('m21Inspector').value='';document.getElementById('m21Result').innerHTML=''}
+function m21renderHistory(){const rows=m19load(M19X.normalKey,[]);document.getElementById('m21History').innerHTML=rows.slice(0,30).map(r=>`<tr><td>${m19esc(r.date)}</td><td>${m19esc(r.asset||'-')}</td><td>${m19esc(r.inspector)}</td><td>${m19statusBadge(r.result)}</td><td class="${r.abnormal?'m19-warn':'m19-good'}">${m19esc(r.abnormal||'None')}</td></tr>`).join('')||'<tr><td colspan="5" style="text-align:center">ยังไม่มีประวัติ</td></tr>'}
+
+function m22Save(){
+  const rows=m19collectChecklist(M22_ITEMS,'m22');const res=m19result(rows);const rec={id:Date.now(),date:document.getElementById('m22Date').value||m19today(),asset:document.getElementById('m22Asset').value,inspector:document.getElementById('m22Inspector').value.trim(),trigger:document.getElementById('m22Trigger').value,ref:document.getElementById('m22Ref').value.trim(),risk:document.getElementById('m22Risk').value,result:res.result,abnormal:res.abnormal,checks:rows};
+  if(!rec.inspector){alert('กรุณาระบุชื่อผู้ตรวจ');return}m19save(M19X.specialKey,[rec,...m19load(M19X.specialKey,[])]);document.getElementById('m22Result').innerHTML=(rec.risk==='Critical'||res.result==='NG')?'<div class="m19-alert">🚨 Special Inspection: '+m19esc(res.result)+' / Risk '+m19esc(rec.risk)+'<br>'+m19esc(res.abnormal||'ต้องทบทวนหลักฐานและ Action ก่อนคืนระบบตามขั้นตอนที่หน่วยงานกำหนด')+'</div>':'<div class="m19-ok">✅ Special Inspection บันทึกแล้ว — Trigger: '+m19esc(rec.trigger)+' / Risk: '+m19esc(rec.risk)+'</div>';m22renderHistory();
+}
+function m22resetChecks(){M22_ITEMS.forEach((_,i)=>{document.getElementById('m22_ok_'+i).checked=false;document.getElementById('m22_res_'+i).value='OK';document.getElementById('m22_note_'+i).value=''})}
+function m22Reset(){m22resetChecks();document.getElementById('m22Inspector').value='';document.getElementById('m22Ref').value='';document.getElementById('m22Result').innerHTML=''}
+function m22renderHistory(){const rows=m19load(M19X.specialKey,[]);document.getElementById('m22History').innerHTML=rows.slice(0,30).map(r=>`<tr><td>${m19esc(r.date)}</td><td>${m19esc(r.asset||'-')}</td><td>${m19esc(r.trigger)}</td><td>${m19statusBadge(r.risk)}</td><td>${m19statusBadge(r.result)}</td><td>${m19esc(r.ref||'-')}</td></tr>`).join('')||'<tr><td colspan="6" style="text-align:center">ยังไม่มีประวัติ</td></tr>'}
+
+function m19refresh(){
+  if(!document.getElementById('mx19'))return;
+  const opts=m19assetOptions();['m20Asset','m21Asset','m22Asset'].forEach(id=>{const e=document.getElementById(id);if(e){const old=e.value;e.innerHTML=opts;if(old)e.value=old}});
+  m19renderParts();m20render();m21renderHistory();m22renderHistory();
+}
+function m19init(){
+  m19injectStyle();m19seedData();m19buildPanels();m19renderChecklist('m21Checklist',M21_ITEMS,'m21');m19renderChecklist('m22Checklist',M22_ITEMS,'m22');m19refresh();
+  if(M19X.timer)clearInterval(M19X.timer);M19X.timer=setInterval(m19refresh,5000);
+  window.addEventListener('beforeunload',()=>M19X.timer&&clearInterval(M19X.timer));
+}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',m19init);else m19init();
+})();
+</script>
