@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <meta name="theme-color" content="#020617">
-<title>MT3 — BHS Engineering Intelligence Platform v28.0 with Full Schedules</title>
+<title>MT3 — BHS Engineering Intelligence Platform v29.0 with Date Filters</title>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <style>
@@ -43,7 +43,7 @@ button{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#1a1405
 border-radius:9px;cursor:pointer;font-size:13px;font-weight:700;font-family:inherit;box-shadow:0 4px 12px rgba(0,0,0,.25)}
 button:active{transform:scale(.97)}button.gray{background:#334155;color:#cbd5e1;font-weight:600}
 button.danger{background:#7f1d1d;color:#fca5a5}
-textarea,input[type=text],input[type=password],select,input[type=range]{width:100%;background:#0a1120;color:#e7edf5;border:1px solid #2b3c57;border-radius:9px;padding:10px;font-family:inherit;font-size:13px}
+textarea,input[type=text],input[type=password],input[type=date],select,input[type=range]{width:100%;background:#0a1120;color:#e7edf5;border:1px solid #2b3c57;border-radius:9px;padding:10px;font-family:inherit;font-size:13px}
 textarea{height:80px;font-family:Consolas,monospace}
 .status{font-size:12px;padding:8px 12px;border-radius:7px;margin-top:9px}
 .ok{background:rgba(6,78,59,.65);color:#6ee7b7}.warn{background:rgba(120,53,15,.65);color:#fcd34d}.err{background:rgba(127,29,29,.65);color:#fca5a5}
@@ -62,8 +62,6 @@ a{color:#93c5fd}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .dt-card{background:#0a1120;border:1px solid #2b3c57;border-radius:12px;padding:14px;margin-bottom:12px}
 .predict-card{background:#0f172a;border:1px solid #334155;border-left:5px solid var(--gold);border-radius:10px;padding:14px;margin-bottom:10px}
-.predict-card.danger{border-left-color:#ef4444;background:rgba(127,29,29,.15)}
-.predict-card.warning{border-left-color:#f59e0b;background:rgba(120,53,15,.15)}
 
 /* Interactive Map Styles */
 .map-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:14px}
@@ -107,15 +105,15 @@ a{color:#93c5fd}
 <div class="hd">
 <img id="logo" alt="MT3 Logo" crossorigin="anonymous">
 <div>
-  <h1><span>MT3</span> BHS ENGINEERING INTELLIGENCE PLATFORM<span class="ver">v28.0 Ultimate</span></h1>
-  <div style="font-size:11.5px;color:#8fa3bf;letter-spacing:1px">BAGGAGE HANDLING SYSTEM • FULL SCHEDULES & PLANS INTEGRATION</div>
+  <h1><span>MT3</span> BHS ENGINEERING INTELLIGENCE PLATFORM<span class="ver">v29.0 Ultimate</span></h1>
+  <div style="font-size:11.5px;color:#8fa3bf;letter-spacing:1px">BAGGAGE HANDLING SYSTEM • FULL SCHEDULES WITH DATE FILTERS</div>
 </div>
 <div style="margin-left:auto;text-align:right">
   <span id="welcomeUser" style="color:var(--gold2);font-size:12px;font-weight:600;display:block;margin-bottom:4px"></span>
   <button class="gray" onclick="handleLogout()" style="padding:5px 10px;font-size:11px">ออกจากระบบ</button>
 </div>
 </div>
-<p class="sub">แพลตฟอร์มวิศวกรรมระดับโลก • ผังโซน • อะไหล่ SAP • แผนทำความสะอาด • แผน PM • แผน Daily พิเศษ</p>
+<p class="sub">แพลตฟอร์มวิศวกรรมระดับโลก • พร้อมระบบกรองเลือกวันที่สำหรับแผนงานทั้งหมด</p>
 
 <!-- Navigation Menu 18 Tabs -->
 <div class="menu-nav">
@@ -157,7 +155,7 @@ a{color:#93c5fd}
       </div>
       <div class="dt-card">
         <h3 style="margin:0 0 8px 0;color:var(--gold2)">💡 Executive Summary & Recommendations</h3>
-        <p style="margin:4px 0;font-size:12.5px">• เพิ่มแท็บแผนทำความสะอาด, แผน PM และแผน Daily พิเศษเรียบร้อย</p>
+        <p style="margin:4px 0;font-size:12.5px">• เพิ่มตัวกรองวันที่สำหรับแผนทำความสะอาด, แผน PM และแผน Daily เรียบร้อย</p>
         <p style="margin:4px 0;font-size:12.5px">• ระบบความปลอดภัย Secure IP พร้อมใช้งาน</p>
       </div>
     </div>
@@ -195,49 +193,74 @@ a{color:#93c5fd}
   </div>
 </div>
 
-<!-- PANEL 3: แผนทำความสะอาด -->
+<!-- PANEL 3: แผนทำความสะอาด + ตัวกรองวันที่ -->
 <div id="p3" class="panel">
   <div class="card">
     <div class="ct">🧹 แผนทำความสะอาด (Cleaning Schedule Zone A - ตุลาคม 2569)</div>
-    <div class="hint">ตารางแผนการทำความสะอาดประจำเดือน ตุลาคม 2569</div>
-    <div class="tw" style="margin-top:14px">
-      <table>
+    <div class="bar" style="margin-bottom:12px">
+      <label style="font-size:12px;color:#8fa3bf">กรองตามวันที่:</label>
+      <select id="cleanDateFilter" style="max-width:200px" onchange="filterCleaningTable()">
+        <option value="">-- แสดงทั้งหมด --</option>
+        <option value="1">วันที่ 1</option>
+        <option value="2">วันที่ 2</option>
+        <option value="3">วันที่ 3</option>
+        <option value="4">วันที่ 4</option>
+      </select>
+    </div>
+    <div class="tw">
+      <table id="cleanTable">
         <tr><th>วันที่</th><th>กะดำเนินการ</th><th>Zone</th><th>ตำแหน่งอุปกรณ์</th></tr>
-        <tr><td>1</td><td>กะดึก</td><td>Zone A</td><td class="mono">LP230-LF030-01-24, LP230-LF031-01-10</td></tr>
-        <tr><td>2</td><td>กะดึก</td><td>Zone A</td><td class="mono">LP230-LF032-01-09</td></tr>
-        <tr><td>3</td><td>กะดึก</td><td>Zone A</td><td class="mono">LP230-LF033-01-11</td></tr>
-        <tr><td>4</td><td>กะดึก</td><td>Zone A</td><td class="mono">LP230-LF034-01-15</td></tr>
+        <tr data-day="1"><td>1</td><td>กะดึก</td><td>Zone A</td><td class="mono">LP230-LF030-01-24, LP230-LF031-01-10</td></tr>
+        <tr data-day="2"><td>2</td><td>กะดึก</td><td>Zone A</td><td class="mono">LP230-LF032-01-09</td></tr>
+        <tr data-day="3"><td>3</td><td>กะดึก</td><td>Zone A</td><td class="mono">LP230-LF033-01-11</td></tr>
+        <tr data-day="4"><td>4</td><td>กะดึก</td><td>Zone A</td><td class="mono">LP230-LF034-01-15</td></tr>
       </table>
     </div>
   </div>
 </div>
 
-<!-- PANEL 4: แผน Preventive maintenance -->
+<!-- PANEL 4: แผน Preventive maintenance + ตัวกรองวันที่ -->
 <div id="p4" class="panel">
   <div class="card">
     <div class="ct">🛠️ แผน Preventive Maintenance (23 ก.ย. - 31 ต.ค. 2569)</div>
-    <div class="hint">แผนการซ่อมบำรุงประจำวันและตามรอบเวลา</div>
-    <div class="tw" style="margin-top:14px">
-      <table>
+    <div class="bar" style="margin-bottom:12px">
+      <label style="font-size:12px;color:#8fa3bf">กรองตามวันที่:</label>
+      <input type="date" id="pmDateFilter" style="max-width:220px" onchange="filterPmTable()">
+      <button class="gray" onclick="document.getElementById('pmDateFilter').value='';filterPmTable()">ล้างตัวกรอง</button>
+    </div>
+    <div class="tw">
+      <table id="pmTable">
         <tr><th>ลำดับ</th><th>ชื่อเครื่องจักร</th><th>ชื่องาน / รายละเอียด</th><th>กำหนดเวลา</th><th>Man Power</th></tr>
-        <tr><td>1</td><td class="mono">ALL SYSTEM</td><td>Daily Inspection (Mechanical and Electrical)</td><td>23/09/2569 06:00 - 14:00</td><td>0 คน</td></tr>
-        <tr><td>2</td><td class="mono">LP209-BHT01-HS071</td><td>ICS Tray Straight : ตรวจสอบเสียง Drive/Wheels/Pulleys, รอยรั่วและระดับน้ำมันเกียร์</td><td>23/09/2569 06:00 - 14:00</td><td>0 คน</td></tr>
-        <tr><td>3</td><td class="mono">LP210-BHT02-HS085</td><td>Check In Belt : ตรวจสอบความตึงสายพานและลูกกลิ้งรองรับ</td><td>24/09/2569 08:00 - 16:00</td><td>2 คน</td></tr>
+        <tr data-date="2026-09-23"><td>1</td><td class="mono">ALL SYSTEM</td><td>Daily Inspection (Mechanical and Electrical)</td><td>23/09/2569 06:00 - 14:00</td><td>0 คน</td></tr>
+        <tr data-date="2026-09-23"><td>2</td><td class="mono">LP209-BHT01-HS071</td><td>ICS Tray Straight : ตรวจสอบเสียง Drive/Wheels/Pulleys</td><td>23/09/2569 06:00 - 14:00</td><td>0 คน</td></tr>
+        <tr data-date="2026-09-24"><td>3</td><td class="mono">LP210-BHT02-HS085</td><td>Check In Belt : ตรวจสอบความตึงสายพานและลูกกลิ้ง</td><td>24/09/2569 08:00 - 16:00</td><td>2 คน</td></tr>
       </table>
     </div>
   </div>
 </div>
 
-<!-- PANEL 5: แผน Daily พิเศษประจำเดือน ตุลาคม 2569 -->
+<!-- PANEL 5: แผน Daily พิเศษประจำเดือน ตุลาคม 2569 + ตัวกรองวันที่ -->
 <div id="p5" class="panel">
   <div class="card">
     <div class="ct">📅 แผน Daily พิเศษประจำเดือน ตุลาคม 2569</div>
-    <div class="hint">ตารางแผนปฏิบัติการพิเศษประจำวัน กะดึก พื้นที่ MTB-East</div>
-    <div class="tw" style="margin-top:14px">
-      <table>
-        <tr><th>No.</th><th>ตำแหน่ง (01/10)</th><th>พื้นที่</th><th>ตำแหน่ง (02/10)</th><th>พื้นที่</th><th>ตำแหน่ง (03/10)</th><th>พื้นที่</th><th>ตำแหน่ง (04/10)</th><th>พื้นที่</th></tr>
-        <tr><td>1</td><td class="mono">LP254-BET67-HE419</td><td>MTB-East</td><td class="mono">LP254-BET65-HS097</td><td>MTB-East</td><td class="mono">LP256-BET75-HS133</td><td>MTB-East</td><td class="mono">LP256-BET75-HS113</td><td>MTB-East</td></tr>
-        <tr><td>2</td><td class="mono">LP254-BET67-HD507</td><td>MTB-East</td><td class="mono">LP254-BET65-HS003</td><td>MTB-East</td><td class="mono">LP256-BET75-HS131</td><td>MTB-East</td><td class="mono">LP256-BET75-HS111</td><td>MTB-East</td></tr>
+    <div class="bar" style="margin-bottom:12px">
+      <label style="font-size:12px;color:#8fa3bf">กรองตามวันที่:</label>
+      <select id="dailyDateFilter" style="max-width:200px" onchange="filterDailyTable()">
+        <option value="">-- แสดงทั้งหมด --</option>
+        <option value="01/10/2569">01/10/2569</option>
+        <option value="02/10/2569">02/10/2569</option>
+        <option value="03/10/2569">03/10/2569</option>
+        <option value="04/10/2569">04/10/2569</option>
+      </select>
+    </div>
+    <div class="tw">
+      <table id="dailyTable">
+        <tr><th>No.</th><th>วันที่</th><th>ตำแหน่ง</th><th>พื้นที่</th><th>กะดำเนินการ</th></tr>
+        <tr data-date="01/10/2569"><td>1</td><td>01/10/2569</td><td class="mono">LP254-BET67-HE419</td><td>MTB-East</td><td>กะดึก</td></tr>
+        <tr data-date="01/10/2569"><td>2</td><td>01/10/2569</td><td class="mono">LP254-BET67-HD507</td><td>MTB-East</td><td>กะดึก</td></tr>
+        <tr data-date="02/10/2569"><td>1</td><td>02/10/2569</td><td class="mono">LP254-BET65-HS097</td><td>MTB-East</td><td>กะดึก</td></tr>
+        <tr data-date="03/10/2569"><td>1</td><td>03/10/2569</td><td class="mono">LP256-BET75-HS133</td><td>MTB-East</td><td>กะดึก</td></tr>
+        <tr data-date="04/10/2569"><td>1</td><td>04/10/2569</td><td class="mono">LP256-BET75-HS113</td><td>MTB-East</td><td>กะดึก</td></tr>
       </table>
     </div>
   </div>
@@ -247,7 +270,6 @@ a{color:#93c5fd}
 <div id="p6" class="panel">
   <div class="card">
     <div class="ct">📦 Real Spare Parts Inventory (Spare Part.xlsx)</div>
-    <div class="hint">ค้นหาอะไหล่ด้วยรหัส SAP ID หรือชื่ออะไหล่</div>
     <div class="bar" style="margin-top:12px">
       <input type="text" id="spareSearchInput" placeholder="พิมพ์ค้นหา เช่น SAP ID, ชื่ออะไหล่..." style="flex:1" onkeyup="searchRealSpareParts()">
       <button onclick="searchRealSpareParts()">🔍 ค้นหาอะไหล่</button>
@@ -261,162 +283,29 @@ a{color:#93c5fd}
 </div>
 
 <!-- PANEL 7: OT Network -->
-<div id="p7" class="panel">
-  <div class="card">
-    <div class="ct">⚡ BHS Network / OT Twin</div>
-    <div class="hint">ตรวจสอบสถานะการเชื่อมต่อเครือข่ายควบคุมอุตสาหกรรมแบบเรียลไทม์</div>
-    <div class="bar" style="margin-top:12px">
-      <button onclick="checkOtNetworkStatus()">🔄 สแกนสถานะ OT Network & PLC Nodes</button>
-      <span style="font-size:12px;color:#6ee7b7">● SCADA Gateway Online (Latency: 4ms)</span>
-    </div>
-  </div>
-</div>
-
+<div id="p7" class="panel"><div class="card"><div class="ct">⚡ BHS Network / OT Twin</div><button onclick="checkOtNetworkStatus()">🔄 สแกน OT Network</button></div></div>
 <!-- PANEL 8: Failure Propagation -->
-<div id="p8" class="panel">
-  <div class="card">
-    <div class="ct">🌊 Failure Propagation Twin</div>
-    <div class="hint">ระบบวิเคราะห์ผลกระทบลูกโซ่ (Domino Effect) เมื่ออุปกรณ์ต้นน้ำขัดข้อง</div>
-    <div class="bar" style="margin-top:12px">
-      <select id="propagationRoot" style="max-width:320px">
-        <option value="CV-001">จุดเริ่มต้น: Infeed Conveyor (CV-001)</option>
-        <option value="MERGE-01">จุดเริ่มต้น: Merge Collector 01 (MERGE-01)</option>
-      </select>
-      <button onclick="runFailurePropagation()">⚡ จำลองเส้นทางการลุกลาม</button>
-    </div>
-    <div id="propagationResult" class="dt-card" style="margin-top:16px"></div>
-  </div>
-</div>
-
+<div id="p8" class="panel"><div class="card"><div class="ct">🌊 Failure Propagation Twin</div><button onclick="runFailurePropagation()">⚡ จำลองความเสียหาย</button><div id="propagationResult" style="margin-top:12px"></div></div></div>
 <!-- PANEL 9: Time Machine -->
-<div id="p9" class="panel">
-  <div class="card">
-    <div class="ct">⏳ Time Machine / Replay</div>
-    <div class="hint">ย้อนเวลาดูสถานะระบบและเหตุการณ์ย้อนหลัง</div>
-    <div class="bar" style="margin-top:12px">
-      <label style="font-size:12px;color:var(--gold2);width:100%">เลือกช่วงเวลาย้อนหลัง: <span id="timeLabel" style="color:#6ee7b7;font-weight:bold">7 วันที่แล้ว</span></label>
-      <input type="range" id="timeSlider" min="1" max="30" value="7" oninput="updateTimeReplay(this.value)">
-    </div>
-    <div id="timeReplayResult" class="dt-card" style="margin-top:16px"></div>
-  </div>
-</div>
-
+<div id="p9" class="panel"><div class="card"><div class="ct">⏳ Time Machine / Replay</div><input type="range" min="1" max="30" value="7" oninput="updateTimeReplay(this.value)"><div id="timeLabel">7 วันที่แล้ว</div><div id="timeReplayResult" style="margin-top:12px"></div></div></div>
 <!-- PANEL 10: Scenario Sim -->
-<div id="p10" class="panel">
-  <div class="card">
-    <div class="ct">🧪 Maintenance Scenario Simulator</div>
-    <div class="hint">ทดลองปรับเปลี่ยนแผนการทำ Preventive Maintenance</div>
-    <div class="grid2" style="margin-top:12px">
-      <div>
-        <label style="font-size:12px;color:#8fa3bf">ความถี่ PM (วัน)</label>
-        <select id="simPmInterval" style="margin-top:4px;margin-bottom:12px">
-          <option value="30">ทุก 30 วัน</option>
-          <option value="15">ทุก 15 วัน</option>
-        </select>
-        <button onclick="runScenarioSimulation()">🚀 รันจำลองสถานการณ์</button>
-      </div>
-      <div class="dt-card" id="simResultBox"></div>
-    </div>
-  </div>
-</div>
-
+<div id="p10" class="panel"><div class="card"><div class="ct">🧪 Maintenance Scenario Simulator</div><button onclick="runScenarioSimulation()">🚀 รันจำลอง</button><div id="simResultBox" style="margin-top:12px"></div></div></div>
 <!-- PANEL 11: Asset Graph -->
-<div id="p11" class="panel">
-  <div class="card">
-    <div class="ct">🧬 BHS Asset Intelligence Graph & Topology</div>
-    <div class="hint">โครงสร้างความสัมพันธ์เครือข่ายอุปกรณ์</div>
-    <div id="graphResult" class="dt-card"></div>
-  </div>
-</div>
-
+<div id="p11" class="panel"><div class="card"><div class="ct">🧬 BHS Asset Intelligence Graph</div><div id="graphResult"></div></div></div>
 <!-- PANEL 12: Health Score -->
-<div id="p12" class="panel">
-  <div class="card">
-    <div class="ct">🩺 Advanced Health Score Matrix</div>
-    <div class="hint">ระบบประเมินคะแนนสุขภาพเครื่องจักรจากฐานข้อมูลกลาง</div>
-    <div id="healthMatrixBox"></div>
-  </div>
-</div>
-
+<div id="p12" class="panel"><div class="card"><div class="ct">🩺 Advanced Health Score</div><div id="healthMatrixBox"></div></div></div>
 <!-- PANEL 13: AI Copilot -->
-<div id="p13" class="panel">
-  <div class="card">
-    <div class="ct">🤖 AI Engineering Copilot</div>
-    <div class="hint">แชทบอทวิศวกรรมที่ดึงข้อมูลจากฐานข้อมูลกลาง</div>
-    <div class="chat-box" id="chatBox">
-      <div class="chat-msg ai">สวัสดีครับ พร้อมช่วยเหลือด้านวิศวกรรม BHS แล้วครับ!</div>
-    </div>
-    <div class="bar">
-      <input type="text" id="copilotInput" placeholder="พิมพ์คำถาม..." style="flex:1" onkeydown="if(event.key==='Enter')sendCopilotQuery()">
-      <button onclick="sendCopilotQuery()">ส่ง</button>
-    </div>
-  </div>
-</div>
-
+<div id="p13" class="panel"><div class="card"><div class="ct">🤖 AI Engineering Copilot</div><div class="chat-box" id="chatBox"><div class="chat-msg ai">สวัสดีครับ พร้อมช่วยเหลือครับ!</div></div><input type="text" id="copilotInput" placeholder="พิมพ์คำถาม..." onkeydown="if(event.key==='Enter')sendCopilotQuery()"></div></div>
 <!-- PANEL 14: ตรวจ DM -->
-<div id="p14" class="panel">
-  <div class="card">
-    <div class="ct">🔍 ค้นหารหัสตำแหน่ง / Equipment ID</div>
-    <div class="bar" style="margin-bottom:12px">
-      <input type="file" id="camInput" accept="image/*" capture="environment" hidden>
-      <button onclick="camInput.click()">📸 ถ่ายรูปป้าย</button>
-    </div>
-    <textarea id="q" placeholder="LP258-BHT57-HS395"></textarea>
-    <div class="bar" style="margin-top:10px">
-      <button onclick="check()">ตรวจสอบสถานะ DM</button>
-    </div>
-  </div>
-  <div class="card"><div class="tw"><table id="out"></table></div></div>
-</div>
-
+<div id="p14" class="panel"><div class="card"><div class="ct">🔍 ค้นหารหัสตำแหน่ง</div><textarea id="q" placeholder="รหัสตำแหน่ง..."></textarea><button onclick="check()">ตรวจสอบ</button></div><div class="card"><div class="tw"><table id="out"></table></div></div></div>
 <!-- PANEL 15: Work Order -->
-<div id="p15" class="panel">
-  <div class="card">
-    <div class="ct">🛠️ Work Order Orchestration</div>
-    <div class="grid2">
-      <div>
-        <input type="text" id="woPos" placeholder="รหัสตำแหน่ง" style="margin-bottom:9px">
-        <input type="text" id="woSym" placeholder="อาการเสีย">
-      </div>
-      <div>
-        <input type="text" id="woHours" placeholder="Downtime (นาที)" style="margin-bottom:9px">
-        <input type="text" id="woPart" placeholder="อะไหล่ที่เปลี่ยน">
-      </div>
-    </div>
-    <button onclick="saveWorkOrder()" style="margin-top:14px">💾 บันทึกงานซ่อม</button>
-  </div>
-  <div class="card"><div class="tw"><table id="woTable"></table></div></div>
-</div>
-
+<div id="p15" class="panel"><div class="card"><div class="ct">🛠️ Work Order</div><input type="text" id="woPos" placeholder="รหัสตำแหน่ง"><input type="text" id="woSym" placeholder="อาการเสีย"><button onclick="saveWorkOrder()" style="margin-top:10px">บันทึก</button></div><div class="card"><div class="tw"><table id="woTable"></table></div></div></div>
 <!-- PANEL 16: RUL Predict -->
-<div id="p16" class="panel">
-  <div class="card">
-    <div class="ct">🔮 Predictive RUL Forecasting</div>
-    <button onclick="runRulPrediction()">⚡ เริ่มรันการพยากรณ์</button>
-    <div id="rulResults" style="margin-top:16px"></div>
-  </div>
-</div>
-
+<div id="p16" class="panel"><div class="card"><div class="ct">🔮 RUL Predict</div><button onclick="runRulPrediction()">รันพยากรณ์</button><div id="rulResults" style="margin-top:12px"></div></div></div>
 <!-- PANEL 17: Energy / Bag -->
-<div id="p17" class="panel">
-  <div class="card">
-    <div class="ct">🔋 Energy Consumption & Carbon per Bag</div>
-    <div class="stat" id="energyBagStats"></div>
-  </div>
-</div>
-
+<div id="p17" class="panel"><div class="card"><div class="ct">🔋 Energy / Bag</div><div class="stat" id="energyBagStats"></div></div></div>
 <!-- PANEL 18: ฐานข้อมูล -->
-<div id="p18" class="panel">
-  <div class="card">
-    <div class="ct">⚙️ ฐานข้อมูลกลาง (Google Sheets Sync)</div>
-    <div class="bar">
-      <button onclick="loadCentralDB()">🔄 รีเฟรชข้อมูล</button>
-    </div>
-    <div id="freshness" style="margin-top:10px"></div>
-    <div class="stat" id="stats"></div>
-    <div id="dbinfo" class="hint" style="margin-top:8px"></div>
-  </div>
-</div>
+<div id="p18" class="panel"><div class="card"><div class="ct">⚙️ ฐานข้อมูลกลาง</div><button onclick="loadCentralDB()">รีเฟรช</button><div id="freshness"></div><div class="stat" id="stats"></div><div id="dbinfo"></div></div></div>
 
 </div>
 
@@ -468,6 +357,31 @@ function switchPanel(id,el){
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   el.classList.add('active');
+}
+
+/* FILTER FUNCTIONS FOR 3 TABS */
+function filterCleaningTable() {
+  const val = document.getElementById('cleanDateFilter').value;
+  const rows = document.querySelectorAll('#cleanTable tr:not(:first-child)');
+  rows.forEach(r => {
+    r.style.display = (!val || r.getAttribute('data-day') === val) ? '' : 'none';
+  });
+}
+
+function filterPmTable() {
+  const val = document.getElementById('pmDateFilter').value;
+  const rows = document.querySelectorAll('#pmTable tr:not(:first-child)');
+  rows.forEach(r => {
+    r.style.display = (!val || r.getAttribute('data-date') === val) ? '' : 'none';
+  });
+}
+
+function filterDailyTable() {
+  const val = document.getElementById('dailyDateFilter').value;
+  const rows = document.querySelectorAll('#dailyTable tr:not(:first-child)');
+  rows.forEach(r => {
+    r.style.display = (!val || r.getAttribute('data-date') === val) ? '' : 'none';
+  });
 }
 
 /* REAL SPARE PARTS */
@@ -575,7 +489,7 @@ function runRulPrediction() {
 
 const SHEET_ID='1X3yGiY54Agb3rywBF803bYhFgZEgLKUciy6ObwdbSlg';
 const CSV_URL='https://docs.google.com/spreadsheets/d/'+SHEET_ID+'/gviz/tq?tqx=out:csv';
-const KEY='cmms_dm_db_v28.0';let DB=null,RESULT=[],KEYS=[];
+const KEY='cmms_dm_db_v29.0';let DB=null,RESULT=[],KEYS=[];
 const norm=s=>String(s??'').toUpperCase().replace(/[^A-Z0-9]/g,'');
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const H={pos:'ตำแหน่ง',sym:'สาเหตุ/อาการ',dt:'วันที่เสีย',lvl:'ระดับความเสียหาย',plan:'แผนการแก้ไข',doc:'Doc DM',wp:'WORK PERMIT',done:'วันแล้วเสร็จ',mc:'Machine type',cause:'สาเหตุการชำรุด',part:'อะไหล่'};
